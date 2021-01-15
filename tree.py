@@ -26,55 +26,76 @@ class Operation_node(NodeMixin):
         self.child_nodes.append(new_node)
 
     def change_operation(self, new_operation):
+        """
+        Function to replace the operation string of the node with (new_operation)
+
+        Returns - None
+        """
+        #pull out node index
         node_index = self.name.split('-')[1]
+
+        #create new node name string
         new_name = f"{new_operation}-{node_index}"
         self.name = new_name
 
     def get_operation(self):
+        """
+        Function to pull out the operation string of the node
+
+        Returns - str
+        """
         operation = node_index = self.name.split('-')[0]
         return(operation)
 
 class Tree:
 
     def __init__(self):
+        """
+        Initilize a Tree with a blank root node
+        """
         #make empty root node and place it in the Tree
         root_node = Operation_node("no_operation-0", None, None)
         self.nodes = [root_node]
 
     def print_tree(self):
-        #print(RenderTree(self.nodes[0]))
+        """
+        Function for displaying a string repersentation of the tree
+
+        Returns - None
+        """
         for pre, fill, node in RenderTree(self.nodes[0]):
             print("%s%s" % (pre, node.name))
 
-    def add_node(self, operation, parent_index):
+    def add_node(self, operation: str, parent_index: int):
+        """
+        Function for adding a new node to the tree. Takes a operation string and
+        the index of the parent (parent_index). New node gets added as a child
+        of the parent and added into the list of tree nodes.
+
+        Returns - None
+        """
+        #get the parent node based off of the parent index
         parent_node = self.nodes[parent_index]
+
+        #set up name for the new node depending of the given operation and the
+        ## number of nodes currently in the tree
         new_node_name = f"{operation}-{len(self.nodes)}"
+
+        #create and add new node to the tree
         new_node = Operation_node(new_node_name, parent_node)
         self.nodes.append(new_node)
 
-    def replace_node(self, new_operation, node_index):
+    def replace_node(self, new_operation: str, node_index: int):
+        """
+        Function to replace the operation with (new_operation) of the
+        (node_index) node within the tree
+
+        Returns - None
+        """
+        #check to make sure
         if node_index > len(self.nodes) or node_index < 0:
             print("Invalid node_index")
             return None
 
         node = self.nodes[node_index]
         node.change_operation(new_operation)
-
-
-def test():
-
-    #test basic tree build
-    test_tree = Tree()
-    test_tree.add_node("first_node", 0)
-    test_tree.add_node("secound_node", 0)
-    test_tree.add_node("third_node", 1)
-    test_tree.add_node("fourth_node", 1)
-    test_tree.add_node("fith_node", 1)
-    test_tree.add_node("fith_node", 1)
-    test_tree.print_tree()
-
-    #test replacing a node operation
-    test_tree.replace_node("replaced", 5)
-    test_tree.print_tree()
-
-test()
