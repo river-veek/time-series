@@ -11,19 +11,18 @@ class Operation_node(NodeMixin):
     that includes aditionaly functionality for storing function calls
     """
 
-    def __init__(self, name, parent=None, children=None):
+    def __init__(self, name, depth: int, patent = None):
         """
         name is a string in the form - 'operation_call-node_index'
         """
         super(Operation_node, self).__init__()
         self.name = name
+        self.depth = depth
         self.parent = parent
-        # set children only if given
-        if children != None:
-            self.children = children
+        self.child_list = []
 
     def add_child(self, new_node):
-        self.child_nodes.append(new_node)
+        self.child_list.append(new_node)
 
     def change_operation(self, new_operation):
         """
@@ -47,6 +46,15 @@ class Operation_node(NodeMixin):
         operation = node_index = self.name.split('-')[0]
         return(operation)
 
+    def get_decendents(self):
+        decendent_list = []
+
+        for child in self.child_list:
+            decendent_list.append(child)
+            decendent_list += child.get_decendents()
+
+        return decendent_list
+
 class Tree:
 
     def __init__(self):
@@ -54,8 +62,9 @@ class Tree:
         Initilize a Tree with a blank root node
         """
         #make empty root node and place it in the Tree
-        root_node = Operation_node("no_operation-0", None, None)
+        root_node = Operation_node("no_operation-0", None)
         self.nodes = [root_node]
+        self.hight = 0
 
     def print_tree(self):
         """
@@ -74,16 +83,26 @@ class Tree:
 
         Returns - None
         """
+        #check to make sure parent_index is valid
+        if parent_index > len(self.nodes) or node_index < 0:
+            print("Invalid parent_index")
+            return None
+
         #get the parent node based off of the parent index
         parent_node = self.nodes[parent_index]
 
         #set up name for the new node depending of the given operation and the
         ## number of nodes currently in the tree
         new_node_name = f"{operation}-{len(self.nodes)}"
+        new_node_depth = parent_node.depth + 1
 
         #create and add new node to the tree
-        new_node = Operation_node(new_node_name, parent_node)
+        new_node = Operation_node(new_node_name, new_node_depth, parent_node)
+        parent_node.add_child(new_node)
+
         self.nodes.append(new_node)
+        if new_node_depth > self.hight:
+            self.hight = new_node_depth
 
     def replace_node(self, new_operation: str, node_index: int):
         """
@@ -92,7 +111,7 @@ class Tree:
 
         Returns - None
         """
-        #check to make sure
+        #check to make sure node_index is valid
         if node_index > len(self.nodes) or node_index < 0:
             print("Invalid node_index")
             return None

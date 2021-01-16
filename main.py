@@ -24,13 +24,24 @@ def copy_subtree(main_tree: Tree, node_index: int):
     Inputs - Tree, node_index
     Returns - Tree
     """
-    pass
+    sub_tree = Tree()
 
-def add_subtree(node_index: int, subtree: Tree):
+    new_root = main_tree.nodes[node_index]
+    new_root.parent = None
+
+    node_list = new_root.get_decendents()
+
+    #set up sub_tree
+    sub_tree.nodes[0] = new_root
+    sub_tree.nodes += node_list
+
+    return sub_tree
+
+def add_subtree(tree: Tree, node_index: int, subtree: Tree):
     """
 
     """
-    pass
+
 
 def save_tree(tree: Tree, save_file_name: str):
     """
@@ -93,8 +104,8 @@ def test():
     test_tree.add_node("secound_node", 0)
     test_tree.add_node("third_node", 1)
     test_tree.add_node("fourth_node", 1)
-    test_tree.add_node("fith_node", 1)
-    test_tree.add_node("fith_node", 1)
+    test_tree.add_node("fith_node", 4)
+    test_tree.add_node("sixth_node", 4)
     test_tree.print_tree()
 
     #test replacing a node operation
@@ -106,5 +117,9 @@ def test():
     loaded_tree = load_tree("save_file.txt")
     print("Loaded Tree:")
     loaded_tree.print_tree()
+
+    print("Sub-Tree:")
+    sub_tree = copy_subtree(test_tree, 1)
+    sub_tree.print_tree()
 
 test()
