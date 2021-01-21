@@ -30,8 +30,10 @@ def print_operation_lists():
     Function to display to terminal the valid pre-processing and visualization
     operation inputs
 
-    Calls - None
-    Call By - get_user_operation()
+    Calls:
+        None
+    Call By:
+        user_interface.py - get_user_operation()
 
     Returns - None
     """
@@ -58,8 +60,10 @@ def get_user_operation():
 
     If invalid user input returns None
 
-    Calls - print_operation_lists()
-    Call By - main()
+    Calls:
+        user_interface.py - print_operation_lists()
+    Call By:
+        user_interface.py - main()
 
     Returns - str
     """
@@ -74,24 +78,23 @@ def get_user_operation():
 
     return operation
 
-def get_user_index(node_type: str):
+def get_user_index(command_str: str):
     """
-    Function to get a valid index of node user inputs. node_type is either
-    'parent', or 'node' to determine message for user
+    Function to get a valid index of node user inputs. command_str is the string
+    to print out to promp user input
 
     If invalid user input returns None
 
-    Calls - None
-    Call By - main()
+    Calls:
+        None
+    Call By:
+        User_interface.py - main()
 
     Returns - int
     """
 
     #get index of target node
-    if node_type == 'parent':
-        node_index = input("Enter index of parent to add node to: ").strip()
-    else:
-        node_index = input("Enter index of node to edit: ").strip()
+    node_index = input(command_str).strip()
 
     #check that node_index is an int
     try:
@@ -105,6 +108,7 @@ def get_user_index(node_type: str):
 def main():
 
     tree = None
+    ts = None
     while(1==1):
         print("\n###Current Tree###")
         if tree == None:
@@ -114,24 +118,35 @@ def main():
             print()
 
         print("###Command List###")
+        print("\tTo load a time series type 'ts'")
+        print("\t--------------------------")
         print("\tTo create tree type 'create'")
         print("\tTo clear tree type 'clear'")
         print("\tTo load tree type 'load'")
         print("\tTo save tree type 'save'")
+        print("\t--------------------------")
         print("\tTo replace a node in the tree type 'replace'")
-        print("\tTo add a node to the tree type 'add'")
+        print("\tTo add a node to the tree type 'add_node'")
+        print("\tTo add a sub-tree to the tree type 'add_subtree'")
+        print("\t--------------------------")
+        print("\tTo copy a sub-tree to a save file type 'copy_subtree'")
+        print("\tTo copy a tree_path to a save file type 'copy_path'")
+        print("\t--------------------------")
         print("\tTo execute a tree or tree branch type 'execute_tree'")
         print("\tTo close this program type 'quit'")
         print()
 
         user_command = input("Please enter the command you wish to preform: ").strip()
 
-        if user_command == "create":
+        if user_command == "ts":
+            ts_file = input("Please enter name of ts file to load: ").strip()
+
+        elif user_command == "create":
             operation = get_user_operation()
             #if vaid operation
             if operation != None:
                 #create empty tree
-                tree = Tree()
+                tree = TS_Tree()
                 #replace blank operation in root with user input
                 tree.replace_node(operation, 0)
 
@@ -147,20 +162,49 @@ def main():
             save_tree(tree, save_file)
 
         elif user_command == "replace":
-            node_index = get_user_index("node")
+            command_str = "Enter index of node to replace: "
+            node_index = get_user_index(command_str)
             operation = get_user_operation()
 
             #if vaid operation
             if (operation != None) and (node_index != None):
                 tree.replace_node(operation, node_index)
 
-        elif user_command == "add":
-            node_index = get_user_index("parent")
+        elif user_command == "add_node":
+            #get user inputs
+            command_str = "Enter index of parent to add node to: "
+            node_index = get_user_index(command_str)
             operation = get_user_operation()
 
             #if vaid operation
             if (operation != None) and (node_index != None):
                 tree.add_node(operation, node_index)
+
+        elif user_command == "add_subtree":
+            tree_file = input("Please enter name of tree save file to load as subtree: ").strip()
+            subtree = load_tree(tree_file)
+
+            command_str = "Enter index of node to add subtree to: "
+            node_index = get_user_index(command_str)
+
+            #if vaid operation
+            if (operation != None) and (node_index != None):
+                tree.add_node(operation, node_index)
+
+        elif user_command == "copy_subtree":
+
+            command_str = "Enter index of root of target subtree: "
+            node_index = get_user_index(command_str)
+
+            save_file = input("Please enter name of save file to save subtree into: ").strip()
+            subtree = load_tree(tree_file)
+
+            #if vaid operation
+            if (operation != None) and (node_index != None):
+                tree.add_node(operation, node_index)
+
+        elif user_command == "copy_path":
+            pass
 
         elif user_command == "execute_tree":
             pass

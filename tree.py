@@ -4,6 +4,8 @@
 
 # anytree library being used to get RenderTree functionality for printing a repersentation of the tree
 from anytree import Node, RenderTree, NodeMixin
+import os
+import shutil
 
 class Operation_node(NodeMixin):
     """
@@ -92,7 +94,7 @@ class Operation_node(NodeMixin):
 
         return decendent_list
 
-class Tree:
+class TS_Tree:
 
     def __init__(self):
         """
@@ -110,7 +112,7 @@ class Tree:
         Calls:
             RenderTree()
         Call By:
-            ___
+            User_interface.py - main()
 
         Returns - None
         """
@@ -124,10 +126,11 @@ class Tree:
         of the parent and added into the list of tree nodes.
 
         Calls:
-            Operation_node.__init__(name, depth, parent_node)
-            Operation_node.add_child(Operation_node)
+            tree.py - Operation_node.__init__(name, depth, parent_node)
+            tree.py - Operation_node.add_child(Operation_node)
         Call By:
-            ___
+            User_interface.py - main()
+            tree.py - add_subtree()
 
         Returns - None
         """
@@ -158,9 +161,9 @@ class Tree:
         (node_index) node within the tree
 
         Calls:
-            Operation_node.change_operation(new_operation)
+            tree.py - Operation_node.change_operation(new_operation)
         Call By:
-            ___
+            User_interface.py - main()
 
         Returns - None
         """
@@ -172,17 +175,22 @@ class Tree:
         node = self.nodes[node_index]
         node.change_operation(new_operation)
 
-#-------------------
+#------------------------------------------------------------------------------
 
-#created tree functions
-def copy_subtree(main_tree: Tree, node_index: int):
+#created functions that deal with the Tree class
+def copy_subtree(main_tree: TS_Tree, node_index: int, save_file_name: str):
     """
     Takes a Tree and returns a copy of the subtree starting at node (node_index)
+    in a save file named (save_file_name) in the TreeFiles folder.
 
-    Inputs - Tree, node_index
+    Calls:
+        tree.py - save_tree()
+    Call By:
+        User_interface.py - main()
+
     Returns - Tree
     """
-    sub_tree = Tree()
+    sub_tree = TS_Tree()
 
     new_root = main_tree.nodes[node_index]
     new_root.parent = None
@@ -197,18 +205,25 @@ def copy_subtree(main_tree: Tree, node_index: int):
 
     return sub_tree
 
-def add_subtree(tree: Tree, node_index: int, subtree: Tree):
+def add_subtree(tree: TS_Tree, node_index: int, subtree: TS_Tree):
     """
 
     """
 
 
-def save_tree(tree: Tree, save_file_name: str):
+def save_tree(tree: TS_Tree, save_file_name: str):
     """
     Function to save target tree (tree) stucture into a file named (save_file_name).
-
     The resulting save_file will save each node on a line as follows
         'node.name,parent.name'
+
+    Calls:
+        None
+    Call By:
+        User_interface.py - main()
+        tree.py - copy_subtree()
+
+    Returns - None
     """
 
     if tree == None:
@@ -228,22 +243,32 @@ def save_tree(tree: Tree, save_file_name: str):
             save_file.write(f"{node.name},{node.parent.name}\n")
     save_file.close()
 
+    #move save file into TreeFiles folder
+    store_loc = os.getcwd()+ "/TreeFiles"
+    shutil.move(save_file_name, store_loc)
+
 def load_tree(save_file_name: str):
     """
     Function to load tree stucture from given file (save_file_name).
 
-    Return - Tree
+    Calls:
+        None
+    Call By:
+        User_interface.py - main()
+
+    Return - TS_Tree
     """
 
     #open file to write the tree data file
     try:
-        load_file = open(save_file_name, "r")
+        path_to_file = os.getcwd()+ "/TreeFiles/" + save_file_name
+        load_file = open(path_to_file, "r")
     except:
         print(f"\nError loading {save_file_name} - Not Found\n")
         return None
 
     try:
-        loaded_tree = Tree()
+        loaded_tree = TS_Tree()
 
         Lines = load_file.readlines()
         for line in Lines:
