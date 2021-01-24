@@ -103,7 +103,7 @@ def longest_continuous_run(ts):
     # if time series has no valid points, return empty time series
     if start_idx == end_idx:
         new_ts = TimeSeries()
-        
+
     return new_ts
 
 def difference(ts):
@@ -120,6 +120,11 @@ def difference(ts):
         new_ts.append(new_val)
     return new_ts
 
+def clip(ts, starting_date, final_date):
+    pass
+
+def assign_time(ts, start, increment):
+    pass
 
 def scaling(ts):
     """
@@ -147,3 +152,9 @@ def standardize(ts):
     for val in ts:
         new_val = (val - ts_mu) / ts_sig
         new_ts.append(new_val)
+
+def design_matrix(ts, input_index, output_index):
+    pass
+
+def design_matrix_2(ts, mi, ti, mo, to):
+    pass
