@@ -81,6 +81,7 @@ def longest_continuous_run(ts):
 
     # WORKS WITH MULTIPLE MISSING POINTS
 
+    # calculate, isolate longest run
     for i in range(len(ts)):
 
         if not ts[i] == None:
@@ -94,6 +95,16 @@ def longest_continuous_run(ts):
             start_idx = cur_idx - cur_run + 1
 
         cur_idx += 1
+
+    # add data points in longest run to new time series
+    for i in range(start_idx, end_idx + 1):
+        new_ts.append(ts[i])
+
+    # if time series has no valid points, return empty time series
+    if start_idx == end_idx:
+        new_ts = TimeSeries()
+        
+    return new_ts
 
 def difference(ts):
     """
