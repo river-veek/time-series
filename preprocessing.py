@@ -28,6 +28,9 @@ def get_magnitudes(ts):
 # HELPER FUNCTIONS
 ######################
 
+def denoise(ts):
+    pass
+
 def impute_missing_data(ts):
     """
     Takes a time series and returns a new time series.
@@ -37,8 +40,10 @@ def impute_missing_data(ts):
     assumed to be missing.
     """
     new_ts = TimeSeries()
+
     for i in range(len(ts)):
 
+        # ASSUMED THAT MISSING POINTS WILL BE == NONE
         if not ts[i] == None:
             new_ts.append(ts[i])
 
@@ -46,14 +51,49 @@ def impute_missing_data(ts):
             # ASSUMED THAT ONLY ONE POINT IS MISSING
             if i == 0:  # if first point missing, take mean of next two
                 mean = (ts[i + 1] + ts[i + 2]) / 2
+
             elif i == len(ts) - 1:  # if last point missing, take mean of previous two
                 mean = (ts[i - 1] + ts[i - 2]) / 2
+
             else:  # else, take mean of previous and next point
                 mean = (ts[i - 1] + ts[i + 1]) / 2
 
             new_ts.append(mean)
 
     return new_ts
+
+def impute_outliers(ts):
+    pass
+
+def longest_continuous_run(ts):
+    """
+    Takes a time series and returns a time series.
+
+    Computes the longest continuous run and returns that
+    subset run as a new time series.
+    """
+    new_ts = TimeSeries()
+    longest_run = 0
+    cur_run = 0
+    cur_idx = 0
+    start_idx = 0
+    end_idx = 0
+
+    # WORKS WITH MULTIPLE MISSING POINTS
+
+    for i in range(len(ts)):
+
+        if not ts[i] == None:
+            cur_run += 1
+        else:
+            cur_run = 0
+
+        if cur_run > longest_run:
+            longest_run = cur_run
+            end_idx = cur_idx
+            start_idx = cur_idx - cur_run + 1
+
+        cur_idx += 1
 
 def difference(ts):
     """
