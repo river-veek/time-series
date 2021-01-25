@@ -19,21 +19,28 @@ def read_from_file(input_file_name):
 
 	NEED TO CHANGE: only currently works with timeSeries1 datasets
 	"""
-
-	#for testing
-	path = "timeSeriesData/TimeSeriesData1/"
-	path = path + input_file_name
 	ts = TS.TimeSeries()
-
-	
 	result = []
 
 
+	# check if the file exists
+	try:
+		with open(input_file_name, "r") as f:
+			pass
+	except:
+		print("File does not currently exist, now exiting")
+		
+
+
+
 	#csv read in
-	with open(path, newline='') as csvfile:
+	with open(input_file_name, newline='') as csvfile:
+		csvfile.readline()
 		data = csv.reader(csvfile, delimiter=' ', quotechar='|')
 
 		for row in data:
+			print(row)
+			break
 			if len(row[0].split(",")) != 1:
 				result.append(row[0].split(","))
 			else:
@@ -42,21 +49,12 @@ def read_from_file(input_file_name):
 	
 
 	for i in range(len(result)):
-
-		if result[i] == "\ufeff28.4":
-			
-			continue
-
 		ts.series[str(i)] = float(result[i])
 
 
 
-	print(ts.series)
 
-
-
-
-	return result
+	return ts
 
 def write_to_file(output_file_name):
 	return 0
@@ -65,6 +63,6 @@ def write_to_file(output_file_name):
 def test():
 	fname1 = "1_temperature_test.csv"
 	fname2 = "wind_cointzio_10m_complete.csv"
-	read_from_file(fname1)
+	#read_from_file(fname1)
 
-test()
+#test()
