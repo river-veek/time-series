@@ -39,8 +39,6 @@ def read_from_file(input_file_name):
 		data = csv.reader(csvfile, delimiter=' ', quotechar='|')
 
 		for row in data:
-			print(row)
-			break
 			if len(row[0].split(",")) != 1:
 				result.append(row[0].split(","))
 			else:

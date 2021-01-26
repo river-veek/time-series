@@ -7,6 +7,10 @@ Preprocessing Functions
 ########################
 
 from time_series import TimeSeries
+import pandas as pd
+import file_io as fio
+import matplotlib.pyplot as plt
+import numpy as np
 
 ######################
 # HELPER FUNCTIONS
@@ -29,7 +33,16 @@ def get_magnitudes(ts):
 ######################
 
 def denoise(ts):
-    pass
+	"""
+		Takes time series and returns a new time series
+		
+		Thought this was my responsibility, call this a draft -Nick Titzler
+	"""
+	frame = pd.Series(ts.series).to_frame()	
+
+	rolling_mean = frame.rolling(window=10).mean()
+
+	return rolling_mean
 
 def impute_missing_data(ts):
     """
@@ -158,3 +171,37 @@ def design_matrix(ts, input_index, output_index):
 
 def design_matrix_2(ts, mi, ti, mo, to):
     pass
+
+
+
+def logarithm(ts):
+	"""
+	nickt
+	"""
+	frame = pd.Series(ts.series).to_frame()	
+	frame['norm'] = (1+frame[0])/2
+	frame['lognorm'] = np.log(frame['norm'])
+
+	
+
+def cubic_root(ts):
+	"""
+	nickt
+	"""
+	pass
+
+def split_data(ts, perc_training, perc_valid, perc_test):
+	"""
+	nickt
+	"""
+	pass
+
+
+
+
+
+
+
+
+
+
