@@ -16,7 +16,7 @@ def get_magnitudes(ts):
     """
     Takes in an a time series and returns a time series.
 
-    Creates a new time series with the each value being the magnitude
+    Creates a new time series with each value being the magnitude
     of the provided time series values.
     """
     new_ts = TimeSeries()
@@ -113,7 +113,7 @@ def difference(ts):
     """
     Takes in an a time series and returns a time series.
 
-    Creates a new time series with the each value being the magnitude
+    Creates a new time series with each value being the magnitude
     of the difference between each consecutive element of the provided
     time series.
     """
