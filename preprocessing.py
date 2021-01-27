@@ -34,10 +34,10 @@ def get_magnitudes(ts):
 def denoise(ts):
 	"""
 		Takes time series and returns a new time series
-		
+
 		Thought this was my responsibility, call this a draft -Nick Titzler
 	"""
-	frame = pd.Series(ts.series).to_frame()	
+	frame = pd.Series(ts.series).to_frame()
 
 	rolling_mean = frame.rolling(window=10).mean()
 
@@ -137,7 +137,47 @@ def difference(ts):
     return new_ts
 
 def clip(ts, starting_date, final_date):
-    pass
+    """
+    Takes a time series, the starting date to clip the time series
+    by, and the ending date to clip the time series by. No assumption
+    is made about the types of starting_date and final_date; these two
+    parameters will only be assumed to be valid keys of the time series ts.
+
+    If starting_date greater than (>) final_date, then time series ts is
+    clipped from starting_date to the end of ts.
+
+    If starting_date or final_date are invalid (not valid keys of ts),
+    an empty time series will be returned.
+
+    Returns a new, clipped time series (does not alter original).
+
+    Author: River Veek
+    """
+    new_ts = TimeSeries()
+    flag = 0  # lets loop know when to start appending vals to new time series
+
+    if (not starting_date in ts) or (not final_date in ts):
+        flag = 2
+
+    for key in ts:
+
+        if flag == 2:
+            break
+
+        if key == starting_date:
+            new_ts[key] = ts[key]
+            flag = 1
+
+        if flag == 1:
+
+            if key == final_date:
+                new_ts[key] = ts[key]
+                break
+
+            new_ts[key] = ts[key]
+
+    return new_ts
+
 
 def assign_time(ts, start, increment):
     """
@@ -198,11 +238,11 @@ def logarithm(ts):
 	"""
 	nickt
 	"""
-	frame = pd.Series(ts.series).to_frame()	
+	frame = pd.Series(ts.series).to_frame()
 	frame['norm'] = (1+frame[0])/2
 	frame['lognorm'] = np.log(frame['norm'])
 
-	
+
 
 def cubic_root(ts):
 	"""
@@ -215,13 +255,3 @@ def split_data(ts, perc_training, perc_valid, perc_test):
 	nickt
 	"""
 	pass
-
-
-
-
-
-
-
-
-
-
