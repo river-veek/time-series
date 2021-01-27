@@ -157,7 +157,7 @@ def clip(ts, starting_date, final_date):
     flag = 0  # lets loop know when to start appending vals to new time series
 
     if (not starting_date in ts) or (not final_date in ts):
-        flag = 2
+        flag = 2  # lets loop know invalid arguments were entered
 
     for key in ts:
 
@@ -177,7 +177,6 @@ def clip(ts, starting_date, final_date):
             new_ts[key] = ts[key]
 
     return new_ts
-
 
 def assign_time(ts, start, increment):
     """
