@@ -47,9 +47,13 @@ def impute_missing_data(ts):
     """
     Takes a time series and returns a new time series.
 
-    Compute missing data point by taking mean of
+    Computes missing data point by taking mean of
     adjacent points in time. Only one data point is
     assumed to be missing.
+
+    If first data point is missing, the mean of the following two points
+    will be imputed. If the last data point is missing, the mean of the
+    previous two data points will be imputed.
 
     Author: River Veek
     """
@@ -84,7 +88,12 @@ def longest_continuous_run(ts):
     Takes a time series and returns a time series.
 
     Computes the longest continuous run and returns that
-    subset run as a new time series.
+    subset run as a new time series. Here, the longest continuous run
+    is the longest continuous time series subset without any empty/None
+    values.
+
+    This function allows for time series inputs with one or more (>= 1)
+    missing data points.
 
     Author: River Veek
     """
@@ -180,11 +189,13 @@ def clip(ts, starting_date, final_date):
 
 def assign_time(ts, start, increment):
     """
+    Assign time stamps to data points in a given time series.
+
     Takes a time series with no time stamps, the starting time (t_0), and
     the amount to be incremented by (delta). Assumed that start and
     increment are both integers.
 
-    Assign time stamps to data points in a given time series.
+    start and increment can be negative or positive values.
 
     Author: River Veek
     """
