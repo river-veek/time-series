@@ -135,7 +135,7 @@ def difference(ts):
     # ensure enough data entries
     if len(ts) < 2:
         print("Error: Not enough data")
-        return 
+        return
     # make a copy
     new_ts = ts.copy()
     # save index to last entry
@@ -270,8 +270,6 @@ def design_matrix(ts, input_index, output_index):
 def design_matrix_2(ts, mi, ti, mo, to):
     pass
 
-
-
 def logarithm(ts):
 	"""
 	nickt
@@ -279,8 +277,6 @@ def logarithm(ts):
 	frame = pd.Series(ts.series).to_frame()
 	frame['norm'] = (1+frame[0])/2
 	frame['lognorm'] = np.log(frame['norm'])
-
-
 
 def cubic_root(ts):
 	"""
@@ -293,3 +289,7 @@ def split_data(ts, perc_training, perc_valid, perc_test):
 	nickt
 	"""
 	pass
+
+def ts2db(input_file, perc_train, perc_val, perc_test,
+          input_index, output_index, output_file):
+    pass
