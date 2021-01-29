@@ -6,42 +6,31 @@ Preprocessing Functions
 # IMPORTS AND GLOBALS
 ########################
 
-from time_series import TimeSeries
 import pandas as pd
 import file_io as fio
 import matplotlib.pyplot as plt
 import numpy as np
 
+
 ######################
 # HELPER FUNCTIONS
 ######################
 
-def get_magnitudes(ts):
-    """
-    Takes in an a time series and returns a time series.
-
-    Creates a new time series with each value being the magnitude
-    of the provided time series values.
-    """
-    new_ts = TimeSeries()
-    for val in ts:
-        new_ts.append(abs(val))
 
 #########################
 # PREPROCESSING FUNCTIONS
 #########################
 
 def denoise(ts):
-	"""
-		Takes time series and returns a new time series
+    """
+    Takes time series and returns a new time series
+    Thought this was my responsibility, call this a draft -Nick Titzler
+    """
+    frame = pd.Series(ts.series).to_frame()
 
-		Thought this was my responsibility, call this a draft -Nick Titzler
-	"""
-	frame = pd.Series(ts.series).to_frame()
+    rolling_mean = frame.rolling(window=10).mean()
 
-	rolling_mean = frame.rolling(window=10).mean()
-
-	return rolling_mean
+    return rolling_mean
 
 def impute_missing_data(ts):
     """
@@ -139,10 +128,28 @@ def difference(ts):
     of the difference between each consecutive element of the provided
     time series.
     """
-    new_ts = TimeSeries()
-    for val_id in range(len(ts)):
-        new_val = ts[val_id+1] - ts[val_id]
-        new_ts.append(new_val)
+    # ensure data is properly formatted
+    if len(ts.keys()) != 2:
+        print("Error: Improperly formatted data")
+        return
+    # ensure enough data entries
+    if len(ts) < 2:
+        print("Error: Not enough data")
+        return 
+    # make a copy
+    new_ts = ts.copy()
+    # save index to last entry
+    last_entry = len(ts) - 1
+    for val_id in range(last_entry):
+        # grab two consecutive values
+        ts_val = ts.iloc[val_id, 1]              # values should be in second column (index 1)
+        next_ts_val = ts.iloc[val_id+1, 1]
+        # get difference
+        new_val = next_ts_val - ts_val
+        # save to new dataframe
+        new_ts.iloc[val_id, 1] = new_val
+    # remove last (unaltered) value
+    new_ts.drop(index=last_entry)
     return new_ts
 
 def clip(ts, starting_date, final_date):
@@ -216,11 +223,21 @@ def scaling(ts):
     Creates a new time series in which the magnitudes of each time series
     value is compressed into the range of [0, 1].
     """
-    new_ts = TimeSeries()
-    ts_max = ts.max()
-    for val in ts:                  # CURRENTLY ASSUMING MAX != 0
-        new_ts.append(val/ts_max)
-
+    # ensure data is properly formatted
+    if len(ts.keys()) != 2:
+        print("Error: Improperly formatted data.")
+        return
+    # make a copy
+    new_ts = ts.copy()
+    # convert to magnitudes
+    new_ts.iloc[:, 1] = new_ts.iloc[:, 1].abs()
+    # get max value
+    ts_max = ts.iloc[:, 1].max()
+    # if maximum is 0, then already scaled
+    if ts_max > 0:
+        # divide each value by max value to scale
+        new_ts.iloc[:, 1] = new_ts.iloc[:, 1] / ts_max
+    return new_ts
 
 def standardize(ts):
     """
@@ -229,12 +246,23 @@ def standardize(ts):
     Creates a new time series that translates the values of the existing
     time series to have a mean of 0 and a variance of 1.
     """
-    new_ts = TimeSeries()
-    ts_mu = ts.mean()
-    ts_sig = ts.stddiv()
-    for val in ts:
-        new_val = (val - ts_mu) / ts_sig
-        new_ts.append(new_val)
+    # ensure data is properly formatted
+    if len(ts.keys()) != 2:
+        print("Error: Improperly formatted data.")
+        return
+    # make a copy
+    new_ts = ts.copy()
+    # save mean and standard deviation for values
+    val_mean = new_ts.iloc[:, 1].mean()
+    val_std = new_ts.iloc[:, 1].std()
+    try:
+        # standardize values
+        new_ts.iloc[:, 1] = (new_ts.iloc[:, 1] - val_mean) / val_std
+    # in case val_std == 0
+    except ZeroDivisionError:
+        print("Error: Cannot standardize. No deviation.")
+        return
+    return new_ts
 
 def design_matrix(ts, input_index, output_index):
     pass
