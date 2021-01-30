@@ -235,7 +235,7 @@ def scaling(ts):
     # convert to magnitudes
     new_ts.iloc[:, -1] = new_ts.iloc[:, -1].abs()
     # get max value
-    ts_max = ts.iloc[:, -1].max()
+    ts_max = new_ts.iloc[:, -1].max()
     # if maximum is 0, then already scaled
     if ts_max > 0:
         # divide each value by max value to scale

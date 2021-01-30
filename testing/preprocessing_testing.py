@@ -28,8 +28,6 @@ def test1_timeSeriesData1():
 	"7_distribution_subsampled_norm_test.csv", "7_distribution_subsampled_norm_train.csv", "8_distribution_subsampled_test.csv", "8_distribution_subsampled_train.csv"]
 
 
-
-
 	fname = "../timeSeriesData/TimeSeriesData1/"+fileNames[0]
 
 	ts = fio.read_from_file(fname)
@@ -54,24 +52,28 @@ def test_general_scaling():
 	df_actual_output = scaling(df_test_input)
 	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
 
-
-
-
-
-
-
-
-
+def test_negative_scaling():
+	"""
+	Test case with both negative and positive values to be scaled
+	"""
+	test_input = {
+		"Times": [0, 1, 2, 3, 4, 5],
+		"Values": [-1, 0, -5, 1, 4, -2]
+	}
+	df_test_input = pd.DataFrame(test_input)
+	test_output = {
+		"Times": [0, 1, 2, 3, 4, 5],
+		"Values": [0.2, 0, 1, 0.2, 4/5, 2/5]
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = scaling(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
 
 '''
 def main():
 	test1_timeSeriesData1()
 	#test2_timeSeriesData2()
 	pass
-
-
-
-
 
 main()
 '''
