@@ -121,7 +121,7 @@ def validate_inputs(data_start,
     elif (type(output_filename) != str) and (output_filename != None):
         print(f"Invalid Input - output_filename={output_filename} is not a str")
         valid = False
-    elif (type(layers) != tuple) and (layers != None):
+    elif (type(layers) != list) and (layers != None):
         print(f"Invalid Input - layers={layers} is not a tuple")
         valid = False
 
@@ -399,7 +399,7 @@ class TS_Tree:
         Returns - None
         """
         #check to make sure node_index is valid
-        if node_index > len(self.nodes) or node_index < 0:
+        if node_index >= len(self.nodes) or node_index < 0:
             print("Invalid node_index")
             return None
         #check to make sure operation is valid
@@ -663,6 +663,7 @@ def load_tree(save_file_name: str):
         load_file = open(save_file_name, "r")
         Lines = load_file.readlines()
         for line in Lines:
+            print(line)
             line = line.strip().split(',')
 
             node_info = line[0].split('-')
@@ -713,7 +714,14 @@ def load_tree(save_file_name: str):
             if line[10] == "None":
                 layers = None
             else:
-                layers = line[10]
+                print(line)
+                layers = []
+                layers.append(float(line[10][1:]))
+                for i in range(11, len(line)):
+                    if i == len(line) - 1:
+                        layers.append(float(line[i][:-1]))
+                    else:
+                        layers.append(float(line[i]))
 
             #Add node to tree
             #root node condition
