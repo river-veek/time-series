@@ -28,8 +28,11 @@ def denoise(ts):
     """
     frame = pd.Series(ts.series).to_frame()
 
+    print(frame)
+
     rolling_mean = frame.rolling(window=10).mean()
 
+    
     return rolling_mean
 
 def impute_missing_data(ts):

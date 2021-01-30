@@ -9,6 +9,7 @@ import sys
 sys.path.append("../")
 import file_io as fio
 import pandas as pd
+import plot as plot
 
 
 """
@@ -43,11 +44,9 @@ def test1_timeSeriesData1():
 	
 def test2_timeSeriesData2():
 
-	fname1 = "../timeSeriesData/TimeSeriesData2/AtmPres2005NovMin.csv"
+	fname1 = "../timeSeriesData/TimeSeriesData2/1_temperature_test.csv"
 	ts = fio.read_from_file(fname1)
 
-	fname2 = "../timeSeriesData/TimeSeriesData2/wind_aristeomercado_10m_complete.csv"
-	ts = fio.read_from_file(fname2)
 
 
 
@@ -69,28 +68,11 @@ def test3_read_from_file_pandas():
 
 
 
-"""
-###############################
-	WRITE_TO_FILE TESTS
-###############################
-
-"""
-
-def test1_write_to_file():
-	ts = TS.TimeSeries()
-	ts = fio.read_from_file("../timeSeriesData/TimeSeriesData1/1_temperature_test.csv")
-	
-	fio.write_to_file(ts, "1_temperature_test_output.csv")
-	
-
-
 def main():
-	test1_timeSeriesData1()
+	#test1_timeSeriesData1()
 	test2_timeSeriesData2()
 
-	#test1_write_to_file()
-	#test3_read_from_file_pandas()
-
+	
 
 	return 1
 

@@ -5,57 +5,42 @@ Author: Nick Titzler
 """
 import csv
 import pickle
-import time_series as TS
+import pandas as pd
 
 #for testing
 
 
 def read_from_file(input_file_name):
-	"""
-	Takes input of a file name
 
-	Returns a instance of a TimeSeries Class
+	# use csv file
+	data = pd.read_csv(input_file_name)
 
-
-	NEED TO CHANGE: only currently works with timeSeries1 datasets
-	"""
-	ts = TS.TimeSeries()
-	result = []
-
-
-	# check if the file exists
-	try:
-		with open(input_file_name, "r") as f:
-			pass
-	except:
-		print("File does not currently exist, now exiting")
-		
-
-
-
-	#csv read in
-	with open(input_file_name, newline='') as csvfile:
-		csvfile.readline()
-		data = csv.reader(csvfile, delimiter=' ', quotechar='|')
-
-		for row in data:
-			if len(row[0].split(",")) != 1:
-				result.append(row[0].split(","))
-			else:
-				result.append(row[0])
+	df = pd.DataFrame(data)
 	
-	
-
-	for i in range(len(result)):
-		ts.series[str(i)] = float(result[i])
+	return df
 
 
 
+def write_to_file(ts, output_file_name):
+	"""
+		writes a time series to a file
 
-	return ts
+		BUG: currently program writes a 0 to the start of the file, unsure as to why
+	"""
+	path = "write_to_file_outputTesting/" + output_file_name
 
-def write_to_file(output_file_name):
-	return 0
+	# convert series to dataframe
+	df = pd.DataFrame.from_dict(ts.series , orient='index')
+
+
+
+	# write dataframe to file.
+	df.to_csv(path, index=1)
+
+
+
+
+	pass
 
 
 def test():

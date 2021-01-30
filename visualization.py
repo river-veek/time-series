@@ -1,3 +1,16 @@
+"""
+
+Author: Nick Titzler
+
+
+
+"""
+
+import preprocessing as pre
+import numpy as np
+import pandas as pd
+
+
 def plot(ts):
     pass
 def histogram(ts):

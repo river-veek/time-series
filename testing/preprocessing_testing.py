@@ -29,7 +29,11 @@ def test1_timeSeriesData1():
 	fname = "../timeSeriesData/TimeSeriesData1/"+fileNames[0]
 
 	ts = fio.read_from_file(fname)
-	logarithm(ts)
+	#logarithm(ts)
+
+	
+
+
 
 	
 
