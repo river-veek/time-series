@@ -154,6 +154,41 @@ def test_multicolumn_scaling():
 	df_actual_output = scaling(df_test_input)
 	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
 
+
+##########################
+# STANDARDIZE() TESTS
+##########################
+
+def test_general_standardize():
+	"""
+	Test the general use case of the standardize function
+	"""
+	test_input = {
+		"Times": [0, 1, 2, 3, 4, 5],
+		"Values": [1, 0, 9, 10, 8, 4]
+	}
+	df_test_input = pd.DataFrame(test_input)
+	input_mean = df_test_input.iloc[:, -1].mean()
+	input_std = df_test_input.iloc[:, -1].std()
+	test_output = {
+		"Times": [0, 1, 2, 3, 4, 5],
+		"Values": [
+			(1 - input_mean) / input_std,
+			(0 - input_mean) / input_std,
+			(9 - input_mean) / input_std,
+			(10 - input_mean) / input_std,
+			(8 - input_mean) / input_std,
+			(4 - input_mean) / input_std
+		]
+	}
+	df_test_output = pd.DataFrame(test_output)
+	print("Expected:")
+	print(df_test_output)
+	df_actual_output = standardize(df_test_input)
+	print("Got:")
+	print(df_actual_output)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
 '''
 def main():
 	test1_timeSeriesData1()
