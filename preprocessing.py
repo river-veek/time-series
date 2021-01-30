@@ -246,21 +246,28 @@ def assign_time(ts, start, increment):
 
     Takes a time series with no time stamps, the starting time (t_0), and
     the amount to be incremented by (delta). Assumed that start and
-    increment are both integers.
+    increment are both integers. Returns a time series with column names
+    defaulting to 'Times' and 'Values.'
 
     start and increment can be negative or positive values.
 
     Author: River Veek
     """
-    # ASSUMED THAT TS IS A LIST, START AND INCREMENT ARE INTS
-    new_ts = TimeSeries()
+    # START AND INCREMENT ARE INTS
+    # DEFAULT COL NAMES TO 'TIMES' AND 'VALUES'
+    new_ts = []
+    ts = ts.iloc[:, -1].tolist()
+    times = []
     total = 0
 
-    for item in ts:
-        new_ts[str(start + total)] = item
+    for i in range(len(ts)):
+        times.append(start + total)
         total += increment
 
-    return new_ts
+    ret = pd.DataFrame()
+    ret["Times"] = times
+    ret["Values"] = ts
+    return ret
 
 def scaling(ts):
     """
