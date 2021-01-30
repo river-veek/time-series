@@ -32,57 +32,81 @@ def denoise(ts):
 
     rolling_mean = frame.rolling(window=10).mean()
 
-    
+
     return rolling_mean
 
 def impute_missing_data(ts):
-    # ts will be a pandas data frame
-    # return new pandas data frame
     """
     Takes a time series and returns a new time series.
 
     Computes missing data point by taking mean of
     adjacent points in time. Only one data point is
-    assumed to be missing.
+    assumed to be missing. Missing point assumed to
+    be equal to 'NaN.'
 
     If first data point is missing, the mean of the following two points
     will be imputed. If the last data point is missing, the mean of the
-    previous two data points will be imputed.
+    previous two data points will be imputed. Otherwise, the mean of the previous
+    and following point will be imputed.
 
     Author: River Veek
     """
-    """
-    new_ts = TimeSeries()
+    # ASSUMED THAT MISSING POINTS WILL BE == NaN
+    # ASSUMED THAT ONLY ONE POINT IS MISSING AT THE MOST
+
+    # isolate last col name
+    col_name = ts.columns[-1]
+
+    # input will be Pandas DataFrame
+    # immediately convert to list (for easier mutability)
+    ts = ts.iloc[:, -1].tolist()
 
     for i in range(len(ts)):
 
-        # ASSUMED THAT MISSING POINTS WILL BE == NONE
-        if not ts[i] == None:
-            new_ts.append(ts[i])
+        if ts[i] == "NaN":
 
-        else:
-            # ASSUMED THAT ONLY ONE POINT IS MISSING
-            if i == 0:  # if first point missing, take mean of next two
-                mean = (ts[i + 1] + ts[i + 2]) / 2
+            if i == 0:
 
-            elif i == len(ts) - 1:  # if last point missing, take mean of previous two
-                mean = (ts[i - 1] + ts[i - 2]) / 2
+                if len(ts) == 1:
+                    ts[i] = 0  # IF ONLY VALUE == NaN, CONVERT TO 0
 
-            else:  # else, take mean of previous and next point
+                elif len(ts) == 2:
+                    ts[i] = ts[1]
+
+                else:
+                    mean = (ts[i + 1] + ts[i + 2]) / 2
+                    ts[i] = mean
+
+            elif i == len(ts) - 1:
+
+                if len(ts) == 2:
+                    ts[i] = ts[i - 1]
+
+                else:
+                    mean = (ts[i - 1] + ts[i - 2]) / 2
+                    ts[i] = mean
+
+            else:
                 mean = (ts[i - 1] + ts[i + 1]) / 2
+                ts[i] = mean
 
-            new_ts.append(mean)
+    # convert list back to DataFrame
+    return pd.DataFrame(ts, columns=[col_name])
 
-    return new_ts
-    """
-    # ts = pd.DataFrame({'c1': [10, 11, 12], 'c2': [100, 110, 120]})
-    # new_ts = ts.copy()
-    # print(ts.iloc[:, -1])
-    # for val in ts.iterrows():
-    for val in ts.iloc[:, -1]:
-        print(val)
-ts = pd.DataFrame({'c1': [10, 11, 12], 'c2': [100, 110, 120]})
-impute_missing_data(ts)
+# tests
+df2 = pd.DataFrame({'c1': [10, 11, "NaN"]})
+df3 = pd.DataFrame({'c1': ["NaN"]})
+df4 = pd.DataFrame({'c1': ["NaN", 10]})
+df5 = pd.DataFrame({'c1': [10, "NaN"]})
+df6 = pd.DataFrame({'c1': ["NaN", 11, 10]})
+df7 = pd.DataFrame({'c1': [10, "NaN", 11]})
+# df2 = impute_missing_data(df2)
+# df3 = impute_missing_data(df3)
+# df4 = impute_missing_data(df4)
+# df5 = impute_missing_data(df5)
+# df6 = impute_missing_data(df6)
+# df7 = impute_missing_data(df7)
+# print(df7)
 
 def impute_outliers(ts):
     pass
