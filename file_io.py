@@ -13,7 +13,7 @@ import pandas as pd
 def read_from_file(input_file_name):
 
 	# use csv file
-	data = pd.read_csv(input_file_name)
+	data = pd.read_csv(input_file_name, na_values=['NONE'])
 
 	df = pd.DataFrame(data)
 	

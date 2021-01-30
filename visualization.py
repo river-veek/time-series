@@ -10,6 +10,7 @@ import preprocessing as pre
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from scipy import stats
 
 
 
@@ -70,11 +71,13 @@ def box_plot(ts):
 
 
 def normality_test(ts):
+	return stats.normaltest(ts)
+
+def mse(y_test, y_forecast):
     pass
 
-def mse(ts):
+def mape(y_test, y_forecast):
     pass
-def mape(ts):
-    pass
-def smape(ts):
+
+def smape(y_test, y_forecast):
     pass
