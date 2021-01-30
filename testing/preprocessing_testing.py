@@ -33,10 +33,44 @@ def test1_timeSeriesData1():
 	#logarithm(ts)
 '''
 
+#############################
+# IMPUTE_MISSING_DATA() TESTS
+#############################
+def test_imp_miss_data():
+    df2 = pd.DataFrame({'c1': [10, 11, "NaN"]})
+    df3 = pd.DataFrame({'c1': ["NaN"]})
+    df4 = pd.DataFrame({'c1': ["NaN", 10]})
+    df5 = pd.DataFrame({'c1': [10, "NaN"]})
+    df6 = pd.DataFrame({'c1': ["NaN", 11, 10]})
+    df7 = pd.DataFrame({'c1': [10, "NaN", 11]})
+    # df2 = impute_missing_data(df2)
+    # df3 = impute_missing_data(df3)
+    # df4 = impute_missing_data(df4)
+    # df5 = impute_missing_data(df5)
+    # df6 = impute_missing_data(df6)
+    # df7 = impute_missing_data(df7)
+    # print(df7)
 
-#######################
+##############################
+# LONGEST_CONTINUOUS_RUN TESTS
+##############################
+def long_cont_run():
+    df2 = pd.DataFrame({'c1': [10, 11, "NaN"]})
+    df3 = pd.DataFrame({'c1': ["NaN"]})
+    df4 = pd.DataFrame({'c1': ["NaN", 10, 9]})
+    df5 = pd.DataFrame({'c1': [10, "NaN"]})
+    df6 = pd.DataFrame({'c1': ["NaN", 11, 10, 12, 11, 9]})
+    df7 = pd.DataFrame({'c1': [10, "NaN", 11]})
+    # df2 = impute_missing_data(df2)
+    # df3 = impute_missing_data(df3)
+    # df4 = impute_missing_data(df4)
+    # df5 = impute_missing_data(df5)
+    # df6 = impute_missing_data(df6)
+    # df7 = impute_missing_data(df7)
+    
+##################
 # SCALING() TESTS
-#######################
+##################
 
 def test_general_scaling():
 	"""

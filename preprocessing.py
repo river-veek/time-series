@@ -110,7 +110,14 @@ def longest_continuous_run(ts):
 
     Author: River Veek
     """
-    new_ts = TimeSeries()
+    # isolate last col name
+    col_name = ts.columns[-1]
+
+    # input will be Pandas DataFrame
+    # immediately convert to list (for easier mutability)
+    ts = ts.iloc[:, -1].tolist()
+    new_ts = []
+
     longest_run = 0
     cur_run = 0
     cur_idx = 0
@@ -122,7 +129,7 @@ def longest_continuous_run(ts):
     # calculate, isolate longest run
     for i in range(len(ts)):
 
-        if not ts[i] == None:
+        if not ts[i] == "NaN":
             cur_run += 1
         else:
             cur_run = 0
@@ -140,9 +147,9 @@ def longest_continuous_run(ts):
 
     # if time series has no valid points, return empty time series
     if start_idx == end_idx:
-        new_ts = TimeSeries()
+        new_ts = pd.DataFrame(new_list, columns=[col_name])
 
-    return new_ts
+    return pd.DataFrame(new_ts, columns=[col_name])
 
 def difference(ts):
     """
@@ -189,30 +196,49 @@ def clip(ts, starting_date, final_date):
 
     Author: River Veek
     """
-    new_ts = TimeSeries()
+    new_ts = []  # will hold values
+    new_col = []  # will hold times
     flag = 0  # lets loop know when to start appending vals to new time series
+    first_col = ts.iloc[:, 0].tolist()  # isolates first column
+    idx = 0  # for indexing ts and first_col
+    time_col_name = ts.columns[0]  # name of first col
+    val_col_name = ts.columns[-1]  # name of last col
 
-    if (not starting_date in ts) or (not final_date in ts):
+    # input will be Pandas DataFrame
+    # immediately convert to list (for easier mutability)
+    ts = ts.iloc[:, -1].tolist()
+
+    if (not starting_date in first_col) or (not final_date in first_col):
         flag = 2  # lets loop know invalid arguments were entered
 
-    for key in ts:
+    for key in first_col:
 
         if flag == 2:
             break
 
         if key == starting_date:
-            new_ts[key] = ts[key]
+            new_col.append(first_col[idx])
+            new_ts.append(ts[idx])
             flag = 1
+            idx += 1
+            continue
 
         if flag == 1:
 
             if key == final_date:
-                new_ts[key] = ts[key]
+                new_col.append(first_col[idx])
+                new_ts.append(ts[idx])
                 break
 
-            new_ts[key] = ts[key]
+            new_col.append(first_col[idx])
+            new_ts.append(ts[idx])
 
-    return new_ts
+        idx += 1
+
+    ret = pd.DataFrame()
+    ret[time_col_name] = new_col
+    ret[val_col_name] = new_ts
+    return ret
 
 def assign_time(ts, start, increment):
     """
