@@ -167,10 +167,6 @@ def difference(ts):
     of the difference between each consecutive element of the provided
     time series.
     """
-    # ensure data is properly formatted
-    if len(ts.keys()) != 2:
-        print("Error: Improperly formatted data")
-        return
     # ensure enough data entries
     if len(ts) < 2:
         print("Error: Not enough data")
@@ -262,16 +258,12 @@ def scaling(ts):
     Creates a new time series in which the magnitudes of each time series
     value is compressed into the range of [0, 1].
     """
-    # ensure data is properly formatted
-    if len(ts.keys()) != 2:
-        print("Error: Improperly formatted data.")
-        return
     # make a copy
     new_ts = ts.copy()
     # convert to magnitudes
     new_ts.iloc[:, -1] = new_ts.iloc[:, -1].abs()
     # get max value
-    ts_max = ts.iloc[:, -1].max()
+    ts_max = new_ts.iloc[:, -1].max()
     # if maximum is 0, then already scaled
     if ts_max > 0:
         # divide each value by max value to scale
@@ -285,10 +277,6 @@ def standardize(ts):
     Creates a new time series that translates the values of the existing
     time series to have a mean of 0 and a variance of 1.
     """
-    # ensure data is properly formatted
-    if len(ts.keys()) != 2:
-        print("Error: Improperly formatted data.")
-        return
     # make a copy
     new_ts = ts.copy()
     # save mean and standard deviation for values

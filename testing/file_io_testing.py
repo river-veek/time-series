@@ -49,7 +49,12 @@ def test2_timeSeriesData2():
 	fname2 = "../timeSeriesData/TimeSeriesData2/wind_aristeomercado_10m_complete.csv"
 	ts = fio.read_from_file(fname2)
 
+	fname3 = "../timeSeriesData/TimeSeriesData1/9_distribution_subsampled_train_empty.csv"
 
+	fname4 = "../timeSeriesData/TimeSeriesData1/AtmPres2005NovMinEmpty.csv"
+
+	ts = fio.read_from_file(fname4)
+	print(ts)
 
 def test3_read_from_file_pandas():
 	#df = pd.read_csv(r'../timeSeriesData/TimeSeriesData1/1_temperature_test.csv')
@@ -85,7 +90,7 @@ def test1_write_to_file():
 
 
 def main():
-	test1_timeSeriesData1()
+	#test1_timeSeriesData1()
 	test2_timeSeriesData2()
 
 	#test1_write_to_file()
