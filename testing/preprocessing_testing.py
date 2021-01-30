@@ -11,12 +11,11 @@ To run nosetests (from 'time-series/' directory):
 import numpy as np
 import sys
 sys.path.append("../")
-import time_series as TS
 import file_io as fio
 from preprocessing import *
 import nose
 
-
+'''
 def test1_timeSeriesData1():
 	"""
 	test time series creation from timeSeriesData1 files
@@ -33,13 +32,26 @@ def test1_timeSeriesData1():
 	fname = "../timeSeriesData/TimeSeriesData1/"+fileNames[0]
 
 	ts = fio.read_from_file(fname)
-	logarithm(ts)
-
-def test1_impute_missing_data():
-    ts = pd.DataFrame({'c1': [10, 11, 12], 'c2': [100, 110, 120]})
-    impute_missing_data(ts)
+	#logarithm(ts)
+'''
 
 
+def test_general_scaling():
+	"""
+	Test general use case of scaling function
+	"""
+	test_input = {
+		"Times": [0, 1, 2, 3, 4, 5],
+		"Values": [1, 0, 9, 10, 8, 4]
+	}
+	df_test_input = pd.DataFrame(test_input)
+	test_output = {
+		"Times": [0, 1, 2, 3, 4, 5],
+		"Values": [0.1, 0, .9, 1, .8, .4]
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = scaling(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
 
 
 
@@ -47,6 +59,10 @@ def test1_impute_missing_data():
 
 
 
+
+
+
+'''
 def main():
 	test1_timeSeriesData1()
 	#test2_timeSeriesData2()
@@ -57,3 +73,4 @@ def main():
 
 
 main()
+'''

@@ -1,11 +1,38 @@
+"""
+
+Author: Nick Titzler
+
+
+
+"""
+
+import preprocessing as pre
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
 def plot(ts):
-    pass
+	if type(ts) == list:
+		for item in ts:
+			plt.plot(item)
+		plt.show()
+	else:
+		plt.plot(ts)
+		plt.show()
+
 def histogram(ts):
-    pass
+    ts.plot.hist()
+    plt.show()
+
+
 def box_plot(ts):
-    pass
+    ts.boxplot()
+    plt.show()
+
 def normality_test(ts):
     pass
+
 def mse(ts):
     pass
 def mape(ts):

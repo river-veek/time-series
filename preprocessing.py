@@ -28,8 +28,11 @@ def denoise(ts):
     """
     frame = pd.Series(ts.series).to_frame()
 
+    print(frame)
+
     rolling_mean = frame.rolling(window=10).mean()
 
+    
     return rolling_mean
 
 def impute_missing_data(ts):
@@ -154,12 +157,12 @@ def difference(ts):
     last_entry = len(ts) - 1
     for val_id in range(last_entry):
         # grab two consecutive values
-        ts_val = ts.iloc[val_id, 1]              # values should be in second column (index 1)
-        next_ts_val = ts.iloc[val_id+1, 1]
+        ts_val = ts.iloc[val_id, -1]              # values should be in last column (index -1)
+        next_ts_val = ts.iloc[val_id+1, -1]
         # get difference
         new_val = next_ts_val - ts_val
         # save to new dataframe
-        new_ts.iloc[val_id, 1] = new_val
+        new_ts.iloc[val_id, -1] = new_val
     # remove last (unaltered) value
     new_ts.drop(index=last_entry)
     return new_ts
@@ -242,13 +245,13 @@ def scaling(ts):
     # make a copy
     new_ts = ts.copy()
     # convert to magnitudes
-    new_ts.iloc[:, 1] = new_ts.iloc[:, 1].abs()
+    new_ts.iloc[:, -1] = new_ts.iloc[:, -1].abs()
     # get max value
-    ts_max = ts.iloc[:, 1].max()
+    ts_max = ts.iloc[:, -1].max()
     # if maximum is 0, then already scaled
     if ts_max > 0:
         # divide each value by max value to scale
-        new_ts.iloc[:, 1] = new_ts.iloc[:, 1] / ts_max
+        new_ts.iloc[:, -1] = new_ts.iloc[:, -1] / ts_max
     return new_ts
 
 def standardize(ts):
@@ -265,11 +268,11 @@ def standardize(ts):
     # make a copy
     new_ts = ts.copy()
     # save mean and standard deviation for values
-    val_mean = new_ts.iloc[:, 1].mean()
-    val_std = new_ts.iloc[:, 1].std()
+    val_mean = new_ts.iloc[:, -1].mean()
+    val_std = new_ts.iloc[:, -1].std()
     try:
         # standardize values
-        new_ts.iloc[:, 1] = (new_ts.iloc[:, 1] - val_mean) / val_std
+        new_ts.iloc[:, -1] = (new_ts.iloc[:, -1] - val_mean) / val_std
     # in case val_std == 0
     except ZeroDivisionError:
         print("Error: Cannot standardize. No deviation.")
