@@ -36,7 +36,7 @@ pre_processing = {"denoise": (pre_proc.denoise, None),
                   "cubic_root": (pre_proc.cubic_root, None),
                   "split_data": (pre_proc.split_data, [3,4,5]),
                   "design_matrix": (pre_proc.design_matrix, [0,1]),
-                  "ts2db": (mod.ts2db, [6,3,4,5,0,1,7]),
+                  "ts2db": (pre_proc.ts2db, [6,3,4,5,0,1,7]),
                   "mlp_model": (mod.mlp_model, [0,2,8])
                   }
 
@@ -49,6 +49,7 @@ visualization = {"plot": (vis.plot, None),
                  "smape": (vis.smape, [6])
                  }
 
+leaf_functions = ["split_data", "mlp_model", "mse", "mape", "smape"]
 
 ########################
 # validate input functions
@@ -67,9 +68,9 @@ def validate_operation(operation: str):
     """
     valid = False
 
-    if function in pre_processing.keys():
+    if operation in pre_processing.keys():
         valid = True
-    elif function in visualization.keys():
+    elif operation in visualization.keys():
         valid = True
 
     return valid
@@ -96,32 +97,32 @@ def validate_inputs(data_start,
     """
     valid = True
 
-    if type(data_start) != float:
-        print("Invalid Input - data_start={data_start} is not a float")
+    if (type(data_start) != float) and (data_start != None):
+        print(f"Invalid Input - data_start={data_start} is not a float")
         valid = False
-    elif type(data_end) != float:
-        print("Invalid Input - data_end={data_end} is not a float")
+    elif (type(data_end) != float) and (data_end != None):
+        print(f"Invalid Input - data_end={data_end} is not a float")
         valid = False
-    elif type(increment) != float:
-        print("Invalid Input - increment={increment} is not a float")
+    elif (type(increment) != float) and (increment != None):
+        print(f"Invalid Input - increment={increment} is not a float")
         valid = False
-    elif type(perc_training) != float:
-        print("Invalid Input - perc_training={perc_training} is not a float")
+    elif (type(perc_training) != float) and (perc_training != None):
+        print(f"Invalid Input - perc_training={perc_training} is not a float")
         valid = False
-    elif type(perc_valid) != float:
-        print("Invalid Input - perc_valid={perc_valid} is not a float")
+    elif (type(perc_valid) != float) and (perc_valid != None):
+        print(f"Invalid Input - perc_valid={perc_valid} is not a float")
         valid = False
-    elif type(perc_test) != float:
-        print("Invalid Input - increment={perc_test} is not a float")
+    elif (type(perc_test) != float) and (perc_test != None):
+        print(f"Invalid Input - increment={perc_test} is not a float")
         valid = False
-    elif type(input_filename) != str:
-        print("Invalid Input - input_filename={input_filename} is not a str")
+    elif (type(input_filename) != str) and (input_filename != None):
+        print(f"Invalid Input - input_filename={input_filename} is not a str")
         valid = False
-    elif type(output_filename) != str:
-        print("Invalid Input - output_filename={output_filename} is not a str")
+    elif (type(output_filename) != str) and (output_filename != None):
+        print(f"Invalid Input - output_filename={output_filename} is not a str")
         valid = False
-    elif type(layers) != tuple:
-        print("Invalid Input - layers={layers} is not a tuple")
+    elif (type(layers) != tuple) and (layers != None):
+        print(f"Invalid Input - layers={layers} is not a tuple")
         valid = False
 
     return valid
@@ -139,7 +140,7 @@ class Operation_node(NodeMixin):
     def __init__(self,
                  name: str,
                  function: str,
-                 parent = None,
+                 parent,
                  data_start = None,
                  data_end = None,
                  increment = None,
@@ -163,9 +164,9 @@ class Operation_node(NodeMixin):
         self.is_a_leaf = True
 
         if function in pre_processing.keys():
-            self.function = pre_processing[key]
+            self.function = pre_processing[function]
         elif function in visualization.keys():
-            self.function = visualization[key]
+            self.function = visualization[function]
 
         self.function_inputs = [data_start,
                                 data_end,
@@ -193,7 +194,7 @@ class Operation_node(NodeMixin):
         self.is_a_leaf = False
 
     def change_operation(self,
-                         new_operation: str
+                         new_operation: str,
                          data_start = None,
                          data_end = None,
                          increment = None,
@@ -251,6 +252,28 @@ class Operation_node(NodeMixin):
 
         return decendent_list
 
+    def copy_node(self):
+        """
+        Function to return a duplicate of current node
+
+        Calls:
+
+        Call By:
+
+        Returns - Operation_node
+        """
+        #set up root node
+        new_node = Operation_node("", "", None)
+        new_node.name = self.name
+        new_node.child_list = self.child_list
+        new_node.parent = self.parent
+        new_node.is_a_leaf = self.is_a_leaf
+        new_node.function = self.function
+        new_node.function_inputs = self.function_inputs
+
+        return new_node
+
+
 class TS_Tree:
 
     def __init__(self):
@@ -258,7 +281,7 @@ class TS_Tree:
         Initilize a Tree with a denoise root node
         """
         #make denoise root node and place it in the Tree
-        root_node = Operation_node("denoise-0", 0, None)
+        root_node = Operation_node("denoise-0", "denoise", None)
         self.nodes = [root_node]
 
     def print_tree(self):
@@ -274,6 +297,7 @@ class TS_Tree:
         """
         for pre, fill, node in RenderTree(self.nodes[0]):
             print("%s%s" % (pre, node.name))
+
 
     def add_node(self,
                  operation: str,
@@ -301,13 +325,14 @@ class TS_Tree:
         Returns - None
         """
         #check to make sure parent_index is valid
-        if parent_index > len(tree.nodes) or parent_index < 0:
+        if parent_index >= len(self.nodes) or parent_index < 0:
             print(f"Invalid parent_index - {parent_index}")
-            valid = False
+            return None
         #check to make sure operation is valid
-        if validate_operation(operation):
+        if validate_operation(operation) == False:
             print(f"Invalid operation - {operation}")
             return None
+
         # check to make sure function inputs are valid
         if validate_inputs(data_start,
                            data_end,
@@ -325,7 +350,9 @@ class TS_Tree:
 
         #check new operation doesn't conflict with parents
         parent_operation = parent_node.name.split("-")[0]
-        # if ____
+        if parent_operation in leaf_functions:
+            print(f"Error - parent function '{parent_operation}' can't have children")
+            return None
 
         #set up name for the new node depending of the given operation and the
         ## number of nodes currently in the tree
@@ -333,11 +360,12 @@ class TS_Tree:
 
         #create and add new node to the tree
         new_node = Operation_node(new_node_name,
+                                  operation,
                                   parent_node,
                                   data_start = data_start,
                                   data_end = data_end,
                                   increment = increment,
-                                  prec_training = perc_training,
+                                  perc_training = perc_training,
                                   perc_valid = perc_valid,
                                   perc_test = perc_test,
                                   input_filename = input_filename,
@@ -367,7 +395,6 @@ class TS_Tree:
         Calls:
             tree.py - Operation_node.change_operation()
         Call By:
-            User_interface.py - main()
 
         Returns - None
         """
@@ -376,8 +403,11 @@ class TS_Tree:
             print("Invalid node_index")
             return None
         #check to make sure operation is valid
-        if validate_operation(new_operation):
+        if validate_operation(new_operation) == False:
             print(f"Invalid operation - {new_operation}")
+            return None
+        if (new_operation in leaf_functions) and (self.nodes[node_index].is_a_leaf == False):
+            print(f"Invalid operation - '{new_operation}' has to be a leaf")
             return None
         # check to make sure function inputs are valid
         if validate_inputs(data_start,
@@ -396,7 +426,7 @@ class TS_Tree:
                               data_start = data_start,
                               data_end = data_end,
                               increment = increment,
-                              prec_training = perc_training,
+                              perc_training = perc_training,
                               perc_valid = perc_valid,
                               perc_test = perc_test,
                               input_filename = input_filename,
@@ -516,20 +546,35 @@ def copy_subtree(main_tree: TS_Tree, node_index: int):
     """
     sub_tree = TS_Tree()
 
-    new_root = main_tree.nodes[node_index]
-    new_root.parent = None
-
-    #get list of nodes that will make up the subtree
-    node_list = new_root.get_decendents()
+    #set up root node
+    root = main_tree.nodes[node_index]
+    new_node = root.copy_node()
+    new_node.parent = None
 
     #set up sub_tree
-    sub_tree.nodes[0] = new_root
+    sub_tree.nodes[0] = new_node
 
-    sub_tree.nodes += node_list
+    #get list of nodes that will make up the subtree
+    node_list = root.get_decendents()
+    for node in node_list:
+        #create a copy of the node
+        copy = node.copy_node()
+        #get copy to point to the parent copy
+        for node in sub_tree.nodes:
+            if node.name == copy.parent.name:
+                copy.parent = node
+        sub_tree.nodes.append(copy)
+
+    #reset indexes of Nodes
+    for node_i in range(len(sub_tree.nodes)):
+        node = sub_tree.nodes[node_i]
+        node_info = node.name.split("-")
+        node_operation = node_info[0]
+        node.name = node_operation + "-" + str(node_i)
 
     return sub_tree
 
-def add_subtree(tree: TS_Tree, node_index: int, subtree: TS_Tree):
+def add_subtree(tree: TS_Tree, node_index: int, sub_tree: TS_Tree):
     """
     Function to add (subtree) TS_Tree to be a child of the target node given by
     (node_index) of (tree).
@@ -542,47 +587,21 @@ def add_subtree(tree: TS_Tree, node_index: int, subtree: TS_Tree):
     Returns - None
     """
     #check to make sure node_index is valid
-    if node_index > len(self.nodes) or node_index < 0:
+    if node_index > len(tree.nodes) or node_index < 0:
         print("Invalid node_index")
         return None
 
-    index_offset = len(tree.nodes)
+    #connect sub_tree to tree
+    sub_tree.nodes[0].parent = tree.nodes[node_index]
+    for node in sub_tree.nodes:
+        tree.nodes.append(node)
 
-    for i in range(len(subtree.nodes)):
-        node = subtree.nodes[i]
+    #reset indexes of Nodes
+    for node_i in range(len(tree.nodes)):
+        node = tree.nodes[node_i]
         node_info = node.name.split("-")
         node_operation = node_info[0]
-        node_index = int(node_info[1])
-
-        function_inputs = node.function_in
-
-        if i == 0:
-            tree.add_node(node_operation,
-                          node_index,
-                          data_start = data_start,
-                          data_end = data_end,
-                          increment = increment,
-                          prec_training = perc_training,
-                          perc_valid = perc_valid,
-                          perc_test = perc_test,
-                          input_filename = input_filename,
-                          output_filename = output_filename,
-                          layers = layers)
-        else:
-            parent_info = node.parent.name.split("-")
-            parent_index = int(node_info[1])
-
-            tree.add_node(node_operation,
-                          parent_index + index_offset,
-                          data_start = data_start,
-                          data_end = data_end,
-                          increment = increment,
-                          prec_training = perc_training,
-                          perc_valid = perc_valid,
-                          perc_test = perc_test,
-                          input_filename = input_filename,
-                          output_filename = output_filename,
-                          layers = layers)
+        node.name = node_operation + "-" + str(node_i)
 
 
 def save_tree(tree: TS_Tree, save_file_name: str):
@@ -638,17 +657,10 @@ def load_tree(save_file_name: str):
     Return - TS_Tree
     """
 
-    # #open file to write the tree data file
-    # try:
-    #     path_to_file = os.getcwd()+ "/TreeFiles/" + save_file_name
-    #     load_file = open(path_to_file, "r")
-    # except:
-    #     print(f"\nError loading {save_file_name} - Not Found\n")
-    #     return None
+    loaded_tree = TS_Tree()
 
     try:
-        loaded_tree = TS_Tree(save_file_name)
-
+        load_file = open(save_file_name, "r")
         Lines = load_file.readlines()
         for line in Lines:
             line = line.strip().split(',')
@@ -658,50 +670,50 @@ def load_tree(save_file_name: str):
             node_index = node_info[1]
 
             #get the function parameters
-            if node_info[2] == "None":
+            if line[2] == "None":
                 data_start = None
-            else
-                data_start = float(node_info[2])
+            else:
+                data_start = float(line[2])
 
-            if node_info[3] == "None":
+            if line[3] == "None":
                 data_end = None
             else:
-                data_end= float(node_info[3])
+                data_end= float(line[3])
 
-            if node_info[4] == "None":
+            if line[4] == "None":
                 increment = None
             else:
-                increment = float(node_info[4])
+                increment = float(line[4])
 
-            if node_info[5] == "None":
+            if line[5] == "None":
                 perc_training = None
             else:
-                perc_training = float(node_info[5])
+                perc_training = float(line[5])
 
-            if node_info[6] == "None":
+            if line[6] == "None":
                 perc_valid = None
             else:
-                perc_valid = float(node_info[6])
+                perc_valid = float(line[6])
 
-            if node_info[7] == "None":
+            if line[7] == "None":
                 perc_test = None
             else:
-                perc_test = float(node_info[7])
+                perc_test = float(line[7])
 
-            if node_info[8] == "None":
+            if line[8] == "None":
                 input_filename = None
             else:
-                input_filename = node_info[8]
+                input_filename = line[8]
 
-            if node_info[9] == "None":
+            if line[9] == "None":
                 output_filename = None
             else:
-                output_filename = node_info[9]
+                output_filename = line[9]
 
-            if node_info[10] == "None":
+            if line[10] == "None":
                 layers = None
             else:
-                layers = node_info[10]
+                layers = line[10]
 
             #Add node to tree
             #root node condition
@@ -725,7 +737,7 @@ def load_tree(save_file_name: str):
                                      data_start = data_start,
                                      data_end = data_end,
                                      increment = increment,
-                                     prec_training = perc_training,
+                                     perc_training = perc_training,
                                      perc_valid = perc_valid,
                                      perc_test = perc_test,
                                      input_filename = input_filename,
@@ -733,8 +745,9 @@ def load_tree(save_file_name: str):
                                      layers = layers)
 
         load_file.close()
+
     except:
         print(f"\nError loading {save_file_name} - Bad Format\n")
-        return None
+        return
 
     return loaded_tree
