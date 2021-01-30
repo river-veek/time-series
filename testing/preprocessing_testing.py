@@ -33,7 +33,11 @@ def test1_timeSeriesData1():
 	ts = fio.read_from_file(fname)
 	#logarithm(ts)
 '''
-	
+
+
+#######################
+# SCALING() TESTS
+#######################
 
 def test_general_scaling():
 	"""
@@ -54,7 +58,7 @@ def test_general_scaling():
 
 def test_negative_scaling():
 	"""
-	Test case with both negative and positive values to be scaled
+	General test case with both negative and positive values to be scaled
 	"""
 	test_input = {
 		"Times": [0, 1, 2, 3, 4, 5],
@@ -64,6 +68,40 @@ def test_negative_scaling():
 	test_output = {
 		"Times": [0, 1, 2, 3, 4, 5],
 		"Values": [0.2, 0, 1, 0.2, 4/5, 2/5]
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = scaling(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
+def test_same_scaling():
+	"""
+	Test case where all values are identical
+	"""
+	test_input = {
+		"Times": [0, 1, 2],
+		"Values": [3, 3, 3]
+	}
+	df_test_input = pd.DataFrame(test_input)
+	test_output = {
+		"Times": [0, 1, 2],
+		"Values": [1, 1, 1]
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = scaling(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
+def test_min_scaling():
+	"""
+	Test case where all values are 0
+	"""
+	test_input = {
+		"Times": [0, 1, 2],
+		"Values": [0, 0, 0]
+	}
+	df_test_input = pd.DataFrame(test_input)
+	test_output = {
+		"Times": [0, 1, 2],
+		"Values": [0, 0, 0]
 	}
 	df_test_output = pd.DataFrame(test_output)
 	df_actual_output = scaling(df_test_input)
