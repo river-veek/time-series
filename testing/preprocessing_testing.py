@@ -14,7 +14,7 @@ sys.path.append("../")
 import time_series as TS
 import file_io as fio
 from preprocessing import *
-
+import nose
 
 
 def test1_timeSeriesData1():
@@ -35,7 +35,9 @@ def test1_timeSeriesData1():
 	ts = fio.read_from_file(fname)
 	logarithm(ts)
 
-
+def test1_impute_missing_data():
+    ts = pd.DataFrame({'c1': [10, 11, 12], 'c2': [100, 110, 120]})
+    impute_missing_data(ts)
 
 
 

@@ -33,6 +33,8 @@ def denoise(ts):
     return rolling_mean
 
 def impute_missing_data(ts):
+    # ts will be a pandas data frame
+    # return new pandas data frame
     """
     Takes a time series and returns a new time series.
 
@@ -45,6 +47,7 @@ def impute_missing_data(ts):
     previous two data points will be imputed.
 
     Author: River Veek
+    """
     """
     new_ts = TimeSeries()
 
@@ -68,6 +71,15 @@ def impute_missing_data(ts):
             new_ts.append(mean)
 
     return new_ts
+    """
+    # ts = pd.DataFrame({'c1': [10, 11, 12], 'c2': [100, 110, 120]})
+    # new_ts = ts.copy()
+    # print(ts.iloc[:, -1])
+    # for val in ts.iterrows():
+    for val in ts.iloc[:, -1]:
+        print(val)
+ts = pd.DataFrame({'c1': [10, 11, 12], 'c2': [100, 110, 120]})
+impute_missing_data(ts)
 
 def impute_outliers(ts):
     pass
