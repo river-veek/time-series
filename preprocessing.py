@@ -131,10 +131,6 @@ def difference(ts):
     of the difference between each consecutive element of the provided
     time series.
     """
-    # ensure data is properly formatted
-    if len(ts.keys()) != 2:
-        print("Error: Improperly formatted data")
-        return
     # ensure enough data entries
     if len(ts) < 2:
         print("Error: Not enough data")
@@ -145,12 +141,12 @@ def difference(ts):
     last_entry = len(ts) - 1
     for val_id in range(last_entry):
         # grab two consecutive values
-        ts_val = ts.iloc[val_id, 1]              # values should be in second column (index 1)
-        next_ts_val = ts.iloc[val_id+1, 1]
+        ts_val = ts.iloc[val_id, -1]              # values should be in last column (index -1)
+        next_ts_val = ts.iloc[val_id+1, -1]
         # get difference
         new_val = next_ts_val - ts_val
         # save to new dataframe
-        new_ts.iloc[val_id, 1] = new_val
+        new_ts.iloc[val_id, -1] = new_val
     # remove last (unaltered) value
     new_ts.drop(index=last_entry)
     return new_ts
@@ -226,20 +222,16 @@ def scaling(ts):
     Creates a new time series in which the magnitudes of each time series
     value is compressed into the range of [0, 1].
     """
-    # ensure data is properly formatted
-    if len(ts.keys()) != 2:
-        print("Error: Improperly formatted data.")
-        return
     # make a copy
     new_ts = ts.copy()
     # convert to magnitudes
-    new_ts.iloc[:, 1] = new_ts.iloc[:, 1].abs()
+    new_ts.iloc[:, -1] = new_ts.iloc[:, -1].abs()
     # get max value
-    ts_max = ts.iloc[:, 1].max()
+    ts_max = new_ts.iloc[:, -1].max()
     # if maximum is 0, then already scaled
     if ts_max > 0:
         # divide each value by max value to scale
-        new_ts.iloc[:, 1] = new_ts.iloc[:, 1] / ts_max
+        new_ts.iloc[:, -1] = new_ts.iloc[:, -1] / ts_max
     return new_ts
 
 def standardize(ts):
@@ -249,18 +241,14 @@ def standardize(ts):
     Creates a new time series that translates the values of the existing
     time series to have a mean of 0 and a variance of 1.
     """
-    # ensure data is properly formatted
-    if len(ts.keys()) != 2:
-        print("Error: Improperly formatted data.")
-        return
     # make a copy
     new_ts = ts.copy()
     # save mean and standard deviation for values
-    val_mean = new_ts.iloc[:, 1].mean()
-    val_std = new_ts.iloc[:, 1].std()
+    val_mean = new_ts.iloc[:, -1].mean()
+    val_std = new_ts.iloc[:, -1].std()
     try:
         # standardize values
-        new_ts.iloc[:, 1] = (new_ts.iloc[:, 1] - val_mean) / val_std
+        new_ts.iloc[:, -1] = (new_ts.iloc[:, -1] - val_mean) / val_std
     # in case val_std == 0
     except ZeroDivisionError:
         print("Error: Cannot standardize. No deviation.")

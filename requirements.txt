@@ -3,3 +3,4 @@ pandas
 nose
 scikit-learn
 anytree
+matplotlib
