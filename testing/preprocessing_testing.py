@@ -107,6 +107,24 @@ def test_min_scaling():
 	df_actual_output = scaling(df_test_input)
 	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
 
+def test_empty_scaling():
+	"""
+	Test case where there are no entries to be scaled
+	"""
+	test_input = {
+		"Times": [],
+		"Values": []
+	}
+	df_test_input = pd.DataFrame(test_input)
+	test_output = {
+		"Times": [],
+		"Values": []
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = scaling(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
+
 '''
 def main():
 	test1_timeSeriesData1()
