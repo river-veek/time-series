@@ -124,6 +124,35 @@ def test_empty_scaling():
 	df_actual_output = scaling(df_test_input)
 	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
 
+def test_monocolumn_scaling():
+	"""
+	Test case where only one column is provided
+	"""
+	test_input = [1, 0, 9, 10, 8, 4]
+	df_test_input = pd.DataFrame(test_input)
+	test_output = [0.1, 0, .9, 1, .8, .4]
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = scaling(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
+def test_multicolumn_scaling():
+	"""
+	Test case where there are multiple columns provided
+	"""
+	test_input = {
+		"Months": [0, 1, 2, 3, 4, 5],
+		"Days": [12, 1, 6, 24, 20, 18],
+		"Values": [1, 0, 9, 10, 8, 4]
+	}
+	df_test_input = pd.DataFrame(test_input)
+	test_output = {
+		"Months": [0, 1, 2, 3, 4, 5],
+		"Days": [12, 1, 6, 24, 20, 18],
+		"Values": [0.1, 0, .9, 1, .8, .4]
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = scaling(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
 
 '''
 def main():
