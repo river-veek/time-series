@@ -13,8 +13,13 @@ import matplotlib.pyplot as plt
 
 
 def plot(ts):
-    plt.plot(ts)
-    plt.show()
+	if type(ts) == list:
+		for item in ts:
+			plt.plot(item)
+		plt.show()
+	else:
+		plt.plot(ts)
+		plt.show()
 
 def histogram(ts):
     ts.plot.hist()
@@ -27,6 +32,7 @@ def box_plot(ts):
 
 def normality_test(ts):
     pass
+
 def mse(ts):
     pass
 def mape(ts):
