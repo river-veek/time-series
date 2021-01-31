@@ -90,11 +90,10 @@ def test_copy_add_subtree(test_tree):
     add_subtree(test_tree, 3, sub_tree)
     test_tree.print_tree()
 
-def test_copy_path():
-    pass
-
-def test_combine_trees():
-    pass
+def test_copy_path(test_tree):
+    print("\n##Test Copying Path##")
+    path_copy = copy_path(test_tree, 11)
+    path_copy.print_tree()
 
 def test_save_load_tree(test_tree):
 
@@ -108,12 +107,6 @@ def test_save_load_tree(test_tree):
     loaded_tree.print_tree()
     save_tree(loaded_tree, "tree_test_loaded.txt")
 
-def test_load_pipeline():
-    pass
-
-def test_save_pipeline():
-    pass
-
 def test_execute_pipeline():
     pass
 
@@ -126,26 +119,16 @@ def test_execute_tree():
 def main():
 
     test_tree = test_create_tree()
+
     test_tree = test_add_node(test_tree)
+
     test_tree = test_replace_operation(test_tree)
 
     test_save_load_tree(test_tree)
+
     test_copy_add_subtree(test_tree)
 
-    # test_add_node(test_tree)
-    #
-    # #test replacing a node operation
-    # test_tree.replace_node("replaced", 5)
-    # test_tree.print_tree()
-    #
-    # save_tree(test_tree, "save_file.txt")
-    #
-    # loaded_tree = load_tree("save_file.txt")
-    # print("Loaded Tree:")
-    # loaded_tree.print_tree()
-    #
-    # print("Sub-Tree:")
-    # sub_tree = copy_subtree(test_tree, 1)
-    # sub_tree.print_tree()
+    test_copy_path(test_tree)
+
 
 main()

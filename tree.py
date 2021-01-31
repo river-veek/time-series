@@ -435,12 +435,14 @@ class TS_Tree:
 
     def get_path(self, node_index: int):
         """
-        Function to get a list of the pipeline leading to the node at (node_index)
+        Function to get a list nodes of the pipeline leading to the node at
+        (node_index)
 
         Calls:
             tree.py - Operation_node.change_operation(new_operation)
         Call By:
             tree.py - TS_Tree.execute_path()
+            tree.py - copy_path()
 
         Returns - List
         """
@@ -536,7 +538,7 @@ class TS_Tree:
 def copy_subtree(main_tree: TS_Tree, node_index: int):
     """
     Takes a Tree and returns a copy of the subtree starting at node (node_index)
-    in a save file named (save_file_name) in the TreeFiles folder.
+    as a new TS_Tree object.
 
     Calls:
         tree.py - save_tree()
@@ -603,6 +605,43 @@ def add_subtree(tree: TS_Tree, node_index: int, sub_tree: TS_Tree):
         node_operation = node_info[0]
         node.name = node_operation + "-" + str(node_i)
 
+def copy_path(main_tree: TS_Tree, node_index: int):
+    """
+    Takes a Tree and returns a copy of the path starting at the root and going
+    to (node_index) as a new TS_Tree object.
+
+    Calls:
+
+    Call By:
+
+    Returns - Tree
+    """
+    path_copy = TS_Tree()
+
+    #get list of nodes that will make up the subtree
+    node_list = main_tree.get_path(node_index)
+    for node in node_list:
+        #create a copy of the node
+        copy = node.copy_node()
+
+        #root condition
+        if node.parent == None:
+            path_copy.nodes[0] = copy
+        else:
+            #get copy to point to the parent copy
+            for node in path_copy.nodes:
+                if node.name == copy.parent.name:
+                    copy.parent = node
+            path_copy.nodes.append(copy)
+
+    #reset indexes of Nodes
+    for node_i in range(len(path_copy.nodes)):
+        node = path_copy.nodes[node_i]
+        node_info = node.name.split("-")
+        node_operation = node_info[0]
+        node.name = node_operation + "-" + str(node_i)
+
+    return path_copy
 
 def save_tree(tree: TS_Tree, save_file_name: str):
     """
