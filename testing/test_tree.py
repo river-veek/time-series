@@ -47,6 +47,7 @@ def test_add_node(test_tree):
     test_tree.add_node("plot", 4)
     test_tree.add_node("histogram", 4)
     test_tree.add_node("mse", 5, input_filename="test_file.txt")
+    test_tree.add_node("mlp_model", 2, layers=[0.0,1.0,2.0,3.0])
     test_tree.print_tree()
 
     #check invaid function inputs
@@ -105,6 +106,7 @@ def test_save_load_tree(test_tree):
     test_tree.print_tree()
     print("\n#Loaded Tree#")
     loaded_tree.print_tree()
+    save_tree(loaded_tree, "tree_test_loaded.txt")
 
 def test_load_pipeline():
     pass
