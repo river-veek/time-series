@@ -94,7 +94,18 @@ def impute_missing_data(ts):
     return pd.DataFrame(ts, columns=[col_name])
 
 def impute_outliers(ts):
-    pass
+    """
+    Takes a time series and returns a time series.
+
+    Identifies any outliers in the given time series and imputes new values
+    in their place. Calculations for the new values will follow a similar
+    process to impute_missing_data(); the new values will be equal to
+    the mean of adjacent values.
+
+    Multiple outliers can exist in the given time series.
+    """
+
+
 
 def longest_continuous_run(ts):
     """
