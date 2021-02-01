@@ -230,6 +230,54 @@ def test_general_standardize():
 	print(df_actual_output)
 	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
 
+
+
+##########################
+# LOGARITHM TESTS
+##########################
+
+def test_logarithm():
+	"""
+	Tests 1 column dataframe
+	"""
+	ts = pd.DataFrame({
+		"Times": [0, 1, 2, 3, 4, 5],
+		"Values": [1.0, 0.0, 9.0, 10.0, 8.0, 4.0]
+	})
+	
+	logarithm(ts)
+
+
+##########################
+# CUBIC ROOT TESTS
+##########################
+
+def test_cubic_root():
+
+	ts = pd.DataFrame({
+		"Times": [0, 1, 2, 3, 4, 5],
+		"Values": [1.0, 0.0, 9.0, 10.0, 8.0, 4.0]
+	})
+
+	df = cubic_root(ts)
+	
+##########################
+# SPLIT DATA TESTS
+##########################
+
+def test_split_data():
+	ts = pd.DataFrame({
+		"Times": [0, 1, 2, 3, 4, 5],
+		"Values": [1.0, 0.0, 9.0, 10.0, 8.0, 4.0]
+	})
+
+	val1 = .25
+	val2 = .50
+	val3 = .25
+	
+	split_data(ts, val1, val2, val3)
+
+test_split_data()
 '''
 def main():
 	test1_timeSeriesData1()

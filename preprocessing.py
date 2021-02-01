@@ -10,7 +10,7 @@ import pandas as pd
 import file_io as fio
 import matplotlib.pyplot as plt
 import numpy as np
-
+import math
 
 ######################
 # HELPER FUNCTIONS
@@ -327,24 +327,70 @@ def design_matrix_2(ts, mi, ti, mo, to):
     pass
 
 def logarithm(ts):
-	"""
-	nickt
-	"""
-	frame = pd.Series(ts.series).to_frame()
-	frame['norm'] = (1+frame[0])/2
-	frame['lognorm'] = np.log(frame['norm'])
+    """
+    Converts ts values to their log10 value
 
+    possible bug: if input values from df coloumn are of type int, this may not work
+    """
+    
+    nums = ts.iloc[:,-1,].to_list()
+    
+
+    for i in range(len(nums)):
+        item = nums[i]
+        
+        
+        if item != 0:
+            item = np.log10(nums[i])
+            print(item)
+            ts.iloc[:,-1,][i] = item
+        elif (item == 0):
+            print(item)
+            ts.iloc[:,-1,][i] = 0
+        else:
+            ts.iloc[:,-1,][i] = np.nan
+        
+
+    return ts
+
+    
+        
 def cubic_root(ts):
-	"""
-	nickt
-	"""
-	pass
+    """prints warning but works"""
+    nums = ts.iloc[:,-1,].to_list()
+    
+    for i in range(len(nums)):
+        item = nums[i]
+
+        if item != 0:
+            item = item**(1/3)
+            ts.iloc[:,-1,][i] = item
+        elif (item == 0):
+            ts.iloc[:,-1,][i] = 0.0
+        else:
+            ts.iloc[:,-1,][i] = np.nan
+    
+    return ts
 
 def split_data(ts, perc_training, perc_valid, perc_test):
-	"""
-	nickt
-	"""
-	pass
+    if (perc_training + perc_valid + perc_test) != 1:
+        raise Exception("Error: percentages do not add to 1")
+    
+    p = np.array([perc_training, perc_valid, perc_test])
+    a = np.array(ts.iloc[:,-1,].to_list())
+
+    length = len(a)
+
+    sec1 = length * perc_training
+    sec2 = length + perc_valid
+    sec3 = length + perc_test
+
+    print(np.split(a,(len(a)*p[:-1].cumsum()).astype(int)))
+
+    
+
+
+
 
 def ts2db(input_file, perc_train, perc_val, perc_test,
           input_index, output_index, output_file):
