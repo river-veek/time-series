@@ -51,22 +51,21 @@ def test_imp_miss_data():
     # df7 = impute_missing_data(df7)
     # print(df7)
 
+#########################
+# IMPUTE_OUTLIERS() TESTS
+#########################
+
 ##############################
 # LONGEST_CONTINUOUS_RUN TESTS
 ##############################
-def long_cont_run():
+def test_long_cont_run():
     df2 = pd.DataFrame({'c1': [10, 11, "NaN"]})
     df3 = pd.DataFrame({'c1': ["NaN"]})
     df4 = pd.DataFrame({'c1': ["NaN", 10, 9]})
     df5 = pd.DataFrame({'c1': [10, "NaN"]})
     df6 = pd.DataFrame({'c1': ["NaN", 11, 10, 12, 11, 9]})
     df7 = pd.DataFrame({'c1': [10, "NaN", 11]})
-    # df2 = impute_missing_data(df2)
-    # df3 = impute_missing_data(df3)
-    # df4 = impute_missing_data(df4)
-    # df5 = impute_missing_data(df5)
-    # df6 = impute_missing_data(df6)
-    # df7 = impute_missing_data(df7)
+
 
 ###############
 # CLIP() TESTS
@@ -244,7 +243,7 @@ def test_logarithm():
 		"Times": [0, 1, 2, 3, 4, 5],
 		"Values": [1.0, 0.0, 9.0, 10.0, 8.0, 4.0]
 	})
-	
+
 	logarithm(ts)
 
 
@@ -260,7 +259,7 @@ def test_cubic_root():
 	})
 
 	df = cubic_root(ts)
-	
+
 ##########################
 # SPLIT DATA TESTS
 ##########################
@@ -274,7 +273,7 @@ def test_split_data():
 	val1 = .25
 	val2 = .50
 	val3 = .25
-	
+
 	split_data(ts, val1, val2, val3)
 
 test_split_data()

@@ -51,7 +51,7 @@ def impute_missing_data(ts):
 
     Author: River Veek
     """
-    # ASSUMED THAT MISSING POINTS WILL BE == NaN
+    # ASSUMED THAT MISSING POINTS WILL BE == 'NaN'
     # ASSUMED THAT ONLY ONE POINT IS MISSING AT THE MOST
 
     # isolate last col name
@@ -102,10 +102,54 @@ def impute_outliers(ts):
     process to impute_missing_data(); the new values will be equal to
     the mean of adjacent values.
 
+    If first data point is an outlier, the mean of the following two points
+    will be imputed. If the last data point is an outlier, the mean of the
+    previous two data points will be imputed. Otherwise, the mean of the previous
+    and following point will be imputed in place of the outlier.
+
     Multiple outliers can exist in the given time series.
+
+    Author: River Veek
     """
+    # isolate last col name
+    col_name = ts.columns[-1]
 
+    # make copy of ts for sorting purposes
+    ts_copy = ts.copy()
+    ts_copy = ts_copy.sort_values(by=[col_name])
+    ts_copy = ts_copy.iloc[:, -1].tolist()
 
+    # convert ts into list of values from last col (data)
+    ts = ts.iloc[:, -1].tolist()
+
+    # isolate Q1, Q2, IQR
+    # NOTE: median included in calculation of Q1, Q2
+    quartiles = np.quantile(ts_copy, [.25, .50, .75])
+    iqr = quartiles[2] - quartiles[0]
+
+    # isolate upper and lower bounds of data set (not inclusive)
+    upper = quartiles[2] + 1.5 * iqr
+    lower = quartiles[0] - 1.5 * iqr
+
+    # find values that fall outside of upper or lower
+    for i in range(len(ts)):
+
+        if (ts[i] > upper) or (ts[i] < lower):
+
+            if i == 0:
+                mean = (ts[i + 1] + ts[i + 2]) / 2
+                ts[i] = mean
+
+            elif i == len(ts) - 1:
+                mean = (ts[i - 1] + ts[i - 2]) / 2
+                ts[i] = mean
+
+            else:
+                mean = (ts[i - 1] + ts[i + 1]) / 2
+                ts[i] = mean
+
+    # return new DataFrame
+    return pd.DataFrame(ts, columns=[col_name])
 
 def longest_continuous_run(ts):
     """
@@ -332,14 +376,14 @@ def logarithm(ts):
 
     possible bug: if input values from df coloumn are of type int, this may not work
     """
-    
+
     nums = ts.iloc[:,-1,].to_list()
-    
+
 
     for i in range(len(nums)):
         item = nums[i]
-        
-        
+
+
         if item != 0:
             item = np.log10(nums[i])
             print(item)
@@ -349,16 +393,16 @@ def logarithm(ts):
             ts.iloc[:,-1,][i] = 0
         else:
             ts.iloc[:,-1,][i] = np.nan
-        
+
 
     return ts
 
-    
-        
+
+
 def cubic_root(ts):
     """prints warning but works"""
     nums = ts.iloc[:,-1,].to_list()
-    
+
     for i in range(len(nums)):
         item = nums[i]
 
@@ -369,13 +413,13 @@ def cubic_root(ts):
             ts.iloc[:,-1,][i] = 0.0
         else:
             ts.iloc[:,-1,][i] = np.nan
-    
+
     return ts
 
 def split_data(ts, perc_training, perc_valid, perc_test):
     if (perc_training + perc_valid + perc_test) != 1:
         raise Exception("Error: percentages do not add to 1")
-    
+
     p = np.array([perc_training, perc_valid, perc_test])
     a = np.array(ts.iloc[:,-1,].to_list())
 
@@ -387,7 +431,7 @@ def split_data(ts, perc_training, perc_valid, perc_test):
 
     print(np.split(a,(len(a)*p[:-1].cumsum()).astype(int)))
 
-    
+
 
 
 
