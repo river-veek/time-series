@@ -384,7 +384,7 @@ def design_matrix(ts, data_start, data_end):
     # ouput index == where to start second tuple, float -> int
     # return tuple of numpy arrays containing numpy arrays ANDDDDD the original ts
     # EXAMPLE
-    # (    [ [1,2,3], [2,3,4], [3,4,5], … [] ],    [ [4,5], [5,6], [6,7], … [] ]    )
+    # (ts, [ [1,2,3], [2,3,4], [3,4,5], … [] ], [ [4,5], [5,6], [6,7], … [] ])
 
     # convert value col of ts to list
     ts_copy = ts.iloc[:, -1].tolist()
