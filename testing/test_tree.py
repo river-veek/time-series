@@ -9,9 +9,12 @@ Author: Noah Kruss
 todo
     write input chack for operations to makes sure a end operation doesn't get followed
 """
+
 import sys
 sys.path.append("../")
 from tree import *
+import file_io as fio
+import pandas as pd
 
 def test_create_tree():
     print("\n##Test basic Tree Creation##")
@@ -63,19 +66,20 @@ def test_replace_operation(test_tree):
     print("\n##Test Replacing Nodes Operation in Tree##")
 
     #check invaid node_index
-    print("#testing invalid node_index#")
+    print("\n#testing invalid node_index#")
     test_tree.replace_node("denoise", 9)
 
     #check invaid operation
-    print("#testing invalid operation#")
+    print("\n#testing invalid operation#")
     test_tree.replace_node("in-valid", 0)
 
     print("\n#testing replacing non-leaf node operation with a lead operation#")
     test_tree.replace_node("mse", 2)
 
     #build basic tree
-    print("#replacing node operation tree#")
-    test_tree.replace_node("input_outliers", 4)
+    print("\n#replacing node operation tree#")
+    test_tree.replace_node("impute_outliers", 4)
+    test_tree.replace_node("difference", 1)
     test_tree.print_tree()
 
     return test_tree
@@ -107,14 +111,21 @@ def test_save_load_tree(test_tree):
     loaded_tree.print_tree()
     save_tree(loaded_tree, "tree_test_loaded.txt")
 
-def test_execute_pipeline():
-    pass
+def test_execute_pipeline(test_tree):
+    tree = TS_Tree()
+    tree.replace_node("longest_continuous_run", 0)
+    tree.add_node("impute_missing_data", 0)
+    tree.add_node("assign_time", 1, data_start=1.0, increment=.2)
+    tree.add_node("clip", 2, data_start=1.0, data_end=10.0)
+    tree.print_tree()
+
+    print("\n##Test executting a pipeline to node 6##")
+    fname1 = "../timeSeriesData/TimeSeriesData2/AtmPres2005NovMin.csv"
+    ts = fio.read_from_file(fname1)
+    tree.execute_path(ts, 3)
 
 def test_execute_tree():
     pass
-
-
-
 
 def main():
 
@@ -129,6 +140,8 @@ def main():
     test_copy_add_subtree(test_tree)
 
     test_copy_path(test_tree)
+
+    test_execute_pipeline(test_tree)
 
 
 main()
