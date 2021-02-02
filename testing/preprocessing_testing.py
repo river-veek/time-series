@@ -15,23 +15,6 @@ import file_io as fio
 from preprocessing import *
 import nose
 
-'''
-def test1_timeSeriesData1():
-	"""
-	test time series creation from timeSeriesData1 files
-
-	"""
-	fileNames = ["1_temperature_test.csv","1_temperature_train.csv","2_temperature_subsampled_test.csv",
-	"2_temperature_subsampled_train.csv", "3_passengers_test.csv","3_passengers_train.csv","4_irradiance_test.csv",
-	"4_irradiance_train.csv", "5_irradiance_subsampled_test.csv", "5_irradiance_subsampled_train.csv", "6_sunspots_test.csv", "6_sunspots_train.csv",
-	"7_distribution_subsampled_norm_test.csv", "7_distribution_subsampled_norm_train.csv", "8_distribution_subsampled_test.csv", "8_distribution_subsampled_train.csv"]
-
-
-	fname = "../timeSeriesData/TimeSeriesData1/"+fileNames[0]
-
-	ts = fio.read_from_file(fname)
-	#logarithm(ts)
-'''
 
 #############################
 # IMPUTE_MISSING_DATA() TESTS
@@ -222,13 +205,8 @@ def test_general_standardize():
 		]
 	}
 	df_test_output = pd.DataFrame(test_output)
-	print("Expected:")
-	print(df_test_output)
 	df_actual_output = standardize(df_test_input)
-	print("Got:")
-	print(df_actual_output)
 	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
-
 
 
 ##########################
@@ -276,12 +254,4 @@ def test_split_data():
 
 	split_data(ts, val1, val2, val3)
 
-test_split_data()
-'''
-def main():
-	test1_timeSeriesData1()
-	#test2_timeSeriesData2()
-	pass
 
-main()
-'''
