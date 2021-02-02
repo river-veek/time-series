@@ -438,6 +438,13 @@ def split_data(ts, perc_training, perc_valid, perc_test):
 
 def ts2db(input_file, perc_train, perc_val, perc_test,
           input_index, output_index, output_file):
+    """
+    Takes in an input data file to read in the time series, as well as
+    how much the user wants the data to be split into three categories:
+    training, validation, and testing. Then, it creates three separate time
+    series that it turns into machine learning model friendly databases with
+    the input and output sizes provided, and returns those.
+    """
     # read in time series data from file
     ts = fio.read_from_file(input_file)
     # split time series data into training, validation, and test sets
@@ -450,3 +457,22 @@ def ts2db(input_file, perc_train, perc_val, perc_test,
     # return set of databases
     return (train_db, val_db, test_db)
 
+def db2ts(db):
+    """
+    Takes in a numpy matrix (database) containing a set of values and
+    converts it to a time series.
+    """
+    # create temporary list to add time series data to
+    ts_list = []
+    # go through each row in database
+    for row_id in range(len(db)):
+        # grab each element from the first row
+        if row_id == 0:                 # SUPER INEFFICIENT
+            for col in db[row_id]:
+                ts_list.append(col)
+        # grab the last element from the remaining rows
+        else:
+            ts_list.append(db[row_id][-1])
+    # convert to real time series data to return
+    ts = pd.DataFrame(ts_list)
+    return ts
