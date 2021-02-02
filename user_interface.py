@@ -1,30 +1,5 @@
 from tree import *
 
-pre_processing = ["denoise",
-                  "input_missing_data",
-                  "input_outliers",
-                  "longest_continous_run",
-                  "clip",
-                  "assign_time",
-                  "difference",
-                  "scaling",
-                  "standardize",
-                  "logarithm",
-                  "cubic_root",
-                  "split_data",
-                  "design_matrix",
-                  "ts2db",
-                  "mlp_model"]
-
-visualization = ["plot",
-                 "histogram",
-                 "box_plot",
-                 "normality_test",
-                 "mse",
-                 "mape",
-                 "smape"]
-
-
 def print_operation_lists():
     """
     Function to display to terminal the valid pre-processing and visualization
@@ -129,9 +104,6 @@ def main():
         print("\tTo add a node to the tree type 'add_node'")
         print("\tTo add a sub-tree to the tree type 'add_subtree'")
         print("\t--------------------------")
-        print("\tTo copy a sub-tree to a save file type 'copy_subtree'")
-        print("\tTo copy a tree_path to a save file type 'copy_path'")
-        print("\t--------------------------")
         print("\tTo execute a tree or tree branch type 'execute_tree'")
         print("\tTo close this program type 'quit'")
         print()
@@ -191,20 +163,18 @@ def main():
             if (operation != None) and (node_index != None):
                 tree.add_node(operation, node_index)
 
-        elif user_command == "copy_subtree":
+        # elif user_command == "copy_subtree":
+        #
+        #     command_str = "Enter index of root of target subtree: "
+        #     node_index = get_user_index(command_str)
+        #
+        #     save_file = input("Please enter name of save file to save subtree into: ").strip()
+        #     subtree = load_tree(tree_file)
+        #
+        #     #if vaid operation
+        #     if (operation != None) and (node_index != None):
+        #         tree.add_node(operation, node_index)
 
-            command_str = "Enter index of root of target subtree: "
-            node_index = get_user_index(command_str)
-
-            save_file = input("Please enter name of save file to save subtree into: ").strip()
-            subtree = load_tree(tree_file)
-
-            #if vaid operation
-            if (operation != None) and (node_index != None):
-                tree.add_node(operation, node_index)
-
-        elif user_command == "copy_path":
-            pass
 
         elif user_command == "execute_tree":
             pass
@@ -213,32 +183,4 @@ def main():
         else:
             print("\n---Invalid Command---\n")
 
-
-def test():
-
-    #test basic tree build
-    test_tree = Tree()
-    test_tree.add_node("first_node", 0)
-    test_tree.add_node("secound_node", 0)
-    test_tree.add_node("third_node", 1)
-    test_tree.add_node("fourth_node", 1)
-    test_tree.add_node("fith_node", 4)
-    test_tree.add_node("sixth_node", 4)
-    test_tree.print_tree()
-
-    #test replacing a node operation
-    test_tree.replace_node("replaced", 5)
-    test_tree.print_tree()
-
-    save_tree(test_tree, "save_file.txt")
-
-    loaded_tree = load_tree("save_file.txt")
-    print("Loaded Tree:")
-    loaded_tree.print_tree()
-
-    print("Sub-Tree:")
-    sub_tree = copy_subtree(test_tree, 1)
-    sub_tree.print_tree()
-
-#test()
 main()
