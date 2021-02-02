@@ -116,13 +116,14 @@ def test_execute_pipeline(test_tree):
     tree.replace_node("longest_continuous_run", 0)
     tree.add_node("impute_missing_data", 0)
     tree.add_node("assign_time", 1, data_start=1.0, increment=.2)
-    tree.add_node("clip", 2, data_start=1.0, data_end=10.0)
+    tree.add_node("plot", 2)
+    #tree.add_node("clip", 2, data_start=1.0, data_end=10.0)
     tree.print_tree()
 
     print("\n##Test executting a pipeline to node 6##")
     fname1 = "../timeSeriesData/TimeSeriesData2/AtmPres2005NovMin.csv"
     ts = fio.read_from_file(fname1)
-    tree.execute_path(ts, 3)
+    results = tree.execute_path(ts, 3)
 
 def test_execute_tree():
     pass

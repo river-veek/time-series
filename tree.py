@@ -1,6 +1,11 @@
 """
 Tree class for product library
 
+The TS_Tree object will store and organize nodes which contain function call
+to be applied to time series data. A pipeline within the tree (a path from the
+root node to the target node) can then be executed to apply the chain of
+functions onto the time series data.
+
 Author: Noah Kruss
 """
 
@@ -17,6 +22,7 @@ from anytree import Node, RenderTree, NodeMixin
 import preprocessing as pre_proc
 import visualization as vis
 import modeling as mod
+import file_io as fio
 
 ########################
 # Valid operations for nodes
@@ -36,7 +42,10 @@ pre_processing = {"denoise": (pre_proc.denoise, None),
                   "design_matrix": (pre_proc.design_matrix, [0,1]),
                   "design_matrix_2": (pre_proc.design_matrix_2, [8,9,10,11]),
                   "ts2db": (pre_proc.ts2db, [6,3,4,5,0,1,7]),
-                  "mlp_model": (mod.mlp_model, [0,2,12])
+                  "mlp_model": (mod.mlp_model, [12]),
+                  "mlp_forecast": (mod.forecast, [6])
+                  "read_from_file": (fio.read_from_file, [6]),
+                  "write_to_file": (fio.write_to_file, [7])
                   }
 
 visualization = {"plot": (vis.plot, None),
@@ -48,7 +57,9 @@ visualization = {"plot": (vis.plot, None),
                  "smape": (vis.smape, [6])
                  }
 
-leaf_functions = ["split_data", "mlp_model", "mse", "mape", "smape"]
+leaf_functions = ["split_data", "mse", "mape", "smape", "write_to_file"]
+
+path_dependent = ["design_matrix", "design_matrix_2", "ts2db", "mlp_model", ]
 
 ########################
 # validate input functions
@@ -60,8 +71,8 @@ def validate_operation(operation: str):
     Calls:
         None
     Call By:
-        tree.
-        tree.
+        tree.py - TS_Tree.add_node()
+        tree.py - TS_Tree.replace_node()
 
     Return - Bool
     """
@@ -74,7 +85,49 @@ def validate_operation(operation: str):
 
     return valid
 
-def validate_inputs(data_start,
+def validate_operation_order(operation: str, parent_operation: str):
+    """
+    Function to validate that the node ordering is valid
+
+    Calls:
+        None
+    Call By:
+        tree.py - TS_Tree.add_node()
+        tree.py - TS_Tree.replace_node()
+
+    Return - Bool
+    """
+    valid = True
+
+    if parent_operation in leaf_functions:
+        print(f"Error - parent function '{parent_operation}' can't have children")
+        valid = False
+
+    elif (parent_operation == "design_matrix" and operation != "mlp_model"):
+        print(f"Error - design_matrix needs to be followed by mlp_model")
+        valid = False
+
+    elif (parent_operation == "design_matrix_2" and operation != "mlp_model"):
+        print(f"Error - design_matrix_2 needs to be followed by mlp_model")
+        valid = False
+
+    elif (parent_operation == "ts2db" and operation != "mlp_model"):
+        print(f"Error - ts2db needs to be followed by mlp_model")
+        valid = False
+
+    elif (parent_operation == "mlp_model" and operation != "mlp_forecast"):
+        print(f"Error - mlp_model needs to be followed by mlp_forecast")
+        valid = False
+
+    elif (parent_operation == "mlp_forecast" and operation != "mape") or
+         (parent_operation == "mlp_forecast" and operation != "smape"):
+        print(f"Error - mlp_forecast needs to be followed by mape or smape")
+        valid = False
+
+    return valid
+
+def validate_inputs(operation,
+                    data_start,
                     data_end,
                     increment,
                     perc_training,
@@ -94,8 +147,8 @@ def validate_inputs(data_start,
     Calls:
         None
     Call By:
-        tree.
-        tree.
+        tree.py - TS_Tree.add_node()
+        tree.py - TS_Tree.replace_node()
 
     Return - Bool
     """
@@ -142,6 +195,47 @@ def validate_inputs(data_start,
         print(f"Invalid Input - t_0={m_0} is not a float")
         valid = False
 
+    #check inputs match with the function
+    if operation == "clip":
+        if (data_start == None) or (data_end == None):
+            valid = False
+    elif operation == "assign_time":
+        if (data_start == None) or (increment == None):
+            valid = False
+    elif operation == "split_data":
+        if (perc_test == None) or (perc_valid == None) or (perc_training == None):
+            valid = False
+    elif operation == "design_matrix":
+        if (data_start == None) or (data_end == None):
+            valid = False
+    elif operation == "design_matrix_2":
+        if (m_i == None) or (t_i == None) or (m_0 == None) or (t_0 == None):
+            valid = False
+    elif operation == "ts2db":
+        if (input_filename == None) or (perc_test == None) or (perc_valid == None) or (perc_training == None) or (data_start == None) or (data_end == None) or (output_filename == None):
+            valid = False
+    elif operation == "mlp_model":
+        if (layers == None):
+            valid = False
+    elif operation == "mlp_forecast":
+        if (input_filename == None):
+            valid = False
+    elif operation == "read_from_file":
+        if (input_filename == None):
+            valid = False
+    elif operation == "write_to_file":
+        if (output_filename == None):
+            valid = False
+    elif operation == "mse":
+        if (input_filename == None):
+            valid = False
+    elif operation == "mape":
+        if (input_filename == None):
+            valid = False
+    elif operation == "smape":
+        if (input_filename == None):
+            valid = False
+
     return valid
 
 ########################
@@ -152,6 +246,40 @@ class Operation_node(NodeMixin):
     Operation_node is a node class for a Tree built off of the basic
     anytree node class. Operation_node class includes aditionaly functionality
     for storing function calls and node depth then NodeMixin
+
+    Function Inputs:
+        data_start - float input that can be passed to functions (clip,
+                     assign_time, design_matrix, ts2db, mlp_model)
+
+        data_end - float input that can be passed to functions (clip,
+                   design_matrix)
+
+        increment - float input that can be passed to functions (assign_time,
+                    mlp_model)
+
+        perc_training - float input that can be passed to functions
+                        (split_data, ts2db)
+
+        perc_valid - float input that can be passed to functions
+                     (split_data, ts2db)
+
+        perc_test - float input that can be passed to functions
+                    (split_data, ts2db)
+
+        input_filename - str input that can be passed to functions (ts2db,
+                         mse, mape, smape)
+
+        output_filename - str input that can be passed to functions (ts2db)
+
+        m_i - float input that can be passed to (design_matrix_2)
+
+        t_i - float input that can be passed to (design_matrix_2)
+
+        m_0 - float input that can be passed to (design_matrix_2)
+
+        t_0 - float input that can be passed to (design_matrix_2)
+
+        layers - list input that can be passed to (mlp_model)
     """
 
     def __init__(self,
@@ -172,10 +300,14 @@ class Operation_node(NodeMixin):
                  t_0 = None,
                  layers = None):
         """
-        Initilize node properties: (name, depth, parent, child_list)
-            name is a string in the form - 'operation_call-node_index'
-            parent is a Operation_node (can be None) that is the parent
-            child_list is an empty list to store child nodes
+        Initilize node properties:
+            name - str in the form 'operation_call-node_index'
+
+            function - str representation of function call
+
+            parent - Operation_node (can be None) that is the parent of the node
+
+
         """
 
         super(Operation_node, self).__init__()
@@ -372,6 +504,7 @@ class TS_Tree:
         if parent_index >= len(self.nodes) or parent_index < 0:
             print(f"Invalid parent_index - {parent_index}")
             return None
+
         #check to make sure operation is valid
         if validate_operation(operation) == False:
             print(f"Invalid operation - {operation}")
@@ -398,8 +531,7 @@ class TS_Tree:
 
         #check new operation doesn't conflict with parents
         parent_operation = parent_node.name.split("-")[0]
-        if parent_operation in leaf_functions:
-            print(f"Error - parent function '{parent_operation}' can't have children")
+        if validate_operation_order(operation, parent_operation):
             return None
 
         #set up name for the new node depending of the given operation and the
@@ -458,13 +590,23 @@ class TS_Tree:
         if node_index >= len(self.nodes) or node_index < 0:
             print("Invalid node_index")
             return None
+
+        node = self.nodes[node_index]
+
         #check to make sure operation is valid
         if validate_operation(new_operation) == False:
             print(f"Invalid operation - {new_operation}")
             return None
-        if (new_operation in leaf_functions) and (self.nodes[node_index].is_a_leaf == False):
+        if (new_operation in leaf_functions) and (node.is_a_leaf == False):
             print(f"Invalid operation - '{new_operation}' has to be a leaf")
             return None
+        if validate_operation_order(new_operation, parent_operation):
+            return None
+        if (node.is_a_leaf == False and new_operation in path_dependent:
+            print(f"Invalid operation - '{new_operation}' is path dependent")
+            return None
+
+
         # check to make sure function inputs are valid
         if validate_inputs(data_start,
                            data_end,
@@ -481,7 +623,6 @@ class TS_Tree:
                            layers) == False:
             return None
 
-        node = self.nodes[node_index]
         node.change_operation(new_operation,
                               data_start = data_start,
                               data_end = data_end,
@@ -527,10 +668,11 @@ class TS_Tree:
 
         return pipeline
 
-    def execute_path(self, time_series, node_index: int):
+    def execute_path(self, data_input, node_index: int):
         """
         Function for running the pipeline from the root to a node with
-        (node_index) within a tree on the given time series (time_series)
+        (node_index) within a tree on the given data_input (time series or
+        file_name of time series)
 
         Calls:
             tree.py - TS_Tree.get_peth()
@@ -555,7 +697,7 @@ class TS_Tree:
 
             #condition where function only takes a time series
             if node.function[1] == None:
-                time_series = func(time_series)
+                data_input = func(data_input)
 
             #function with aditional inputs
             else:
@@ -567,22 +709,23 @@ class TS_Tree:
                 #make function call with apropriate input parameters
                 num_inputs = len(inputs)
                 if num_inputs == 1:
-                    time_series = func(time_series, inputs[0])
+                    data_input = func(data_input, inputs[0])
                 elif num_inputs == 2:
-                    time_series = func(time_series, inputs[0], inputs[1])
+                    data_input = func(data_input, inputs[0], inputs[1])
                 elif num_inputs == 3:
-                    time_series = func(time_series, inputs[0], inputs[1], inputs[2])
+                    data_input = func(data_input, inputs[0], inputs[1], inputs[2])
                 elif num_inputs == 4:
-                    time_series = func(time_series, inputs[0], inputs[1], inputs[2], inputs[3])
+                    data_input = func(data_input, inputs[0], inputs[1], inputs[2], inputs[3])
                 elif num_inputs == 5:
-                    time_series = func(time_series, inputs[0], inputs[1], inputs[2], inputs[3], inputs[5])
+                    data_input = func(data_input, inputs[0], inputs[1], inputs[2], inputs[3], inputs[5])
 
-        return time_series
+        return data_input
 
-    def execute_tree(self, time_series):
+    def execute_tree(self, data_input):
         """
         Function for running every possible pipeline from the root to a leaf
-        within a tree on the given time series (time_series)
+        within a tree on the given an data_input (time series or
+        file_name of time series)
 
         Calls:
             tree.py - TS_Tree.execute_path()
@@ -597,7 +740,7 @@ class TS_Tree:
             #if node is a leaf execute the pipeline from it to the root
             if node.is_a_leaf:
                 index = node.name.split("-")[1]
-                result = self.execute_path(time_series, index)
+                result = self.execute_path(data_input), index)
                 Outputs[node.name] = result
 
         return result
