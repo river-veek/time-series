@@ -43,6 +43,17 @@ def write_to_file(ts, output_file_name):
 	pass
 
 
+
+
+def db_read_to_file(input_filename):
+	"""
+	Reads in a time series database.
+	"""
+	data = pd.read_csv(input_filename)
+	return data
+
+
+
 def test():
 	fname1 = "1_temperature_test.csv"
 	fname2 = "wind_cointzio_10m_complete.csv"

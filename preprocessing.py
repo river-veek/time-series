@@ -441,10 +441,12 @@ def ts2db(input_file, perc_train, perc_val, perc_test,
     # read in time series data from file
     ts = fio.read_from_file(input_file)
     # split time series data into training, validation, and test sets
-    ts_db = split_data(ts, perc_train, perc_val, perc_test)
+    ts_splits = split_data(ts, perc_train, perc_val, perc_test)
     # convert datasets into databases that can be processed by
     # a machine learning model
-    # TODO: CALL DESIGN MATRIX
+    train_db = design_matrix(ts_splits[0], input_index, output_index)
+    val_db = design_matrix(ts_splits[1], input_index, output_index)
+    test_db = design_matrix(ts_splits[2], input_index, output_index)
     # return set of databases
-    return dbs
+    return (train_db, val_db, test_db)
 
