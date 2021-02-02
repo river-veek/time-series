@@ -15,23 +15,6 @@ import file_io as fio
 from preprocessing import *
 import nose
 
-'''
-def test1_timeSeriesData1():
-	"""
-	test time series creation from timeSeriesData1 files
-
-	"""
-	fileNames = ["1_temperature_test.csv","1_temperature_train.csv","2_temperature_subsampled_test.csv",
-	"2_temperature_subsampled_train.csv", "3_passengers_test.csv","3_passengers_train.csv","4_irradiance_test.csv",
-	"4_irradiance_train.csv", "5_irradiance_subsampled_test.csv", "5_irradiance_subsampled_train.csv", "6_sunspots_test.csv", "6_sunspots_train.csv",
-	"7_distribution_subsampled_norm_test.csv", "7_distribution_subsampled_norm_train.csv", "8_distribution_subsampled_test.csv", "8_distribution_subsampled_train.csv"]
-
-
-	fname = "../timeSeriesData/TimeSeriesData1/"+fileNames[0]
-
-	ts = fio.read_from_file(fname)
-	#logarithm(ts)
-'''
 
 #############################
 # IMPUTE_MISSING_DATA() TESTS
@@ -51,22 +34,21 @@ def test_imp_miss_data():
     # df7 = impute_missing_data(df7)
     # print(df7)
 
+#########################
+# IMPUTE_OUTLIERS() TESTS
+#########################
+
 ##############################
 # LONGEST_CONTINUOUS_RUN TESTS
 ##############################
-def long_cont_run():
+def test_long_cont_run():
     df2 = pd.DataFrame({'c1': [10, 11, "NaN"]})
     df3 = pd.DataFrame({'c1': ["NaN"]})
     df4 = pd.DataFrame({'c1': ["NaN", 10, 9]})
     df5 = pd.DataFrame({'c1': [10, "NaN"]})
     df6 = pd.DataFrame({'c1': ["NaN", 11, 10, 12, 11, 9]})
     df7 = pd.DataFrame({'c1': [10, "NaN", 11]})
-    # df2 = impute_missing_data(df2)
-    # df3 = impute_missing_data(df3)
-    # df4 = impute_missing_data(df4)
-    # df5 = impute_missing_data(df5)
-    # df6 = impute_missing_data(df6)
-    # df7 = impute_missing_data(df7)
+
 
 ###############
 # CLIP() TESTS
@@ -223,13 +205,8 @@ def test_general_standardize():
 		]
 	}
 	df_test_output = pd.DataFrame(test_output)
-	print("Expected:")
-	print(df_test_output)
 	df_actual_output = standardize(df_test_input)
-	print("Got:")
-	print(df_actual_output)
 	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
-
 
 
 ##########################
@@ -244,7 +221,7 @@ def test_logarithm():
 		"Times": [0, 1, 2, 3, 4, 5],
 		"Values": [1.0, 0.0, 9.0, 10.0, 8.0, 4.0]
 	})
-	
+
 	logarithm(ts)
 
 
@@ -260,7 +237,7 @@ def test_cubic_root():
 	})
 
 	df = cubic_root(ts)
-	
+
 ##########################
 # SPLIT DATA TESTS
 ##########################
@@ -278,17 +255,14 @@ def test_split_data():
 	val1 = .25
 	val2 = .50
 	val3 = .25
+<<<<<<< HEAD
 	#ts = logarithm(ts)
 	ts = cubic_root(ts)
 	res = split_data(ts, val1, val2, val3)
 	
+=======
 
-test_split_data()
-'''
-def main():
-	test1_timeSeriesData1()
-	#test2_timeSeriesData2()
-	pass
+	split_data(ts, val1, val2, val3)
+>>>>>>> b5cf2e4077811497cab7f7d78441c8ede743c564
 
-main()
-'''
+
