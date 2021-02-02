@@ -438,4 +438,13 @@ def split_data(ts, perc_training, perc_valid, perc_test):
 
 def ts2db(input_file, perc_train, perc_val, perc_test,
           input_index, output_index, output_file):
-    pass
+    # read in time series data from file
+    ts = fio.read_from_file(input_file)
+    # split time series data into training, validation, and test sets
+    ts_db = split_data(ts, perc_train, perc_val, perc_test)
+    # convert datasets into databases that can be processed by
+    # a machine learning model
+    # TODO: CALL DESIGN MATRIX
+    # return set of databases
+    return dbs
+
