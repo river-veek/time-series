@@ -364,9 +364,6 @@ def standardize(ts):
         return
     return new_ts
 
-def design_matrix(ts, input_index, output_index):
-    pass
-
 def design_matrix_2(ts, mi, ti, mo, to):
     pass
 
