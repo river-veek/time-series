@@ -267,15 +267,21 @@ def test_cubic_root():
 
 def test_split_data():
 	ts = pd.DataFrame({
-		"Times": [0, 1, 2, 3, 4, 5],
+		"greetings": ["hello", "hello1", "hello2", "hello3", "hello4", "hello5"],
+		"date": ["monday", "tue", "wed", "thu", "friday", "saturday"],
+		"Values": [1.0, 0.0, 9.0, 10.0, 8.0, 4.0]
+	})
+	ts2 = pd.DataFrame({
 		"Values": [1.0, 0.0, 9.0, 10.0, 8.0, 4.0]
 	})
 
 	val1 = .25
 	val2 = .50
 	val3 = .25
+	#ts = logarithm(ts)
+	ts = cubic_root(ts)
+	res = split_data(ts, val1, val2, val3)
 	
-	split_data(ts, val1, val2, val3)
 
 test_split_data()
 '''

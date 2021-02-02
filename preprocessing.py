@@ -12,10 +12,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 
+
 ######################
 # HELPER FUNCTIONS
 ######################
-
+pd.options.mode.chained_assignment = None
 
 #########################
 # PREPROCESSING FUNCTIONS
@@ -342,10 +343,9 @@ def logarithm(ts):
         
         if item != 0:
             item = np.log10(nums[i])
-            print(item)
+            
             ts.iloc[:,-1,][i] = item
         elif (item == 0):
-            print(item)
             ts.iloc[:,-1,][i] = 0
         else:
             ts.iloc[:,-1,][i] = np.nan
@@ -365,29 +365,76 @@ def cubic_root(ts):
         if item != 0:
             item = item**(1/3)
             ts.iloc[:,-1,][i] = item
-        elif (item == 0):
-            ts.iloc[:,-1,][i] = 0.0
         else:
             ts.iloc[:,-1,][i] = np.nan
     
     return ts
 
 def split_data(ts, perc_training, perc_valid, perc_test):
+    """
+    splits ts dataframe in the following format: 
+
+    -[ts, ts, ts]
+    -[perc_training, perc_valid, perc_test]
+
+    """
     if (perc_training + perc_valid + perc_test) != 1:
         raise Exception("Error: percentages do not add to 1")
     
     p = np.array([perc_training, perc_valid, perc_test])
     a = np.array(ts.iloc[:,-1,].to_list())
 
-    length = len(a)
 
-    sec1 = length * perc_training
-    sec2 = length + perc_valid
-    sec3 = length + perc_test
+    # check how many columns are in the dataset
 
-    print(np.split(a,(len(a)*p[:-1].cumsum()).astype(int)))
 
-    
+    # for one column in original ts
+    if len(ts.columns) == 1:
+
+        length = len(a)
+        #print((len(a)*p[:-1].cumsum()).astype(int))
+        values = np.split(a, (len(a)*p[:-1].cumsum()).astype(int)     )
+        #print(values)
+        perc_training = pd.DataFrame(values[0])
+        perc_valid = pd.DataFrame(values[1])
+        perc_test = pd.DataFrame(values[2])
+        return [perc_training, perc_valid, perc_test]
+
+    else:
+
+        res = []
+        
+        # iterate through columns
+        for i in range(len(ts.columns)):
+
+           col = np.array(ts.iloc[:,i].to_list())
+           values = np.split(col, (len(col)*p[:-1].cumsum()).astype(int)     )
+           res.append(values)
+        
+
+        dictList = []
+        for i in range(len(ts.columns)):
+            dictList.append({})
+
+        ctr = 0
+        for i in range(len(ts.columns)):
+            for j in range(len(ts.columns)):
+                dictList[i][ts.columns[j]] = res[j][i]
+                
+        
+        result = []
+
+        
+        for i in range(len(dictList)):
+            x = pd.DataFrame.from_dict(dictList[i])
+            #print(x)
+            result.append(x)
+            
+
+        
+        return result
+
+
 
 
 

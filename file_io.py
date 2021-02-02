@@ -6,7 +6,7 @@ Author: Nick Titzler
 import csv
 import pickle
 import pandas as pd
-
+import numpy as np
 #for testing
 
 
