@@ -384,10 +384,10 @@ def standardize(ts):
     try:
         # standardize values
         new_ts.iloc[:, -1] = (new_ts.iloc[:, -1] - val_mean) / val_std
-    # in case val_std == 0
+    # in case where val_std == 0
     except ZeroDivisionError:
-        print("Error: Cannot standardize. No deviation.")
-        return
+        # all values should be the mean and set to 0
+        new_ts.iloc[:, -1] = new_ts.iloc[:, -1] * 0
     return new_ts
 
 def design_matrix(ts, input_index, output_index):
