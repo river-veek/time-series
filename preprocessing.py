@@ -53,9 +53,13 @@ def impute_missing_data(ts):
     """
     # ASSUMED THAT MISSING POINTS WILL BE == 'NaN'
     # ASSUMED THAT ONLY ONE POINT IS MISSING AT THE MOST
+    # ASSUMED THAT VALUE COLUMN IS ALWAYS LAST
 
     # isolate last col name
     col_name = ts.columns[-1]
+
+    # grab copy of ts (for preservation of original time series)
+    ts_copy = ts
 
     # input will be Pandas DataFrame
     # immediately convert to list (for easier mutability)
@@ -90,8 +94,9 @@ def impute_missing_data(ts):
                 mean = (ts[i - 1] + ts[i + 1]) / 2
                 ts[i] = mean
 
-    # convert list back to DataFrame
-    return pd.DataFrame(ts, columns=[col_name])
+    # alter value column of ts (copy)
+    ts_copy[col_name] = ts
+    return ts_copy
 
 def impute_outliers(ts):
     """
