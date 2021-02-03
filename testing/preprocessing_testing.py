@@ -322,6 +322,58 @@ def test_zerodiv_standardize():
 	print(df_actual_output)
 	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
 
+def test_monocolumn_standardize():
+	"""
+	Test case where only one column is provided
+	"""
+	test_input = {
+		"Values": [1, 0, 9, 10, 8, 4]
+	}
+	df_test_input = pd.DataFrame(test_input)
+	input_mean = df_test_input.iloc[:, -1].mean()
+	input_std = df_test_input.iloc[:, -1].std()
+	test_output = {
+		"Values": [
+			(1 - input_mean) / input_std,
+			(0 - input_mean) / input_std,
+			(9 - input_mean) / input_std,
+			(10 - input_mean) / input_std,
+			(8 - input_mean) / input_std,
+			(4 - input_mean) / input_std
+		]
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = standardize(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
+def test_multicolumn_standardize():
+	"""
+	Test the use case where a multiple of columns are provided
+	"""
+	test_input = {
+		"Months": [0, 1, 2, 3, 4, 5],
+		"Days": [12, 1, 6, 24, 20, 18],
+		"Values": [1, 0, 9, 10, 8, 4]
+	}
+	df_test_input = pd.DataFrame(test_input)
+	input_mean = df_test_input.iloc[:, -1].mean()
+	input_std = df_test_input.iloc[:, -1].std()
+	test_output = {
+		"Months": [0, 1, 2, 3, 4, 5],
+		"Days": [12, 1, 6, 24, 20, 18],
+		"Values": [
+			(1 - input_mean) / input_std,
+			(0 - input_mean) / input_std,
+			(9 - input_mean) / input_std,
+			(10 - input_mean) / input_std,
+			(8 - input_mean) / input_std,
+			(4 - input_mean) / input_std
+		]
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = standardize(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
 
 ##########################
 # LOGARITHM TESTS
