@@ -184,6 +184,8 @@ def longest_continuous_run(ts):
 
     Author: River Veek
     """
+    # WORKS WITH MULTIPLE MISSING POINTS
+
     # isolate last col name
     col_name = ts.columns[-1]
 
@@ -200,8 +202,6 @@ def longest_continuous_run(ts):
     cur_idx = 0
     start_idx = 0
     end_idx = 0
-
-    # WORKS WITH MULTIPLE MISSING POINTS
 
     # calculate, isolate longest run
     for i in range(len(ts)):
@@ -227,6 +227,8 @@ def longest_continuous_run(ts):
         new_ts = pd.DataFrame(new_list, columns=[col_name])
 
     return pd.DataFrame(new_ts, columns=[col_name])
+    # ts_copy[col_name] = new_ts
+    # return ts_copy
 
 def difference(ts):
     """
@@ -273,6 +275,8 @@ def clip(ts, starting_date, final_date):
 
     Author: River Veek
     """
+    # ASSUMES FIRST COLUMN IS TIME, SECOND COLUMN IS VALUES
+
     new_ts = []  # will hold values
     new_col = []  # will hold times
     flag = 0  # lets loop know when to start appending vals to new time series

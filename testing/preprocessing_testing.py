@@ -129,14 +129,19 @@ def test_multiple_outlier_impute_outliers():
 ##############################
 # LONGEST_CONTINUOUS_RUN TESTS
 ##############################
-def test_long_cont_run():
-    df2 = pd.DataFrame({'c1': [10, 11, "NaN"]})
-    df3 = pd.DataFrame({'c1': ["NaN"]})
-    df4 = pd.DataFrame({'c1': ["NaN", 10, 9]})
-    df5 = pd.DataFrame({'c1': [10, "NaN"]})
-    df6 = pd.DataFrame({'c1': ["NaN", 11, 10, 12, 11, 9]})
-    df7 = pd.DataFrame({'c1': [10, "NaN", 11]})
+def test_longest_continuous_run():
+    """
+    Testing longest_continuous_run().
+    """
+    df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK", "BTC", "NIO", "DIS", "ETH", "JD"],
+                        'Vals': [10, 17.8, 15, "NaN", 25, 17, 18, 19, 500, 700]})
+    df2 = pd.DataFrame({'Time': [4, 5, 6, 7, 8, 9],
+                        'Daily Top': ["DOGE", "NOK", "BTC", "NIO", "DIS", "ETH", "JD"],
+                        'Vals': [ 25, 17, 18, 19, 500, 700]})
 
+    # FIXME: need to trim ALL columns in DF, not just value column
+    assert longest_continuous_run(df1).equals(df2)
 
 ###############
 # CLIP() TESTS
