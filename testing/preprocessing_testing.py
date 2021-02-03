@@ -1,13 +1,14 @@
 """
-Tests for time_series.py containing the time series class
-
-Author: Nick Titzler
+Tests for preprocessing.py methods.
 
 To run nosetests (from 'time-series/' directory):
 
     nosetests -v testing/preprocessing_testing.py
 
+
+Author(s): Nick Titzler, River Veek
 """
+
 import numpy as np
 import sys
 sys.path.append("../")
@@ -116,12 +117,12 @@ def test_multiple_outlier_impute_outliers():
     df2 = pd.DataFrame({'Time': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
                         'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK", "BTC", "NIO", "DIS", "ETH", "JD"],
                         'Vals': [10, 17.8, 15, 16, 25, 17, 18, 19, 24.3203125, 29.640625]})
-    # last test repeats until no outliers are found
-    # values for each iteration are shown below
-    # 10, 17.8, 15, 16, 25, 17, 18, 19, 359.5, 189.25
-    # 10, 17.8, 15, 16, 25, 17, 18, 19, 104.125, 61.5625
-    # 10, 17.8, 15, 16, 25, 17, 18, 19, 40.28125, 29.640625
-    # 10, 17.8, 15, 16, 25, 17, 18, 19, 24.3203125, 29.640625
+                        # last test repeats until no outliers are found
+                        # values for each iteration are shown below
+                        # 10, 17.8, 15, 16, 25, 17, 18, 19, 359.5, 189.25
+                        # 10, 17.8, 15, 16, 25, 17, 18, 19, 104.125, 61.5625
+                        # 10, 17.8, 15, 16, 25, 17, 18, 19, 40.28125, 29.640625
+                        # 10, 17.8, 15, 16, 25, 17, 18, 19, 24.3203125, 29.640625
 
     assert impute_outliers(df1).equals(df2)
 

@@ -131,10 +131,8 @@ def impute_outliers(ts):
     ts = ts.iloc[:, -1].tolist()
 
     # isolate Q1, Q2, IQR
-    # NOTE: median included in calculation of Q1, Q2
     quartiles = np.quantile(ts_copy, [.25, .75], interpolation="nearest")
     iqr = quartiles[1] - quartiles[0]
-    # print(quartiles[1], quartiles[0])
 
     # isolate upper and lower bounds of data set (not inclusive)
     upper = quartiles[1] + 1.5 * iqr
@@ -168,7 +166,7 @@ def impute_outliers(ts):
                 else:
                     mean = (ts[i - 1] + ts[i + 1]) / 2
                     ts[i] = mean
-                    
+
     ts_original[col_name] = ts
     return ts_original
 
@@ -188,6 +186,9 @@ def longest_continuous_run(ts):
     """
     # isolate last col name
     col_name = ts.columns[-1]
+
+    # grab copy of original ts (for preservation purposes)
+    ts_copy = ts
 
     # input will be Pandas DataFrame
     # immediately convert to list (for easier mutability)
