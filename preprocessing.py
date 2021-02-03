@@ -124,37 +124,53 @@ def impute_outliers(ts):
     ts_copy = ts_copy.sort_values(by=[col_name])
     ts_copy = ts_copy.iloc[:, -1].tolist()
 
+    # grab second copy of ts (for preservation of original time series)
+    ts_original = ts
+
     # convert ts into list of values from last col (data)
     ts = ts.iloc[:, -1].tolist()
 
     # isolate Q1, Q2, IQR
     # NOTE: median included in calculation of Q1, Q2
-    quartiles = np.quantile(ts_copy, [.25, .50, .75])
-    iqr = quartiles[2] - quartiles[0]
+    quartiles = np.quantile(ts_copy, [.25, .75], interpolation="nearest")
+    iqr = quartiles[1] - quartiles[0]
+    # print(quartiles[1], quartiles[0])
 
     # isolate upper and lower bounds of data set (not inclusive)
-    upper = quartiles[2] + 1.5 * iqr
+    upper = quartiles[1] + 1.5 * iqr
     lower = quartiles[0] - 1.5 * iqr
 
     # find values that fall outside of upper or lower
-    for i in range(len(ts)):
+    flag = 0  # equals 0 as long as outliers exist
 
-        if (ts[i] > upper) or (ts[i] < lower):
+    # run as long as outliers exist (flag == 0)
+    while flag == 0:
 
-            if i == 0:
-                mean = (ts[i + 1] + ts[i + 2]) / 2
-                ts[i] = mean
+        flag = 1
 
-            elif i == len(ts) - 1:
-                mean = (ts[i - 1] + ts[i - 2]) / 2
-                ts[i] = mean
+        for item in ts:
 
-            else:
-                mean = (ts[i - 1] + ts[i + 1]) / 2
-                ts[i] = mean
+            if item > upper or item < lower:
+                flag = 0  # flip flag if any outliers found (alert loop to continue)
 
-    # return new DataFrame
-    return pd.DataFrame(ts, columns=[col_name])
+        for i in range(len(ts)):
+
+            if (ts[i] > upper) or (ts[i] < lower):
+
+                if i == 0:
+                    mean = (ts[i + 1] + ts[i + 2]) / 2
+                    ts[i] = mean
+
+                elif i == len(ts) - 1:
+                    mean = (ts[i - 1] + ts[i - 2]) / 2
+                    ts[i] = mean
+
+                else:
+                    mean = (ts[i - 1] + ts[i + 1]) / 2
+                    ts[i] = mean
+                    
+    ts_original[col_name] = ts
+    return ts_original
 
 def longest_continuous_run(ts):
     """

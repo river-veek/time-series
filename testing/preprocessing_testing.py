@@ -62,6 +62,68 @@ def test_no_NaN_impute_missing_data():
 #########################
 # IMPUTE_OUTLIERS() TESTS
 #########################
+def test_outlier_first_impute_outliers():
+    """
+    Testing impute_outliers() with outlier as first value.
+    """
+    df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4, 5], 'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK", "BTC"],
+                        'Vals': [420, 17.8, 15, 1, 25, 17]})
+    df2 = pd.DataFrame({'Time': [0, 1, 2, 3, 4, 5], 'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK", "BTC"],
+                        'Vals': [16.4, 17.8, 15, 1, 25, 17]})
+
+    assert impute_outliers(df1).equals(df2)
+
+def test_outlier_last_impute_outliers():
+    """
+    Testing impute_outliers() with outlier as last value.
+    """
+    df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4, 5], 'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK", "BTC"],
+                        'Vals': [5, 17.8, 15, 1, 25, 420]})
+    df2 = pd.DataFrame({'Time': [0, 1, 2, 3, 4, 5], 'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK", "BTC"],
+                        'Vals': [5, 17.8, 15, 1, 25, 13]})
+
+    assert impute_outliers(df1).equals(df2)
+
+def test_outlier_middle_impute_outliers():
+    """
+    Testing impute_outliers() outlier as a middle value (not the first or last value).
+    """
+    df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4, 5], 'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK", "BTC"],
+                        'Vals': [5, 17.8, 15, 420, 25, 1]})
+    df2 = pd.DataFrame({'Time': [0, 1, 2, 3, 4, 5], 'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK", "BTC"],
+                        'Vals': [5, 17.8, 15, 20, 25, 1]})
+
+    assert impute_outliers(df1).equals(df2)
+
+def test_no_outlier_impute_outliers():
+    """
+    Testing impute_outliers() with no oulier.
+    """
+    df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4, 5], 'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK", "BTC"],
+                        'Vals': [5, 17.8, 15, 16, 25, 1]})
+    df2 = pd.DataFrame({'Time': [0, 1, 2, 3, 4, 5], 'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK", "BTC"],
+                        'Vals': [5, 17.8, 15, 16, 25, 1]})
+
+    assert impute_outliers(df1).equals(df2)
+
+def test_multiple_outlier_impute_outliers():
+    """
+    Testing impute_outliers() with multiple outliers.
+    """
+    df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK", "BTC", "NIO", "DIS", "ETH", "JD"],
+                        'Vals': [10, 17.8, 15, 16, 25, 17, 18, 19, 500, 700]})
+    df2 = pd.DataFrame({'Time': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK", "BTC", "NIO", "DIS", "ETH", "JD"],
+                        'Vals': [10, 17.8, 15, 16, 25, 17, 18, 19, 24.3203125, 29.640625]})
+    # last test repeats until no outliers are found
+    # values for each iteration are shown below
+    # 10, 17.8, 15, 16, 25, 17, 18, 19, 359.5, 189.25
+    # 10, 17.8, 15, 16, 25, 17, 18, 19, 104.125, 61.5625
+    # 10, 17.8, 15, 16, 25, 17, 18, 19, 40.28125, 29.640625
+    # 10, 17.8, 15, 16, 25, 17, 18, 19, 24.3203125, 29.640625
+
+    assert impute_outliers(df1).equals(df2)
 
 ##############################
 # LONGEST_CONTINUOUS_RUN TESTS
