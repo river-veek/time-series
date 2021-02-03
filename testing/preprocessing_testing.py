@@ -301,6 +301,27 @@ def test_general_standardize():
 	df_actual_output = standardize(df_test_input)
 	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
 
+def test_zerodiv_standardize():
+	"""
+	Test the edge case of the standardize function when variation is 0
+	"""
+	test_input = {
+		"Times": [0, 1, 2],
+		"Values": [5, 5, 5]
+	}
+	df_test_input = pd.DataFrame(test_input)
+	input_mean = df_test_input.iloc[:, -1].mean()
+	input_std = df_test_input.iloc[:, -1].std()
+	test_output = {
+		"Times": [0, 1, 2],
+		"Values": [0, 0, 0]
+	}
+	df_test_output = pd.DataFrame(test_output)
+	print(df_test_output)
+	df_actual_output = standardize(df_test_input)
+	print(df_actual_output)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
 
 ##########################
 # LOGARITHM TESTS

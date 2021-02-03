@@ -381,11 +381,10 @@ def standardize(ts):
     # save mean and standard deviation for values
     val_mean = new_ts.iloc[:, -1].mean()
     val_std = new_ts.iloc[:, -1].std()
-    try:
+    if val_std != 0:              # to avoid division by 0 errors
         # standardize values
         new_ts.iloc[:, -1] = (new_ts.iloc[:, -1] - val_mean) / val_std
-    # in case where val_std == 0
-    except ZeroDivisionError:
+    else:
         # all values should be the mean and set to 0
         new_ts.iloc[:, -1] = new_ts.iloc[:, -1] * 0
     return new_ts
