@@ -348,12 +348,9 @@ def test_split_data():
 	val1 = .25
 	val2 = .50
 	val3 = .25
-    # <<<<<<< HEAD
 	#ts = logarithm(ts)
 	ts = cubic_root(ts)
 	res = split_data(ts, val1, val2, val3)
 
-    # =======
 
 	split_data(ts, val1, val2, val3)
-# >>>>>>> b5cf2e4077811497cab7f7d78441c8ede743c564
