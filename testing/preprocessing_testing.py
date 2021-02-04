@@ -262,6 +262,40 @@ def test_two_entry_difference():
 	df_actual_output = difference(df_test_input)
 	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
 
+def test_monocolumn_difference():
+	"""
+	Test mono-column use case of the difference function.
+	"""
+	test_input = {
+		"Values": [1, 0, 9, 10, 8, 4]
+	}
+	df_test_input = pd.DataFrame(test_input)
+	test_output = {
+		"Values": [1, 9, 1, 2, 4]
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = difference(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
+def test_multicolumn_difference():
+	"""
+	Test multi-column use case of the difference function.
+	"""
+	test_input = {
+		"Months": [0, 1, 2, 3, 4, 5],
+		"Days": [12, 1, 6, 24, 20, 18],
+		"Values": [1, 0, 9, 10, 8, 4]
+	}
+	df_test_input = pd.DataFrame(test_input)
+	test_output = {
+		"Months": [0, 1, 2, 3, 4],
+		"Days": [12, 1, 6, 24, 20],
+		"Values": [1, 9, 1, 2, 4]
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = difference(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
 
 ###############
 # CLIP() TESTS
