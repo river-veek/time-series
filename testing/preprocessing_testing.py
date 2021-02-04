@@ -212,6 +212,8 @@ def test_negatives_difference():
 ###############
 # CLIP() TESTS
 ###############
+def test_clip_run():
+    pass
 
 #####################
 # ASSIGN_TIME() TESTS
