@@ -21,19 +21,24 @@ pd.options.mode.chained_assignment = None
 # PREPROCESSING FUNCTIONS
 #########################
 
-def denoise(ts):
+def denoise(ts, increment=10):
     """
     Takes time series and returns a new time series
     Thought this was my responsibility, call this a draft -Nick Titzler
     """
-    frame = pd.Series(ts.series).to_frame()
 
-    print(frame)
+    if increment >= (len(ts.iloc[:,-1])):
+        print("ERROR: by using increment size ",increment," your data will be converted to NaN")
+        print("Now exiting")
+        exit()
+    # function that denoises data
+    ts.iloc[:,-1] = ts.iloc[:,-1].rolling(increment).mean()
 
-    rolling_mean = frame.rolling(window=10).mean()
-
-
-    return rolling_mean
+    # function that removes NaN values
+    ts = ts.dropna()
+    
+    return ts
+    
 
 def impute_missing_data(ts):
     """
@@ -536,7 +541,6 @@ def split_data(ts, perc_training, perc_valid, perc_test):
         raise Exception("Error: percentages do not add to 1")
 
     p = np.array([perc_training, perc_valid, perc_test])
-
     a = np.array(ts.iloc[:,-1,].to_list())
 
     # check how many columns are in the dataset
