@@ -629,7 +629,7 @@ def db2ts(db):
                 ts_list.append(col)
         # grab the last element from the remaining rows
         else:
-            ts_list.append(db.iloc[row_id, -1])
+            ts_list.append(db[row_id][-1])
     # convert to real time series data to return
     ts = pd.DataFrame(ts_list)
     return ts
