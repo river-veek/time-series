@@ -15,6 +15,7 @@ sys.path.append("../")
 import file_io as fio
 from preprocessing import *
 import nose
+import numpy as np
 
 
 #############################
@@ -624,3 +625,25 @@ def test_split_data():
 
 
 	split_data(ts, val1, val2, val3)
+
+
+#############
+# DB2TS()
+#############
+
+def test_general_db2ts():
+	"""
+	Tests general use case of db2ts()
+	"""
+	test_input = np.array(
+		[
+			[1, 2, 3],
+			[2, 3, 4],
+			[3, 4, 5]
+		]
+	)
+	df_test_input = pd.DataFrame(test_input)
+	test_output = pd.DataFrame([1, 2, 3, 4, 5])
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = db2ts(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
