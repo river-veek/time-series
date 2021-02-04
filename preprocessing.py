@@ -479,13 +479,6 @@ def split_data(ts, perc_training, perc_valid, perc_test):
         return result
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> b5cf2e4077811497cab7f7d78441c8ede743c564
-
-
-
 
 def ts2db(input_file, perc_train, perc_val, perc_test,
           input_index, output_index, output_file):

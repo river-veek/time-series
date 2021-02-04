@@ -73,11 +73,15 @@ def box_plot(ts):
 def normality_test(ts):
 	return stats.normaltest(ts)
 
-def mse(y_test, y_forecast):
+def mse(y_test: np.array, y_forecast: np.array):
     pass
 
-def mape(y_test, y_forecast):
+def mape(y_test: np.array, y_forecast: np.array):
     pass
 
-def smape(y_test, y_forecast):
+def smape(y_test: np.array, y_forecast: np.array):
     pass
+
+
+
+
