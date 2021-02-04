@@ -153,12 +153,29 @@ def test_general_difference():
 	"""
 	test_input = {
 		"Times": [0, 1, 2, 3, 4, 5],
-		"Values": [-1, 0, 9, 10, 8, -4]
+		"Values": [1, 0, 9, 10, 8, 4]
 	}
 	df_test_input = pd.DataFrame(test_input)
 	test_output = {
 		"Times": [0, 1, 2, 3, 4],
-		"Values": [1, 9, 1, 2, 12]
+		"Values": [1, 9, 1, 2, 4]
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = difference(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
+def test_negatives_difference():
+	"""
+	Test use case of the difference function with negatives.
+	"""
+	test_input = {
+		"Times": [0, 1, 2, 3, 4, 5],
+		"Values": [-1, 0, -9, 10, 8, -4]
+	}
+	df_test_input = pd.DataFrame(test_input)
+	test_output = {
+		"Times": [0, 1, 2, 3, 4],
+		"Values": [1, 9, 19, 2, 12]
 	}
 	df_test_output = pd.DataFrame(test_output)
 	df_actual_output = difference(df_test_input)
