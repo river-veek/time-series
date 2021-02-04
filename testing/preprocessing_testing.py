@@ -170,6 +170,7 @@ def test_all_NaN_longest_continuous_run():
 
     assert longest_continuous_run(df1).equals(df2)
 
+
 ###################
 # DIFFERENCE()
 ###################
