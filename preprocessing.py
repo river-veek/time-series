@@ -12,11 +12,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math
 
-
 ######################
 # HELPER FUNCTIONS
 ######################
-pd.options.mode.chained_assignment = None
+
 
 #########################
 # PREPROCESSING FUNCTIONS
@@ -54,9 +53,13 @@ def impute_missing_data(ts):
     """
     # ASSUMED THAT MISSING POINTS WILL BE == 'NaN'
     # ASSUMED THAT ONLY ONE POINT IS MISSING AT THE MOST
+    # ASSUMED THAT VALUE COLUMN IS ALWAYS LAST
 
     # isolate last col name
     col_name = ts.columns[-1]
+
+    # grab copy of ts (for preservation of original time series)
+    ts_copy = ts
 
     # input will be Pandas DataFrame
     # immediately convert to list (for easier mutability)
@@ -91,8 +94,9 @@ def impute_missing_data(ts):
                 mean = (ts[i - 1] + ts[i + 1]) / 2
                 ts[i] = mean
 
-    # convert list back to DataFrame
-    return pd.DataFrame(ts, columns=[col_name])
+    # alter value column of ts (copy)
+    ts_copy[col_name] = ts
+    return ts_copy
 
 def impute_outliers(ts):
     """
@@ -120,37 +124,51 @@ def impute_outliers(ts):
     ts_copy = ts_copy.sort_values(by=[col_name])
     ts_copy = ts_copy.iloc[:, -1].tolist()
 
+    # grab second copy of ts (for preservation of original time series)
+    ts_original = ts
+
     # convert ts into list of values from last col (data)
     ts = ts.iloc[:, -1].tolist()
 
     # isolate Q1, Q2, IQR
-    # NOTE: median included in calculation of Q1, Q2
-    quartiles = np.quantile(ts_copy, [.25, .50, .75])
-    iqr = quartiles[2] - quartiles[0]
+    quartiles = np.quantile(ts_copy, [.25, .75], interpolation="nearest")
+    iqr = quartiles[1] - quartiles[0]
 
     # isolate upper and lower bounds of data set (not inclusive)
-    upper = quartiles[2] + 1.5 * iqr
+    upper = quartiles[1] + 1.5 * iqr
     lower = quartiles[0] - 1.5 * iqr
 
     # find values that fall outside of upper or lower
-    for i in range(len(ts)):
+    flag = 0  # equals 0 as long as outliers exist
 
-        if (ts[i] > upper) or (ts[i] < lower):
+    # run as long as outliers exist (flag == 0)
+    while flag == 0:
 
-            if i == 0:
-                mean = (ts[i + 1] + ts[i + 2]) / 2
-                ts[i] = mean
+        flag = 1
 
-            elif i == len(ts) - 1:
-                mean = (ts[i - 1] + ts[i - 2]) / 2
-                ts[i] = mean
+        for item in ts:
 
-            else:
-                mean = (ts[i - 1] + ts[i + 1]) / 2
-                ts[i] = mean
+            if item > upper or item < lower:
+                flag = 0  # flip flag if any outliers found (alert loop to continue)
 
-    # return new DataFrame
-    return pd.DataFrame(ts, columns=[col_name])
+        for i in range(len(ts)):
+
+            if (ts[i] > upper) or (ts[i] < lower):
+
+                if i == 0:
+                    mean = (ts[i + 1] + ts[i + 2]) / 2
+                    ts[i] = mean
+
+                elif i == len(ts) - 1:
+                    mean = (ts[i - 1] + ts[i - 2]) / 2
+                    ts[i] = mean
+
+                else:
+                    mean = (ts[i - 1] + ts[i + 1]) / 2
+                    ts[i] = mean
+
+    ts_original[col_name] = ts
+    return ts_original
 
 def longest_continuous_run(ts):
     """
@@ -166,8 +184,13 @@ def longest_continuous_run(ts):
 
     Author: River Veek
     """
+    # WORKS WITH MULTIPLE MISSING POINTS
+
     # isolate last col name
     col_name = ts.columns[-1]
+
+    # grab copy of original ts (for preservation purposes)
+    ts_copy = ts
 
     # input will be Pandas DataFrame
     # immediately convert to list (for easier mutability)
@@ -179,8 +202,6 @@ def longest_continuous_run(ts):
     cur_idx = 0
     start_idx = 0
     end_idx = 0
-
-    # WORKS WITH MULTIPLE MISSING POINTS
 
     # calculate, isolate longest run
     for i in range(len(ts)):
@@ -206,6 +227,8 @@ def longest_continuous_run(ts):
         new_ts = pd.DataFrame(new_list, columns=[col_name])
 
     return pd.DataFrame(new_ts, columns=[col_name])
+    # ts_copy[col_name] = new_ts
+    # return ts_copy
 
 def difference(ts):
     """
@@ -252,6 +275,8 @@ def clip(ts, starting_date, final_date):
 
     Author: River Veek
     """
+    # ASSUMES FIRST COLUMN IS TIME, SECOND COLUMN IS VALUES
+
     new_ts = []  # will hold values
     new_col = []  # will hold times
     flag = 0  # lets loop know when to start appending vals to new time series
@@ -356,13 +381,12 @@ def standardize(ts):
     # save mean and standard deviation for values
     val_mean = new_ts.iloc[:, -1].mean()
     val_std = new_ts.iloc[:, -1].std()
-    try:
+    if val_std != 0:              # to avoid division by 0 errors
         # standardize values
         new_ts.iloc[:, -1] = (new_ts.iloc[:, -1] - val_mean) / val_std
-    # in case val_std == 0
-    except ZeroDivisionError:
-        print("Error: Cannot standardize. No deviation.")
-        return
+    else:
+        # all values should be the mean and set to 0
+        new_ts.iloc[:, -1] = new_ts.iloc[:, -1] * 0
     return new_ts
 
 def design_matrix(ts, input_index, output_index):
@@ -387,9 +411,10 @@ def logarithm(ts):
 
         if item != 0:
             item = np.log10(nums[i])
-            
+            print(item)
             ts.iloc[:,-1,][i] = item
         elif (item == 0):
+            print(item)
             ts.iloc[:,-1,][i] = 0
         else:
             ts.iloc[:,-1,][i] = np.nan
@@ -409,86 +434,66 @@ def cubic_root(ts):
         if item != 0:
             item = item**(1/3)
             ts.iloc[:,-1,][i] = item
+        elif (item == 0):
+            ts.iloc[:,-1,][i] = 0.0
         else:
             ts.iloc[:,-1,][i] = np.nan
 
     return ts
 
 def split_data(ts, perc_training, perc_valid, perc_test):
-    """
-    splits ts dataframe in the following format: 
-
-    -[ts, ts, ts]
-    -[perc_training, perc_valid, perc_test]
-
-    """
     if (perc_training + perc_valid + perc_test) != 1:
         raise Exception("Error: percentages do not add to 1")
 
     p = np.array([perc_training, perc_valid, perc_test])
     a = np.array(ts.iloc[:,-1,].to_list())
 
+    length = len(a)
 
-    # check how many columns are in the dataset
+    sec1 = length * perc_training
+    sec2 = length + perc_valid
+    sec3 = length + perc_test
 
-
-    # for one column in original ts
-    if len(ts.columns) == 1:
-
-        length = len(a)
-        #print((len(a)*p[:-1].cumsum()).astype(int))
-        values = np.split(a, (len(a)*p[:-1].cumsum()).astype(int)     )
-        #print(values)
-        perc_training = pd.DataFrame(values[0])
-        perc_valid = pd.DataFrame(values[1])
-        perc_test = pd.DataFrame(values[2])
-        return [perc_training, perc_valid, perc_test]
-
-    else:
-
-        res = []
-        
-        # iterate through columns
-        for i in range(len(ts.columns)):
-
-           col = np.array(ts.iloc[:,i].to_list())
-           values = np.split(col, (len(col)*p[:-1].cumsum()).astype(int)     )
-           res.append(values)
-        
-
-        dictList = []
-        for i in range(len(ts.columns)):
-            dictList.append({})
-
-        ctr = 0
-        for i in range(len(ts.columns)):
-            for j in range(len(ts.columns)):
-                dictList[i][ts.columns[j]] = res[j][i]
-                
-        
-        result = []
-
-        
-        for i in range(len(dictList)):
-            x = pd.DataFrame.from_dict(dictList[i])
-            #print(x)
-            result.append(x)
-            
-
-        
-        return result
-
+    print(np.split(a,(len(a)*p[:-1].cumsum()).astype(int)))
 
 
 def ts2db(input_file, perc_train, perc_val, perc_test,
           input_index, output_index, output_file):
+    """
+    Takes in an input data file to read in the time series, as well as
+    how much the user wants the data to be split into three categories:
+    training, validation, and testing. Then, it creates three separate time
+    series that it turns into machine learning model friendly databases with
+    the input and output sizes provided, and returns those.
+    """
     # read in time series data from file
     ts = fio.read_from_file(input_file)
     # split time series data into training, validation, and test sets
-    ts_db = split_data(ts, perc_train, perc_val, perc_test)
+    ts_splits = split_data(ts, perc_train, perc_val, perc_test)
     # convert datasets into databases that can be processed by
     # a machine learning model
-    # TODO: CALL DESIGN MATRIX
+    train_db = design_matrix(ts_splits[0], input_index, output_index)
+    val_db = design_matrix(ts_splits[1], input_index, output_index)
+    test_db = design_matrix(ts_splits[2], input_index, output_index)
     # return set of databases
-    return dbs
+    return (train_db, val_db, test_db)
 
+def db2ts(db):
+    """
+    Takes in a numpy matrix (database) containing a set of values and
+    converts it to a time series.
+    """
+    # create temporary list to add time series data to
+    ts_list = []
+    # go through each row in database
+    for row_id in range(len(db)):
+        # grab each element from the first row
+        if row_id == 0:                 # SUPER INEFFICIENT
+            for col in db[row_id]:
+                ts_list.append(col)
+        # grab the last element from the remaining rows
+        else:
+            ts_list.append(db[row_id][-1])
+    # convert to real time series data to return
+    ts = pd.DataFrame(ts_list)
+    return ts
