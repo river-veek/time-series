@@ -400,8 +400,80 @@ def standardize(ts):
         new_ts.iloc[:, -1] = new_ts.iloc[:, -1] * 0
     return new_ts
 
-def design_matrix(ts, input_index, output_index):
-    pass
+def design_matrix(ts, data_start, data_end):
+    """
+    Takes a time series, float representing the size of input array,
+    float representing the size of the output array, and returns a
+    tuple consisting of the original time series as well as
+    another tuple that holds the two matrices (input matrix and output matrix)
+    in that particular order.
+
+    Example of return:
+    (ts, (input array, output array))
+
+    data_start represents the size of the input matrix. data_end represents
+    the size of the output matrix. Both parameters are expected to be floats
+    but will immediately be converted into ints.
+    """
+    # input index == where to start first tuple, float -> int
+    # ouput index == where to start second tuple, float -> int
+    # return tuple of numpy arrays containing numpy arrays ANDDDDD the original ts
+    # EXAMPLE
+    # (    [ [1,2,3], [2,3,4], [3,4,5], … [] ],    [ [4,5], [5,6], [6,7], … [] ]    )
+
+    # convert value col of ts to list
+    ts_copy = ts.iloc[:, -1].tolist()
+
+    # convert index args to ints (from floats)
+    data_start = int(data_start)
+    data_end = int(data_end)
+
+    # create input matrix
+    input = []
+
+    # create output matrix
+    output = []
+
+    for i in range(len(ts_copy)):
+
+        # tmp to be added to input matrix
+        tmp = []
+
+        for j in range(data_start):
+
+            # don't access out of range elements
+            if i + j >= len(ts_copy):
+                break
+
+            tmp.append(ts_copy[i + j])
+
+        # only append row if it is
+        #   - the same length as data_start
+        #   - it leaves enough room to also add a corresponding output matrix
+        #     as to not make it partially empty
+        if len(tmp) == data_start and i + data_start + data_end <= len(ts_copy):
+            input.append(tmp)
+
+        # tmp to be added to output matrix
+        tmp = []
+
+        for j in range(data_end):
+
+            # don't access out of range elements
+            if i + j  + data_end  + 1 >= len(ts_copy):
+                break
+
+            tmp.append(ts_copy[i + j + data_end + 1])
+
+        if len(tmp) == data_end:
+            output.append(tmp)
+
+    # convert input and output matrices
+    input = np.array(input)
+    output = np.array(output)
+
+    # return tuple of original ts, tuple of matrices
+    return ts, (input, output)
 
 def design_matrix_2(ts, mi, ti, mo, to):
     pass
