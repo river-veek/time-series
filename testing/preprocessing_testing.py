@@ -15,6 +15,7 @@ sys.path.append("../")
 import file_io as fio
 from preprocessing import *
 import nose
+import numpy as np
 
 
 #############################
@@ -180,7 +181,64 @@ def test_all_NaN_longest_continuous_run():
 # CLIP() TESTS
 ###############
 def test_clip():
-    pass
+    """
+    Testing clip().
+    """
+    df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+    df2 = pd.DataFrame({'Time': [1, 2, 3],
+                        'Daily Top': ["AMC", "BB", "DOGE"],
+                        'Vals': [12, 45, 88]})
+
+    assert clip(df1, 1, 3).equals(df2)
+
+def test_end_less_than_start_clip():
+    """
+    Testing clip() where end_time is less than start_time.
+    """
+    df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+    df2 = pd.DataFrame({'Time': [2, 3, 4],
+                        'Daily Top': ["BB", "DOGE", "NOK"],
+                        'Vals': [45, 88, 90]})
+
+    assert clip(df1, 2, 1).equals(df2)
+
+def test_invalid_times_clip():
+    """
+    Testing clip() where end_time and/or start_time is invalid.
+    """
+    df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+    df2 = pd.DataFrame({'Time': [],
+                        'Daily Top': [],
+                        'Vals': []})
+
+    df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+    df2 = pd.DataFrame({'Time': [3, 4],
+                        'Daily Top': ["DOGE", "NOK"],
+                        'Vals': [88, 90]})
+
+    assert clip(df1, 5, 8).equals(df2)
+    assert clip(df1, 3, 6).equals(df2)
+
+def test_equal_times_clip():
+    """
+    Testing clip() where end_time and start_time are equal.
+    """
+    df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+    df2 = pd.DataFrame({'Time': [1],
+                        'Daily Top': ["AMC"],
+                        'Vals': [12]})
+
+    assert clip(df1, 1, 1).equals(df2)
 
 #####################
 # ASSIGN_TIME() TESTS
@@ -624,3 +682,25 @@ def test_split_data():
 
 
 	split_data(ts, val1, val2, val3)
+
+
+#############
+# DB2TS()
+#############
+
+def test_general_db2ts():
+	"""
+	Tests general use case of db2ts()
+	"""
+	test_input = np.array(
+		[
+			[1, 2, 3],
+			[2, 3, 4],
+			[3, 4, 5]
+		]
+	)
+	df_test_input = pd.DataFrame(test_input)
+	test_output = pd.DataFrame([1, 2, 3, 4, 5])
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = db2ts(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
