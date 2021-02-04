@@ -161,9 +161,7 @@ def test_general_difference():
 		"Values": [1, 9, 1, 2, 12]
 	}
 	df_test_output = pd.DataFrame(test_output)
-	print(df_test_output)
 	df_actual_output = difference(df_test_input)
-	print(df_actual_output)
 	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
 
 
@@ -327,7 +325,7 @@ def test_general_standardize():
 
 def test_negative_standardize():
 	"""
-	Test the general use case of the standardize function
+	Test the negative use case of the standardize function
 	"""
 	test_input = {
 		"Times": [0, 1, 2, 3, 4, 5],
@@ -353,7 +351,7 @@ def test_negative_standardize():
 
 def test_empty_standardize():
 	"""
-	Test the general use case of the standardize function
+	Test the empty time series use case of the standardize function
 	"""
 	test_input = {
 		"Times": [],
