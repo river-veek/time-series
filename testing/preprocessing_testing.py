@@ -635,15 +635,29 @@ def test_general_db2ts():
 	"""
 	Tests general use case of db2ts()
 	"""
-	test_input = np.array(
-		[
+	test_input = [
 			[1, 2, 3],
 			[2, 3, 4],
 			[3, 4, 5]
 		]
-	)
-	df_test_input = pd.DataFrame(test_input)
+	db_test_input = np.array(test_input)
 	test_output = pd.DataFrame([1, 2, 3, 4, 5])
 	df_test_output = pd.DataFrame(test_output)
-	df_actual_output = db2ts(df_test_input)
+	df_actual_output = db2ts(db_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
+def test_negatives_db2ts():
+	"""
+	Tests use case of db2ts() with negative numbers
+	"""
+	test_input = [
+			[1, -2, 2],
+			[-2, 2, 4],
+			[2, 4, -5],
+			[4, -5, -1]
+		]
+	db_test_input = np.array(test_input)
+	test_output = pd.DataFrame([1, -2, 2, 4, -5, -1])
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = db2ts(db_test_input)
 	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
