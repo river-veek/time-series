@@ -181,7 +181,64 @@ def test_all_NaN_longest_continuous_run():
 # CLIP() TESTS
 ###############
 def test_clip():
-    pass
+    """
+    Testing clip().
+    """
+    df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+    df2 = pd.DataFrame({'Time': [1, 2, 3],
+                        'Daily Top': ["AMC", "BB", "DOGE"],
+                        'Vals': [12, 45, 88]})
+
+    assert clip(df1, 1, 3).equals(df2)
+
+def test_end_less_than_start_clip():
+    """
+    Testing clip() where end_time is less than start_time.
+    """
+    df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+    df2 = pd.DataFrame({'Time': [2, 3, 4],
+                        'Daily Top': ["BB", "DOGE", "NOK"],
+                        'Vals': [45, 88, 90]})
+
+    assert clip(df1, 2, 1).equals(df2)
+
+def test_invalid_times_clip():
+    """
+    Testing clip() where end_time and/or start_time is invalid.
+    """
+    df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+    df2 = pd.DataFrame({'Time': [],
+                        'Daily Top': [],
+                        'Vals': []})
+
+    df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+    df2 = pd.DataFrame({'Time': [3, 4],
+                        'Daily Top': ["DOGE", "NOK"],
+                        'Vals': [88, 90]})
+
+    assert clip(df1, 5, 8).equals(df2)
+    assert clip(df1, 3, 6).equals(df2)
+
+def test_equal_times_clip():
+    """
+    Testing clip() where end_time and start_time are equal.
+    """
+    df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+    df2 = pd.DataFrame({'Time': [1],
+                        'Daily Top': ["AMC"],
+                        'Vals': [12]})
+
+    assert clip(df1, 1, 1).equals(df2)
 
 #####################
 # ASSIGN_TIME() TESTS

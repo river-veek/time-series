@@ -27,7 +27,7 @@ import file_io as fio
 ########################
 # Valid operations for nodes
 ########################
-pre_processing = {"denoise": (pre_proc.denoise, None),
+pre_processing = {"denoise": (pre_proc.denoise, [2]),
                   "impute_missing_data": (pre_proc.impute_missing_data, None),
                   "impute_outliers": (pre_proc.impute_outliers, None),
                   "longest_continuous_run": (pre_proc.longest_continuous_run, None),
@@ -43,14 +43,14 @@ pre_processing = {"denoise": (pre_proc.denoise, None),
                   "design_matrix_2": (pre_proc.design_matrix_2, [8,9,10,11]),
                   "ts2db": (pre_proc.ts2db, [6,3,4,5,0,1,7]),
                   "mlp_model": (mod.mlp_model, [12]),
-                  "mlp_forecast": (mod.forecast, [6])
+                  "mlp_forecast": (mod.mlp_forecast, [6]),
                   "read_from_file": (fio.read_from_file, [6]),
                   "write_to_file": (fio.write_to_file, [7])
                   }
 
-visualization = {"plot": (vis.plot, None),
-                 "histogram": (vis.histogram, None),
-                 "box_plot": (vis.box_plot, None),
+visualization = {"plot": (vis.plot, [7]),
+                 "histogram": (vis.histogram, [7]),
+                 "box_plot": (vis.box_plot, [7]),
                  "normality_test": (vis.normality_test, None),
                  "mse": (vis.mse, [6]),
                  "mape": (vis.mape, [6]),
@@ -119,7 +119,7 @@ def validate_operation_order(operation: str, parent_operation: str):
         print(f"Error - mlp_model needs to be followed by mlp_forecast")
         valid = False
 
-    elif (parent_operation == "mlp_forecast" and operation != "mape") or
+    elif (parent_operation == "mlp_forecast" and operation != "mape") or \
          (parent_operation == "mlp_forecast" and operation != "smape"):
         print(f"Error - mlp_forecast needs to be followed by mape or smape")
         valid = False
@@ -135,11 +135,11 @@ def validate_inputs(operation,
                     perc_test,
                     input_filename,
                     output_filename,
-                    layers,
                     m_i,
                     t_i,
                     m_0,
-                    t_0):
+                    t_0,
+                    layers):
     """
     Function to validate that an inputs for operations are valid types. If any
     of the inputs are invalid returns False
@@ -198,6 +198,9 @@ def validate_inputs(operation,
     #check inputs match with the function
     if operation == "clip":
         if (data_start == None) or (data_end == None):
+            valid = False
+    elif operation == "denoise":
+        if (increment == None):
             valid = False
     elif operation == "assign_time":
         if (data_start == None) or (increment == None):
@@ -454,7 +457,7 @@ class TS_Tree:
         Initilize a Tree with a denoise root node
         """
         #make denoise root node and place it in the Tree
-        root_node = Operation_node("denoise-0", "denoise", None)
+        root_node = Operation_node("denoise-0", "denoise", None, increment=10.0)
         self.nodes = [root_node]
 
     def print_tree(self):
@@ -469,7 +472,6 @@ class TS_Tree:
         """
         for pre, fill, node in RenderTree(self.nodes[0]):
             print("%s%s" % (pre, node.name))
-
 
     def add_node(self,
                  operation: str,
@@ -511,7 +513,8 @@ class TS_Tree:
             return None
 
         # check to make sure function inputs are valid
-        if validate_inputs(data_start,
+        if validate_inputs(operation,
+                           data_start,
                            data_end,
                            increment,
                            perc_training,
@@ -531,7 +534,7 @@ class TS_Tree:
 
         #check new operation doesn't conflict with parents
         parent_operation = parent_node.name.split("-")[0]
-        if validate_operation_order(operation, parent_operation):
+        if validate_operation_order(operation, parent_operation) == False:
             return None
 
         #set up name for the new node depending of the given operation and the
@@ -592,6 +595,11 @@ class TS_Tree:
             return None
 
         node = self.nodes[node_index]
+        parent_node = node.parent
+        if parent_node != None:
+            parent_operation = parent_node.name.split("-")[0]
+        else:
+            parent_operation = None
 
         #check to make sure operation is valid
         if validate_operation(new_operation) == False:
@@ -600,15 +608,16 @@ class TS_Tree:
         if (new_operation in leaf_functions) and (node.is_a_leaf == False):
             print(f"Invalid operation - '{new_operation}' has to be a leaf")
             return None
-        if validate_operation_order(new_operation, parent_operation):
+        if validate_operation_order(new_operation, parent_operation) == False:
             return None
-        if (node.is_a_leaf == False and new_operation in path_dependent:
+        if (node.is_a_leaf == False and new_operation in path_dependent):
             print(f"Invalid operation - '{new_operation}' is path dependent")
             return None
 
 
         # check to make sure function inputs are valid
-        if validate_inputs(data_start,
+        if validate_inputs(new_operation,
+                           data_start,
                            data_end,
                            increment,
                            perc_training,
@@ -740,10 +749,10 @@ class TS_Tree:
             #if node is a leaf execute the pipeline from it to the root
             if node.is_a_leaf:
                 index = node.name.split("-")[1]
-                result = self.execute_path(data_input), index)
+                result = self.execute_path(data_input, index)
                 Outputs[node.name] = result
 
-        return result
+        return Outputs
 
 #------------------------------------------------------------------------------
 
@@ -760,6 +769,11 @@ def copy_subtree(main_tree: TS_Tree, node_index: int):
     Returns - Tree
     """
     sub_tree = TS_Tree()
+
+    #check to make sure node_index is valid
+    if node_index >= len(main_tree.nodes) or node_index < 0:
+        print("Invalid node_index")
+        return None
 
     #set up root node
     root = main_tree.nodes[node_index]
@@ -830,6 +844,11 @@ def copy_path(main_tree: TS_Tree, node_index: int):
     Returns - Tree
     """
     path_copy = TS_Tree()
+
+    #check to make sure node_index is valid
+    if node_index > len(main_tree.nodes) or node_index < 0:
+        print("Invalid node_index")
+        return None
 
     #get list of nodes that will make up the subtree
     node_list = main_tree.get_path(node_index)
