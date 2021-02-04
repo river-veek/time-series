@@ -151,6 +151,9 @@ def test_longest_continuous_run():
     assert longest_continuous_run(df3).equals(df4)
 
 def test_no_NaN_longest_continuous_run():
+    """
+    Testing longest_continuous_run() with no NaN values.
+    """
     df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
                         'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK", "BTC", "NIO", "DIS", "ETH", "JD"],
                         'Vals': [10, 17.8, 15, 18, 25, 17, 18, 19, 500, 700]})
@@ -161,6 +164,9 @@ def test_no_NaN_longest_continuous_run():
     assert longest_continuous_run(df1).equals(df2)
 
 def test_all_NaN_longest_continuous_run():
+    """
+    Testing longest_continuous_run() with all NaN values.
+    """
     df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4],
                         'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
                         'Vals': ["NaN", "NaN", "NaN", "NaN", "NaN"]})
@@ -170,11 +176,20 @@ def test_all_NaN_longest_continuous_run():
 
     assert longest_continuous_run(df1).equals(df2)
 
+###############
+# CLIP() TESTS
+###############
+def test_clip():
+    pass
+
+#####################
+# ASSIGN_TIME() TESTS
+#####################
+
 
 ###################
 # DIFFERENCE()
 ###################
-
 def test_general_difference():
 	"""
 	Test general use case of the difference function.
@@ -296,21 +311,9 @@ def test_multicolumn_difference():
 	df_actual_output = difference(df_test_input)
 	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
 
-
-###############
-# CLIP() TESTS
-###############
-def test_clip_run():
-    pass
-
-#####################
-# ASSIGN_TIME() TESTS
-#####################
-
 ##################
 # SCALING() TESTS
 ##################
-
 def test_general_scaling():
 	"""
 	Test general use case of scaling function
@@ -430,7 +433,6 @@ def test_multicolumn_scaling():
 ##########################
 # STANDARDIZE() TESTS
 ##########################
-
 def test_general_standardize():
 	"""
 	Test the general use case of the standardize function
@@ -577,7 +579,6 @@ def test_multicolumn_standardize():
 ##########################
 # LOGARITHM TESTS
 ##########################
-
 def test_logarithm():
 	"""
 	Tests 1 column dataframe
@@ -589,11 +590,9 @@ def test_logarithm():
 
 	logarithm(ts)
 
-
 ##########################
 # CUBIC ROOT TESTS
 ##########################
-
 def test_cubic_root():
 
 	ts = pd.DataFrame({
@@ -606,7 +605,6 @@ def test_cubic_root():
 ##########################
 # SPLIT DATA TESTS
 ##########################
-
 def test_split_data():
 	ts = pd.DataFrame({
 		"greetings": ["hello", "hello1", "hello2", "hello3", "hello4", "hello5"],
