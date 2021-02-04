@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy import stats
+from sklearn.metrics import mean_squared_error
 
 
 
@@ -33,16 +34,22 @@ def fiveNumberSummary(ts):
 #########################
 
 
-def plot(ts):
+def plot(ts, save=False, fname=None):
 	if type(ts) == list:
 	 	for item in ts:
-	 		plt.plot(item)
+	 		item.plot()
 	 	plt.show()
 	else:
-		plt.plot(ts)
+		ts.plot()
 		plt.show()
 
-def histogram(ts):
+	# handle file saving
+	if (save == True) and type(fname) == str:
+		plt.savefig(fname)
+
+	return ts
+
+def histogram(ts, save=False, fname=None):
 	if type(ts) == list:
 	 	for item in ts:
 	 		item.plot.hist()
@@ -51,14 +58,17 @@ def histogram(ts):
 		ts.plot.hist()
 		plt.show()
 
-def box_plot(ts):
+	if (save == True) and type(fname) == str:
+		plt.savefig(fname)
+
+	return ts
+
+def box_plot(ts, save=False, fname=None):
 	if type(ts) == list:
 		for item in ts:
 			item.boxplot()
 			fiveNumberSummary(item)
 		plt.show()
-
-
 
 	else:
 		ts.boxplot()
@@ -66,18 +76,24 @@ def box_plot(ts):
 		fiveNumberSummary(ts)
 		plt.show()
 
-	# print five number summary
+	if (save == True) and type(fname) == str:
+		plt.savefig(fname)
 	
+	return ts
 
 
 def normality_test(ts):
 	return stats.normaltest(ts)
 
-def mse(y_test, y_forecast):
-    pass
+def mse(y_test: np.array, y_forecast: np.array): 
+    return mean_squared_error(y_test, y_forecast)
 
-def mape(y_test, y_forecast):
-    pass
+def mape(y_test: np.array, y_forecast: np.array):
+    return np.mean((np.abs(y_test-y_forcast) / y_test)) * 100
 
-def smape(y_test, y_forecast):
-    pass
+def smape(y_test: np.array, y_forecast: np.array):
+    return 100/len(y_test) * np.sum(2 * np.abs(y_forecast - y_test) / (np.abs(y_test) + np.abs(y_forecast)))
+
+
+
+

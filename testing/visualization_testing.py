@@ -10,6 +10,7 @@ sys.path.append("../")
 import file_io as fio
 import pandas as pd
 import visualization as plot
+import matplotlib.pyplot as plt
 
 
 """
@@ -43,23 +44,44 @@ def test1_timeSeriesData1():
 def test2_timeSeriesData2():
 
 	fname1 = "../timeSeriesData/TimeSeriesData1/1_temperature_test.csv"
-	fname2 = "../timeSeriesData/TimeSeriesData1/1_temperature_subsampled_test.csv"
+	fname2 = "../timeSeriesData/TimeSeriesData2/wind_aristeomercado_10m_complete.csv"
 	fname3 = "../timeSeriesData/TimeSeriesData2/wind_aristeomercado_10m_complete.csv"
 
 	ts = fio.read_from_file(fname1)
 	ts2 = fio.read_from_file(fname2)
 	#plot.plot([ts, ts2])
-	# plot.plot(ts)
+	
+	
 	
 	#plot.histogram([ts, ts2])
 	
 
 	#plot.box_plot(ts)
-	plot.box_plot([ts, ts2])
+	#plot.box_plot([ts, ts2])
 
 	#plot.plot(ts)
 
+def test_plot():
+	fname1 = "../timeSeriesData/TimeSeriesData1/1_temperature_test.csv"
+	fname2 = "../timeSeriesData/TimeSeriesData2/wind_aristeomercado_10m_complete.csv"
+	fname3 = "../timeSeriesData/TimeSeriesData1/3_passengers_train.csv"
 
+
+	ts = fio.read_from_file(fname1)
+	ts2 = fio.read_from_file(fname2)
+	
+	plot.plot(ts)
+	plot.plot(ts2)
+
+def test_histogram():
+	fname1 = "../timeSeriesData/TimeSeriesData1/1_temperature_test.csv"
+	fname2 = "../timeSeriesData/TimeSeriesData2/wind_aristeomercado_10m_complete.csv"
+	fname3 = "../timeSeriesData/TimeSeriesData1/3_passengers_train.csv"
+
+	ts = fio.read_from_file(fname1)
+	ts2 = fio.read_from_file(fname2)
+
+	plot.histogram([ts, ts2])
 	
 def test_normality():
 
@@ -67,16 +89,14 @@ def test_normality():
 	ts = fio.read_from_file(fname1)
 
 	plot.normality_test(ts)
-	pass
-
-
+	
 
 
 
 def main():
-	#test1_timeSeriesData1()
-	#test2_timeSeriesData2()
-	test_normality()
+	test_plot()
+	test_histogram()
+
 
 	return 1
 

@@ -263,10 +263,10 @@ def difference(ts):
         next_ts_val = ts.iloc[val_id+1, -1]
         # get difference
         new_val = next_ts_val - ts_val
-        # save to new dataframe
-        new_ts.iloc[val_id, -1] = new_val
+        # save magnitude to new dataframe
+        new_ts.iloc[val_id, -1] = abs(new_val)
     # remove last (unaltered) value
-    new_ts.drop(index=last_entry)
+    new_ts = new_ts.drop(index=last_entry)
     return new_ts
 
 def clip(ts, starting_date, final_date):
@@ -392,13 +392,12 @@ def standardize(ts):
     # save mean and standard deviation for values
     val_mean = new_ts.iloc[:, -1].mean()
     val_std = new_ts.iloc[:, -1].std()
-    try:
+    if val_std != 0:              # to avoid division by 0 errors
         # standardize values
         new_ts.iloc[:, -1] = (new_ts.iloc[:, -1] - val_mean) / val_std
-    # in case val_std == 0
-    except ZeroDivisionError:
-        print("Error: Cannot standardize. No deviation.")
-        return
+    else:
+        # all values should be the mean and set to 0
+        new_ts.iloc[:, -1] = new_ts.iloc[:, -1] * 0
     return new_ts
 
 def design_matrix(ts, input_index, output_index):
@@ -454,23 +453,62 @@ def cubic_root(ts):
     return ts
 
 def split_data(ts, perc_training, perc_valid, perc_test):
-    if (perc_training + perc_valid + perc_test) != 1:
-        raise Exception("Error: percentages do not add to 1")
+    """
+   splits ts dataframe in the following format: 
 
-    p = np.array([perc_training, perc_valid, perc_test])
-    a = np.array(ts.iloc[:,-1,].to_list())
+    -[ts, ts, ts]
+    -[perc_training, perc_valid, perc_test]
 
-    length = len(a)
-
-    sec1 = length * perc_training
-    sec2 = length + perc_valid
-    sec3 = length + perc_test
-
-    print(np.split(a,(len(a)*p[:-1].cumsum()).astype(int)))
+    """
+    
+    # check how many columns are in the dataset
 
 
+    # for one column in original ts
+    if len(ts.columns) == 1:
 
+        length = len(a)
+        #print((len(a)*p[:-1].cumsum()).astype(int))
+        values = np.split(a, (len(a)*p[:-1].cumsum()).astype(int)     )
+        #print(values)
+        perc_training = pd.DataFrame(values[0])
+        perc_valid = pd.DataFrame(values[1])
+        perc_test = pd.DataFrame(values[2])
+        return [perc_training, perc_valid, perc_test]
 
+    else:
+
+        res = []
+        
+        # iterate through columns
+        for i in range(len(ts.columns)):
+
+           col = np.array(ts.iloc[:,i].to_list())
+           values = np.split(col, (len(col)*p[:-1].cumsum()).astype(int)     )
+           res.append(values)
+        
+
+        dictList = []
+        for i in range(len(ts.columns)):
+            dictList.append({})
+
+        ctr = 0
+        for i in range(len(ts.columns)):
+            for j in range(len(ts.columns)):
+                dictList[i][ts.columns[j]] = res[j][i]
+                
+        
+        result = []
+
+        
+        for i in range(len(dictList)):
+            x = pd.DataFrame.from_dict(dictList[i])
+            #print(x)
+            result.append(x)
+            
+
+        
+        return result
 
 
 def ts2db(input_file, perc_train, perc_val, perc_test,

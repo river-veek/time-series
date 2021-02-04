@@ -160,6 +160,7 @@ def test_no_NaN_longest_continuous_run():
 
     assert longest_continuous_run(df1).equals(df2)
 
+<<<<<<< HEAD
 def test_all_NaN_longest_continuous_run():
     df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4],
                         'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
@@ -170,6 +171,45 @@ def test_all_NaN_longest_continuous_run():
 
     assert longest_continuous_run(df1).equals(df2)
 
+=======
+###################
+# DIFFERENCE()
+###################
+
+def test_general_difference():
+	"""
+	Test general use case of the difference function.
+	"""
+	test_input = {
+		"Times": [0, 1, 2, 3, 4, 5],
+		"Values": [1, 0, 9, 10, 8, 4]
+	}
+	df_test_input = pd.DataFrame(test_input)
+	test_output = {
+		"Times": [0, 1, 2, 3, 4],
+		"Values": [1, 9, 1, 2, 4]
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = difference(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
+def test_negatives_difference():
+	"""
+	Test use case of the difference function with negatives.
+	"""
+	test_input = {
+		"Times": [0, 1, 2, 3, 4, 5],
+		"Values": [-1, 0, -9, 10, 8, -4]
+	}
+	df_test_input = pd.DataFrame(test_input)
+	test_output = {
+		"Times": [0, 1, 2, 3, 4],
+		"Values": [1, 9, 19, 2, 12]
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = difference(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+>>>>>>> 8aeddf443e4d3ca0a75788570a0c5833cd7671da
 
 
 ###############
@@ -330,6 +370,122 @@ def test_general_standardize():
 	df_actual_output = standardize(df_test_input)
 	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
 
+def test_negative_standardize():
+	"""
+	Test the negative use case of the standardize function
+	"""
+	test_input = {
+		"Times": [0, 1, 2, 3, 4, 5],
+		"Values": [-1, 0, -9, -10, -8, -4]
+	}
+	df_test_input = pd.DataFrame(test_input)
+	input_mean = df_test_input.iloc[:, -1].mean()
+	input_std = df_test_input.iloc[:, -1].std()
+	test_output = {
+		"Times": [0, 1, 2, 3, 4, 5],
+		"Values": [
+			(-1 - input_mean) / input_std,
+			(0 - input_mean) / input_std,
+			(-9 - input_mean) / input_std,
+			(-10 - input_mean) / input_std,
+			(-8 - input_mean) / input_std,
+			(-4 - input_mean) / input_std
+		]
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = standardize(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
+def test_empty_standardize():
+	"""
+	Test the empty time series use case of the standardize function
+	"""
+	test_input = {
+		"Times": [],
+		"Values": []
+	}
+	df_test_input = pd.DataFrame(test_input)
+	test_output = {
+		"Times": [],
+		"Values": []
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = standardize(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
+def test_zerodiv_standardize():
+	"""
+	Test the edge case of the standardize function when variation is 0
+	"""
+	test_input = {
+		"Times": [0, 1, 2],
+		"Values": [5, 5, 5]
+	}
+	df_test_input = pd.DataFrame(test_input)
+	input_mean = df_test_input.iloc[:, -1].mean()
+	input_std = df_test_input.iloc[:, -1].std()
+	test_output = {
+		"Times": [0, 1, 2],
+		"Values": [0, 0, 0]
+	}
+	df_test_output = pd.DataFrame(test_output)
+	print(df_test_output)
+	df_actual_output = standardize(df_test_input)
+	print(df_actual_output)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
+def test_monocolumn_standardize():
+	"""
+	Test case where only one column is provided
+	"""
+	test_input = {
+		"Values": [1, 0, 9, 10, 8, 4]
+	}
+	df_test_input = pd.DataFrame(test_input)
+	input_mean = df_test_input.iloc[:, -1].mean()
+	input_std = df_test_input.iloc[:, -1].std()
+	test_output = {
+		"Values": [
+			(1 - input_mean) / input_std,
+			(0 - input_mean) / input_std,
+			(9 - input_mean) / input_std,
+			(10 - input_mean) / input_std,
+			(8 - input_mean) / input_std,
+			(4 - input_mean) / input_std
+		]
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = standardize(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
+def test_multicolumn_standardize():
+	"""
+	Test the use case where a multiple of columns are provided
+	"""
+	test_input = {
+		"Months": [0, 1, 2, 3, 4, 5],
+		"Days": [12, 1, 6, 24, 20, 18],
+		"Values": [1, 0, 9, 10, 8, 4]
+	}
+	df_test_input = pd.DataFrame(test_input)
+	input_mean = df_test_input.iloc[:, -1].mean()
+	input_std = df_test_input.iloc[:, -1].std()
+	test_output = {
+		"Months": [0, 1, 2, 3, 4, 5],
+		"Days": [12, 1, 6, 24, 20, 18],
+		"Values": [
+			(1 - input_mean) / input_std,
+			(0 - input_mean) / input_std,
+			(9 - input_mean) / input_std,
+			(10 - input_mean) / input_std,
+			(8 - input_mean) / input_std,
+			(4 - input_mean) / input_std
+		]
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = standardize(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
 
 ##########################
 # LOGARITHM TESTS
@@ -377,12 +533,9 @@ def test_split_data():
 	val1 = .25
 	val2 = .50
 	val3 = .25
-    # <<<<<<< HEAD
 	#ts = logarithm(ts)
 	ts = cubic_root(ts)
 	res = split_data(ts, val1, val2, val3)
 
-    # =======
 
 	split_data(ts, val1, val2, val3)
-# >>>>>>> b5cf2e4077811497cab7f7d78441c8ede743c564
