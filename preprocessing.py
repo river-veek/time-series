@@ -454,13 +454,13 @@ def cubic_root(ts):
 
 def split_data(ts, perc_training, perc_valid, perc_test):
     """
-   splits ts dataframe in the following format: 
+   splits ts dataframe in the following format:
 
     -[ts, ts, ts]
     -[perc_training, perc_valid, perc_test]
 
     """
-    
+
     # check how many columns are in the dataset
 
 
@@ -479,14 +479,14 @@ def split_data(ts, perc_training, perc_valid, perc_test):
     else:
 
         res = []
-        
+
         # iterate through columns
         for i in range(len(ts.columns)):
 
            col = np.array(ts.iloc[:,i].to_list())
            values = np.split(col, (len(col)*p[:-1].cumsum()).astype(int)     )
            res.append(values)
-        
+
 
         dictList = []
         for i in range(len(ts.columns)):
@@ -496,18 +496,18 @@ def split_data(ts, perc_training, perc_valid, perc_test):
         for i in range(len(ts.columns)):
             for j in range(len(ts.columns)):
                 dictList[i][ts.columns[j]] = res[j][i]
-                
-        
+
+
         result = []
 
-        
+
         for i in range(len(dictList)):
             x = pd.DataFrame.from_dict(dictList[i])
             #print(x)
             result.append(x)
-            
 
-        
+
+
         return result
 
 

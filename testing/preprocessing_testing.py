@@ -159,7 +159,17 @@ def test_no_NaN_longest_continuous_run():
                         'Vals': [10, 17.8, 15, 18, 25, 17, 18, 19, 500, 700]})
 
     assert longest_continuous_run(df1).equals(df2)
-    
+
+def test_all_NaN_longest_continuous_run():
+    df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': ["NaN", "NaN", "NaN", "NaN", "NaN"]})
+    df2 = pd.DataFrame({'Time': [],
+                        'Daily Top': [],
+                        'Vals': []})
+
+    assert longest_continuous_run(df1).equals(df2)
+
 ###################
 # DIFFERENCE()
 ###################
