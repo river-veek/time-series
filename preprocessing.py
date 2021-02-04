@@ -249,10 +249,10 @@ def difference(ts):
     of the difference between each consecutive element of the provided
     time series.
     """
-    # ensure enough data entries
+    # empty return when not enough to calculate difference
     if len(ts) < 2:
-        print("Error: Not enough data")
-        return
+        new_ts = pd.DataFrame(columns=ts.keys())
+        return new_ts
     # make a copy
     new_ts = ts.copy()
     # save index to last entry

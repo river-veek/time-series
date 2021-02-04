@@ -34,7 +34,7 @@ def fiveNumberSummary(ts):
 #########################
 
 
-def plot(ts, save=False, fname=None):
+def plot(ts, fname=None):
 	if type(ts) == list:
 	 	for item in ts:
 	 		item.plot()
@@ -44,26 +44,22 @@ def plot(ts, save=False, fname=None):
 		plt.show()
 
 	# handle file saving
-	if (save == True) and type(fname) == str:
+	if type(fname) == str:
 		plt.savefig(fname)
 
 	return ts
 
-def histogram(ts, save=False, fname=None):
-	if type(ts) == list:
-	 	for item in ts:
-	 		item.plot.hist()
-	 	plt.show()
-	else:
-		ts.plot.hist()
-		plt.show()
+def histogram(ts, fname=None):
+	ax = ts.plot()
+	ts.plot.hist(ax=ax, orientation="horizontal")
+	plt.show()
 
-	if (save == True) and type(fname) == str:
+	if type(fname) == str:
 		plt.savefig(fname)
 
 	return ts
 
-def box_plot(ts, save=False, fname=None):
+def box_plot(ts, fname=None):
 	if type(ts) == list:
 		for item in ts:
 			item.boxplot()
@@ -76,7 +72,7 @@ def box_plot(ts, save=False, fname=None):
 		fiveNumberSummary(ts)
 		plt.show()
 
-	if (save == True) and type(fname) == str:
+	if type(fname) == str:
 		plt.savefig(fname)
 	
 	return ts
