@@ -181,6 +181,59 @@ def test_negatives_difference():
 	df_actual_output = difference(df_test_input)
 	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
 
+def test_empty_difference():
+	"""
+	Test use case of the difference function where there are no entries.
+	"""
+	test_input = {
+		"Times": [],
+		"Values": []
+	}
+	df_test_input = pd.DataFrame(test_input)
+	test_output = {
+		"Times": [],
+		"Values": []
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = difference(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
+def test_one_entry_difference():
+	"""
+	Test the use case of the difference function where there are entries (one entry),
+	but it's not enough to calculate a difference.
+	"""
+	test_input = {
+		"Times": [0],
+		"Values": [1]
+	}
+	df_test_input = pd.DataFrame(test_input)
+	test_output = {
+		"Times": [],
+		"Values": []
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = difference(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
+def test_two_entry_difference():
+	"""
+	Test the use case of the difference function where there are just enough
+	entries to calculate a difference (2 entries).
+	"""
+	test_input = {
+		"Times": [0, 1],
+		"Values": [1, 5]
+	}
+	df_test_input = pd.DataFrame(test_input)
+	test_output = {
+		"Times": [0],
+		"Values": [4]
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = difference(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
 
 ###############
 # CLIP() TESTS
