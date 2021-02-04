@@ -45,6 +45,8 @@ def test_add_node(test_tree):
     print("\n#building tree#")
     test_tree.add_node("denoise", 0)
     test_tree.add_node("clip", 0, data_start=1.0, data_end=2.0)
+    test_tree.print_tree()
+
     test_tree.add_node("impute_missing_data", 1)
     test_tree.add_node("longest_continuous_run", 1)
     test_tree.add_node("plot", 4)
@@ -76,6 +78,9 @@ def test_replace_operation(test_tree):
     print("\n#testing replacing non-leaf node operation with a lead operation#")
     test_tree.replace_node("mse", 2)
 
+    print("\n#testing replacing node with bad inputs#")
+    test_tree.add_node("clip", 2, output_filename="test_file.txt")
+
     #build basic tree
     print("\n#replacing node operation tree#")
     test_tree.replace_node("impute_outliers", 4)
@@ -96,7 +101,7 @@ def test_copy_add_subtree(test_tree):
 
 def test_copy_path(test_tree):
     print("\n##Test Copying Path##")
-    path_copy = copy_path(test_tree, 11)
+    path_copy = copy_path(test_tree, 5)
     path_copy.print_tree()
 
 def test_save_load_tree(test_tree):
@@ -118,9 +123,9 @@ def test_execute_pipeline(test_tree):
     tree.add_node("assign_time", 1, data_start=1.0, increment=.2)
     tree.add_node("plot", 2)
     #tree.add_node("clip", 2, data_start=1.0, data_end=10.0)
-    tree.print_tree()
 
-    print("\n##Test executting a pipeline to node 6##")
+    print("\n##Test executting a pipeline to node 3##")
+    tree.print_tree()
     fname1 = "../timeSeriesData/TimeSeriesData2/AtmPres2005NovMin.csv"
     ts = fio.read_from_file(fname1)
     results = tree.execute_path(ts, 3)
