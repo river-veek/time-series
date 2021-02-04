@@ -81,7 +81,9 @@ def test_histogram():
 	ts = fio.read_from_file(fname1)
 	ts2 = fio.read_from_file(fname2)
 
-	plot.histogram([ts, ts2])
+	#plot.histogram([ts, ts2])
+	#plot.histogram(ts2)
+	plot.histogram(ts2)
 	
 def test_normality():
 
@@ -94,7 +96,7 @@ def test_normality():
 
 
 def main():
-	test_plot()
+	#test_plot()
 	test_histogram()
 
 
