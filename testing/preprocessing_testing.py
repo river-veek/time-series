@@ -143,6 +143,45 @@ def test_longest_continuous_run():
     # FIXME: need to trim ALL columns in DF, not just value column
     assert longest_continuous_run(df1).equals(df2)
 
+###################
+# DIFFERENCE()
+###################
+
+def test_general_difference():
+	"""
+	Test general use case of the difference function.
+	"""
+	test_input = {
+		"Times": [0, 1, 2, 3, 4, 5],
+		"Values": [1, 0, 9, 10, 8, 4]
+	}
+	df_test_input = pd.DataFrame(test_input)
+	test_output = {
+		"Times": [0, 1, 2, 3, 4],
+		"Values": [1, 9, 1, 2, 4]
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = difference(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
+def test_negatives_difference():
+	"""
+	Test use case of the difference function with negatives.
+	"""
+	test_input = {
+		"Times": [0, 1, 2, 3, 4, 5],
+		"Values": [-1, 0, -9, 10, 8, -4]
+	}
+	df_test_input = pd.DataFrame(test_input)
+	test_output = {
+		"Times": [0, 1, 2, 3, 4],
+		"Values": [1, 9, 19, 2, 12]
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = difference(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
+
 ###############
 # CLIP() TESTS
 ###############
@@ -303,7 +342,7 @@ def test_general_standardize():
 
 def test_negative_standardize():
 	"""
-	Test the general use case of the standardize function
+	Test the negative use case of the standardize function
 	"""
 	test_input = {
 		"Times": [0, 1, 2, 3, 4, 5],
@@ -322,6 +361,23 @@ def test_negative_standardize():
 			(-8 - input_mean) / input_std,
 			(-4 - input_mean) / input_std
 		]
+	}
+	df_test_output = pd.DataFrame(test_output)
+	df_actual_output = standardize(df_test_input)
+	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
+def test_empty_standardize():
+	"""
+	Test the empty time series use case of the standardize function
+	"""
+	test_input = {
+		"Times": [],
+		"Values": []
+	}
+	df_test_input = pd.DataFrame(test_input)
+	test_output = {
+		"Times": [],
+		"Values": []
 	}
 	df_test_output = pd.DataFrame(test_output)
 	df_actual_output = standardize(df_test_input)

@@ -252,10 +252,10 @@ def difference(ts):
         next_ts_val = ts.iloc[val_id+1, -1]
         # get difference
         new_val = next_ts_val - ts_val
-        # save to new dataframe
-        new_ts.iloc[val_id, -1] = new_val
+        # save magnitude to new dataframe
+        new_ts.iloc[val_id, -1] = abs(new_val)
     # remove last (unaltered) value
-    new_ts.drop(index=last_entry)
+    new_ts = new_ts.drop(index=last_entry)
     return new_ts
 
 def clip(ts, starting_date, final_date):
