@@ -15,7 +15,7 @@ import math
 ######################
 # HELPER FUNCTIONS
 ######################
-
+pd.options.mode.chained_assignment = None
 
 #########################
 # PREPROCESSING FUNCTIONS
@@ -532,6 +532,12 @@ def split_data(ts, perc_training, perc_valid, perc_test):
     -[perc_training, perc_valid, perc_test]
 
     """
+    if (perc_training + perc_valid + perc_test) != 1:
+        raise Exception("Error: percentages do not add to 1")
+
+    p = np.array([perc_training, perc_valid, perc_test])
+
+    a = np.array(ts.iloc[:,-1,].to_list())
 
     # check how many columns are in the dataset
 
