@@ -18,6 +18,32 @@ import nose
 import numpy as np
 
 
+##########################
+# SPLIT DATA TESTS
+##########################
+def test_denoise_general():
+	ts1 = pd.DataFrame({
+		"greetings": ["hello", "hello1", "hello2", "hello3", "hello4", "hello5", "hello", "hello1", "hello2", "hello3", "hello4", "hello5"],
+		"date": ["monday", "tue", "wed", "thu", "friday", "saturday", "monday", "tue", "wed", "thu", "friday", "saturday"],
+		"Values": [1.0, 0.0, 9.0, 10.0, 8.0, 4.0, 1.0, 0.0, 9.0, 10.0, 8.0, 4.0]
+	})
+	ts2 = pd.DataFrame({ "Values": [1.0, 0.0, 9.0, 10.0, 8.0, 4.0, 5.0, 5.5, 6.0, 5.5, 6.0] })
+	#print(ts1)
+	#ts1.iloc[:,-1] = ts1.iloc[:,-1].rolling(5).mean()
+	#print(ts1)
+
+	ts2 = pd.DataFrame({"greetings": ["hello2", "hello3", "hello4", "hello5", "hello", "hello1", "hello2", "hello3", "hello4", "hello5"],
+							"date": ["wed", "thu", "friday", "saturday", "monday", "tue", "wed", "thu", "friday", "saturday"],
+							"Values": [3.333333, 6.333333, 9.000000, 7.333333, 4.333333, 1.666667, 3.333333, 6.333333, 9.000000, 7.333333]
+
+						})
+	
+
+
+	
+
+
+test_denoise_general()
 #############################
 # IMPUTE_MISSING_DATA() TESTS
 #############################
@@ -647,6 +673,7 @@ def test_logarithm():
 	})
 
 	logarithm(ts)
+
 
 ##########################
 # CUBIC ROOT TESTS
