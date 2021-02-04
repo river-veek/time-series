@@ -176,18 +176,28 @@ def longest_continuous_run(ts):
 
     Computes the longest continuous run and returns that
     subset run as a new time series. Here, the longest continuous run
-    is the longest continuous time series subset without any empty/None
-    values.
+    is the longest continuous time series subset without any "NaN" values.
 
     This function allows for time series inputs with one or more (>= 1)
     missing data points.
+
+    If all values are "NaN," an empty DataFrame will be returned.
 
     Author: River Veek
     """
     # WORKS WITH MULTIPLE MISSING POINTS
 
-    # isolate last col name
-    col_name = ts.columns[-1]
+    # create dictionary of all columns with empty value lists
+    d = {}
+    for col in ts:
+        d[col] = []
+
+    # grab copy of d (for preserverion purposes)
+    # will create a DataFrame of this if start_idx and end_idx are equal
+    d_copy = {}
+    for col in ts:
+        d_copy[col] = []
+    print(d_copy)
 
     # grab copy of original ts (for preservation purposes)
     ts_copy = ts
@@ -195,7 +205,7 @@ def longest_continuous_run(ts):
     # input will be Pandas DataFrame
     # immediately convert to list (for easier mutability)
     ts = ts.iloc[:, -1].tolist()
-    new_ts = []
+    # new_ts = []
 
     longest_run = 0
     cur_run = 0
@@ -208,6 +218,7 @@ def longest_continuous_run(ts):
 
         if not ts[i] == "NaN":
             cur_run += 1
+
         else:
             cur_run = 0
 
@@ -218,17 +229,17 @@ def longest_continuous_run(ts):
 
         cur_idx += 1
 
-    # add data points in longest run to new time series
+    # add all data from longest run to dictionary (d)
     for i in range(start_idx, end_idx + 1):
-        new_ts.append(ts[i])
+        for col in d:
+            d[col].append(ts_copy[col][i])
 
-    # if time series has no valid points, return empty time series
+    # if time series has no valid points, return empty time series (d_copy)
     if start_idx == end_idx:
-        new_ts = pd.DataFrame(new_list, columns=[col_name])
+        print(d_copy)
+        return pd.DataFrame(d_copy)
 
-    return pd.DataFrame(new_ts, columns=[col_name])
-    # ts_copy[col_name] = new_ts
-    # return ts_copy
+    return pd.DataFrame(d)
 
 def difference(ts):
     """
