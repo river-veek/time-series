@@ -37,10 +37,10 @@ def test_denoise_general():
 							"Values": [3.333333, 6.333333, 9.000000, 7.333333, 4.333333, 1.666667, 3.333333, 6.333333, 9.000000, 7.333333]
 
 						})
-	
 
 
-	
+
+
 
 
 test_denoise_general()
@@ -217,7 +217,15 @@ def test_clip():
                         'Daily Top': ["AMC", "BB", "DOGE"],
                         'Vals': [12, 45, 88]})
 
+    df3 = pd.DataFrame({'Time': ["1/1", "1/2", "1/3", "1/4", "1/5"],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+    df4 = pd.DataFrame({'Time': ["1/3", "1/4", "1/5"],
+                        'Daily Top': ["BB", "DOGE", "NOK"],
+                        'Vals': [45, 88, 90]})
+
     assert clip(df1, 1, 3).equals(df2)
+    assert clip(df3, '1/3', '1/5').equals(df4)
 
 def test_end_less_than_start_clip():
     """
@@ -243,15 +251,16 @@ def test_invalid_times_clip():
                         'Daily Top': [],
                         'Vals': []})
 
-    df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4],
+    df3 = pd.DataFrame({'Time': [0, 1, 2, 3, 4],
                         'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
                         'Vals': [10, 12, 45, 88, 90]})
-    df2 = pd.DataFrame({'Time': [3, 4],
+    df4 = pd.DataFrame({'Time': [3, 4],
                         'Daily Top': ["DOGE", "NOK"],
                         'Vals': [88, 90]})
-
-    assert clip(df1, 5, 8).equals(df2)
-    assert clip(df1, 3, 6).equals(df2)
+    # print(clip(df1, 5, 8))
+    print(clip(df1, 3, 6))
+    # assert clip(df1, 5, 8).equals(df2)
+    assert clip(df3, 3, 6).equals(df4)
 
 def test_equal_times_clip():
     """
@@ -264,7 +273,9 @@ def test_equal_times_clip():
                         'Daily Top': ["AMC"],
                         'Vals': [12]})
 
+    print(clip(df1, 1, 1))
     assert clip(df1, 1, 1).equals(df2)
+
 
 #####################
 # ASSIGN_TIME() TESTS

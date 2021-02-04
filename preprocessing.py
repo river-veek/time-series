@@ -36,9 +36,9 @@ def denoise(ts, increment=10):
 
     # function that removes NaN values
     ts = ts.dropna()
-    
+
     return ts
-    
+
 
 def impute_missing_data(ts):
     """
@@ -279,7 +279,7 @@ def clip(ts, starting_date, final_date):
     Takes a time series, the starting date to clip the time series
     by, and the ending date to clip the time series by. No assumption
     is made about the types of starting_date and final_date; these two
-    parameters will only be assumed to be valid keys of the time series ts.
+    parameters will only be assumed to be valid items of the time series ts.
 
     If starting_date greater than (>) final_date, then time series ts is
     clipped from starting_date to the end of ts.
@@ -291,7 +291,15 @@ def clip(ts, starting_date, final_date):
 
     Author: River Veek
     """
-    # ASSUMES FIRST COLUMN IS TIME, SECOND COLUMN IS VALUES
+    # ASSUMES FIRST COLUMN IS TIME, LAST COLUMN IS VALUES
+
+    # grab copy of ts (for preservation purposes)
+    ts_copy = ts
+
+    # make blank dictionary to add future col vals to
+    d = {}
+    for col in ts_copy:
+        d[col] = []
 
     new_ts = []  # will hold values
     new_col = []  # will hold times
@@ -310,32 +318,37 @@ def clip(ts, starting_date, final_date):
 
     for key in first_col:
 
-        if flag == 2:
-            break
-
         if key == starting_date:
-            new_col.append(first_col[idx])
-            new_ts.append(ts[idx])
+            if starting_date == final_date:
+                for col in d:
+
+                    d[col].append(ts_copy[col][idx])
+
+                break
+
+            for col in d:
+
+                d[col].append(ts_copy[col][idx])
+
             flag = 1
             idx += 1
             continue
 
         if flag == 1:
-
             if key == final_date:
-                new_col.append(first_col[idx])
-                new_ts.append(ts[idx])
+                for col in d:
+
+                    d[col].append(ts_copy[col][idx])
+
                 break
 
-            new_col.append(first_col[idx])
-            new_ts.append(ts[idx])
+            for col in d:
+
+                d[col].append(ts_copy[col][idx])
 
         idx += 1
 
-    ret = pd.DataFrame()
-    ret[time_col_name] = new_col
-    ret[val_col_name] = new_ts
-    return ret
+    return pd.DataFrame(d)
 
 def assign_time(ts, start, increment):
     """
