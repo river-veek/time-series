@@ -3,6 +3,7 @@ Modeling and Forecasting Functions
 """
 
 from sklearn.neural_network import MLPClassifier
+import file_io as fio
 
 
 def mlp_model(train, layers=(100,)):
@@ -19,6 +20,7 @@ def mlp_forecast(model, x_filename):
     Predicts a future set of values from a given set of values
     and a trained model.
     """
-    read_from
+    x = fio.read_from_file(x_filename)
+    x = x.to_numpy()
     y_hat = model.predict(x)
     return y_hat
