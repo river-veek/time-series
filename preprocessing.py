@@ -423,8 +423,8 @@ def design_matrix(ts, data_start, data_end):
     Takes a time series, float representing the size of input array,
     float representing the size of the output array, and returns a
     tuple consisting of the original time series as well as
-    another tuple that holds the two matrices (input matrix and output matrix)
-    in that particular order.
+    another tuple that holds the two matrices (input matrix and output matrix,
+    both as numpy arrays) in that particular order.
 
     Example of return:
     (ts, (input array, output array))
@@ -437,7 +437,7 @@ def design_matrix(ts, data_start, data_end):
     # ouput index == where to start second tuple, float -> int
     # return tuple of numpy arrays containing numpy arrays ANDDDDD the original ts
     # EXAMPLE
-    # (    [ [1,2,3], [2,3,4], [3,4,5], … [] ],    [ [4,5], [5,6], [6,7], … [] ]    )
+    # (ts, ([[1,2,3], [2,3,4], [3,4,5], ..., []], [[4,5], [5,6], [6,7], ..., []]))
 
     # convert value col of ts to list
     ts_copy = ts.iloc[:, -1].tolist()
@@ -453,7 +453,7 @@ def design_matrix(ts, data_start, data_end):
     output = []
 
     for i in range(len(ts_copy)):
-
+        # print(i)
         # tmp to be added to input matrix
         tmp = []
 
@@ -478,12 +478,13 @@ def design_matrix(ts, data_start, data_end):
         for j in range(data_end):
 
             # don't access out of range elements
-            if i + j  + data_end  + 1 >= len(ts_copy):
+            if i + j  + data_end >= len(ts_copy):
                 break
 
-            tmp.append(ts_copy[i + j + data_end + 1])
+            tmp.append(ts_copy[i + j + data_end])
 
         if len(tmp) == data_end:
+            # print(tmp)
             output.append(tmp)
 
     # convert input and output matrices
