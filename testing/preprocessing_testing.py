@@ -734,8 +734,26 @@ def test_design_matrix():
     ret1 = (df1, (np.array([[10, 12], [12, 45], [45, 88], [88, 90]]),
                   np.array([[45, 88], [88, 90], [90, 77], [77, 81]])))
 
-    ts1_correct = ret1[0].equals(df1)
     op1 = design_matrix(df1, 2.0, 2.0)
+    ts1_correct = op1[0].equals(df1)
+    in1_vs_op1 = op1[1][0] == ret1[1][0]
+    in1 = in1_vs_op1.all()
+    out1_vs_op1 = op1[1][1] == ret1[1][1]
+    out1 = in1_vs_op1.all()
+    assert ts1_correct and in1 and out1
+
+def test_design_matrix():
+    """
+    Testing design_matrix() again.
+    """
+    df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4, 5, 6],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK", "BTC", "ETH"],
+                        'Vals': [10, 12, 45, 88, 90, 77, 81]})
+    ret1 = (df1, (np.array([[10, 12, 45], [12, 45, 88], [45, 88, 90]]),
+                  np.array([[88, 90], [90, 77], [90, 77], [77, 81]])))
+
+    ts1_correct = ret1[0].equals(df1)
+    op1 = design_matrix(df1, 3.0, 2.0)
     in1_vs_op1 = op1[1][0] == ret1[1][0]
     in1 = in1_vs_op1.all()
     out1_vs_op1 = op1[1][1] == ret1[1][1]
