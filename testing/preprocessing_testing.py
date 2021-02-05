@@ -1,10 +1,17 @@
 """
 Tests for preprocessing.py methods.
 
-To run nosetests (from 'time-series/' directory):
+To run all nosetests (from 'time-series/' directory):
 
     nosetests -v testing/preprocessing_testing.py
 
+To run single test class:
+
+    nosetests -v testing/preprocessing_testing.py:<class name>
+
+To run single test module (single test from within a class):
+
+    nosetests -v testing/preprocessing_testing.py:<class name>.<module name>
 
 Author(s): Nick Titzler, River Veek
 """
@@ -39,48 +46,51 @@ def test_denoise_general():
 						})
 
 
-#############################
-# IMPUTE_MISSING_DATA() TESTS
-#############################
-def test_NaN_last_impute_missing_data():
-    """
-    Testing impute_missing_data() with NaN as last value and as first value.
-    """
-    df1 = pd.DataFrame({'Time': [0, 1, 2], 'Daily Top': ["GME", "AMC", "BB"], 'Vals': [14.6, 17.8, "NaN"]})
-    df2 = pd.DataFrame({'Time': [0, 1, 2], 'Daily Top': ["GME", "AMC", "BB"], 'Vals': [14.6, 17.8, 16.2]})
+class Test_impute_missing_data:
+    """Test class for impute_missing_data()."""
 
-    df3 = pd.DataFrame({'Time': [0, 1, 2], 'Daily Top': ["GME", "AMC", "BB"], 'Vals': ["NaN", 10, 11]})
-    df4 = pd.DataFrame({'Time': [0, 1, 2], 'Daily Top': ["GME", "AMC", "BB"], 'Vals': [10.5, 10, 11]})
+    #############################
+    # IMPUTE_MISSING_DATA() TESTS
+    #############################
+    def test_NaN_last_impute_missing_data(self):
+        """
+        Testing impute_missing_data() with NaN as last value and as first value.
+        """
+        df1 = pd.DataFrame({'Time': [0, 1, 2], 'Daily Top': ["GME", "AMC", "BB"], 'Vals': [14.6, 17.8, "NaN"]})
+        df2 = pd.DataFrame({'Time': [0, 1, 2], 'Daily Top': ["GME", "AMC", "BB"], 'Vals': [14.6, 17.8, 16.2]})
 
-    assert impute_missing_data(df1).equals(df2)
-    assert impute_missing_data(df3).equals(df4)
+        df3 = pd.DataFrame({'Time': [0, 1, 2], 'Daily Top': ["GME", "AMC", "BB"], 'Vals': ["NaN", 10, 11]})
+        df4 = pd.DataFrame({'Time': [0, 1, 2], 'Daily Top': ["GME", "AMC", "BB"], 'Vals': [10.5, 10, 11]})
 
-def test_NaN_middle_impute_missing_data():
-    """
-    Testing impute_missing_data() with NaN as a middle value (not the first or last value).
-    """
-    df1 = pd.DataFrame({'Time': [0, 1, 2], 'Vals': [10, "NaN", 20]})
-    df2 = pd.DataFrame({'Time': [0, 1, 2], 'Vals': [10.0, 15.0, 20.0]})
+        assert impute_missing_data(df1).equals(df2)
+        assert impute_missing_data(df3).equals(df4)
 
-    assert impute_missing_data(df1).equals(df2)
+    def test_NaN_middle_impute_missing_data(self):
+        """
+        Testing impute_missing_data() with NaN as a middle value (not the first or last value).
+        """
+        df1 = pd.DataFrame({'Time': [0, 1, 2], 'Vals': [10, "NaN", 20]})
+        df2 = pd.DataFrame({'Time': [0, 1, 2], 'Vals': [10.0, 15.0, 20.0]})
 
-def test_NaN_only_impute_missing_data():
-    """
-    Testing impute_missing_data() with NaN as only value.
-    """
-    df1 = pd.DataFrame({'Time': [0], 'Vals': ["NaN"]})
-    df2 = pd.DataFrame({'Time': [0], 'Vals': [0]})
+        assert impute_missing_data(df1).equals(df2)
 
-    assert impute_missing_data(df1).equals(df2)
+    def test_NaN_only_impute_missing_data(self):
+        """
+        Testing impute_missing_data() with NaN as only value.
+        """
+        df1 = pd.DataFrame({'Time': [0], 'Vals': ["NaN"]})
+        df2 = pd.DataFrame({'Time': [0], 'Vals': [0]})
 
-def test_no_NaN_impute_missing_data():
-    """
-    Testing impute_missing_data() with no NaN.
-    """
-    df1 = pd.DataFrame({'Time': [0], 'Vals': [22]})
-    df2 = pd.DataFrame({'Time': [0], 'Vals': [22]})
+        assert impute_missing_data(df1).equals(df2)
 
-    assert impute_missing_data(df1).equals(df2)
+    def test_no_NaN_impute_missing_data(self):
+        """
+        Testing impute_missing_data() with no NaN.
+        """
+        df1 = pd.DataFrame({'Time': [0], 'Vals': [22]})
+        df2 = pd.DataFrame({'Time': [0], 'Vals': [22]})
+
+        assert impute_missing_data(df1).equals(df2)
 
 
 #########################
