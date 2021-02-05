@@ -40,11 +40,11 @@ pre_processing = {"denoise": (pre_proc.denoise, [2]),
                   "cubic_root": (pre_proc.cubic_root, None),
                   "split_data": (pre_proc.split_data, [3,4,5]),
                   "design_matrix": (pre_proc.design_matrix, [0,1]),
-                  "design_matrix_2": (pre_proc.design_matrix_2, [8,9,10,11]),
                   "ts2db": (pre_proc.ts2db, [6,3,4,5,0,1,7]),
+                  "db2ts": (pre_proc.db2ts, None),
                   "mlp_model": (mod.mlp_model, [12]),
                   "mlp_forecast": (mod.mlp_forecast, [6]),
-                  "read_from_file": (fio.read_from_file, [6]),
+                  "read_from_file": (fio.read_from_file, None),
                   "write_to_file": (fio.write_to_file, [7])
                   }
 
@@ -59,7 +59,7 @@ visualization = {"plot": (vis.plot, [7]),
 
 leaf_functions = ["split_data", "mse", "mape", "smape", "write_to_file"]
 
-path_dependent = ["design_matrix", "design_matrix_2", "ts2db", "mlp_model", ]
+path_dependent = ["design_matrix","ts2db", "mlp_model"]
 
 ########################
 # validate input functions
@@ -107,10 +107,6 @@ def validate_operation_order(operation: str, parent_operation: str):
         print(f"Error - design_matrix needs to be followed by mlp_model")
         valid = False
 
-    elif (parent_operation == "design_matrix_2" and operation != "mlp_model"):
-        print(f"Error - design_matrix_2 needs to be followed by mlp_model")
-        valid = False
-
     elif (parent_operation == "ts2db" and operation != "mlp_model"):
         print(f"Error - ts2db needs to be followed by mlp_model")
         valid = False
@@ -120,8 +116,14 @@ def validate_operation_order(operation: str, parent_operation: str):
         valid = False
 
     elif (parent_operation == "mlp_forecast" and operation != "mape") or \
-         (parent_operation == "mlp_forecast" and operation != "smape"):
-        print(f"Error - mlp_forecast needs to be followed by mape or smape")
+         (parent_operation == "mlp_forecast" and operation != "smape") or \
+         (parent_operation == "mlp_forecast" and operation != "db2ts"):
+        print(f"Error - mlp_forecast needs to be followed by mape, smape, or db2ts")
+        valid = False
+
+    elif (parent_operation == "db2ts" and operation != "write_to_file") or \
+         (parent_operation == "mlp_forecast" and (operation not in visualization.keys())):
+        print(f"Error - db2ts needs to be followed by write_to_file or visualiztion/error function")
         valid = False
 
     return valid
@@ -221,9 +223,6 @@ def validate_inputs(operation,
         if (layers == None):
             valid = False
     elif operation == "mlp_forecast":
-        if (input_filename == None):
-            valid = False
-    elif operation == "read_from_file":
         if (input_filename == None):
             valid = False
     elif operation == "write_to_file":

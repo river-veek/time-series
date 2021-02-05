@@ -130,6 +130,10 @@ def test_execute_pipeline(test_tree):
     ts = fio.read_from_file(fname1)
     results = tree.execute_path(ts, 3)
 
+    tree2 = TS_Tree()
+    tree2.replace_node("read_from_file", 0, input_filename="../timeSeriesData/TimeSeriesData2/AtmPres2005NovMin.csv")
+
+
 def test_execute_tree():
     pass
 
