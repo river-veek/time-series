@@ -742,7 +742,7 @@ def test_design_matrix():
     out1 = in1_vs_op1.all()
     assert ts1_correct and in1 and out1
 
-def test_design_matrix():
+def test_again_design_matrix():
     """
     Testing design_matrix() again.
     """
