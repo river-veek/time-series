@@ -276,7 +276,43 @@ def test_equal_times_clip():
 #####################
 # ASSIGN_TIME() TESTS
 #####################
+def test_assign_time():
+    """
+    Testing assign_time().
+    """
+    df1 = pd.DataFrame({'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+    df2 = pd.DataFrame({'Times': [1, 2, 3, 4, 5],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
 
+    df3 = pd.DataFrame({'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+    df4 = pd.DataFrame({'Times': [0, 5, 10, 15, 20],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+
+    assert assign_time(df1, 1, 1).equals(df2)
+    assert assign_time(df3, 0, 5).equals(df4)
+
+def test_decreasing_assign_time():
+    """
+    Testing assign_time() with a negative start and increment arguments.
+    """
+    df1 = pd.DataFrame({'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+    df2 = pd.DataFrame({'Times': [0, -1, -2, -3, -4],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+
+    df3 = pd.DataFrame({'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+    df4 = pd.DataFrame({'Times': [-5, -10, -15, -20, -25],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+
+    assert assign_time(df1, 0, -1).equals(df2)
+    assert assign_time(df3, -5, -5).equals(df4)
 
 
 ###################

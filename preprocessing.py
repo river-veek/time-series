@@ -354,18 +354,25 @@ def assign_time(ts, start, increment):
     """
     Assign time stamps to data points in a given time series.
 
-    Takes a time series with no time stamps, the starting time (t_0), and
-    the amount to be incremented by (delta). Assumed that start and
-    increment are both integers. Returns a time series with column names
-    defaulting to 'Times' and 'Values.'
+    Takes a time series without time stamps, the starting time (start),
+    and the amount to be incremented by (increment). Assumed that start and
+    increment are both integers. It is also assumed that no column holding
+    times exists.
+
+    Returns a time series with where the name of the first column is 'Times.'
 
     start and increment can be negative or positive values.
 
     Author: River Veek
     """
     # START AND INCREMENT ARE INTS
-    # DEFAULT COL NAMES TO 'TIMES' AND 'VALUES'
-    new_ts = []
+    # DEFAULT FIRST COL NAME TO 'Times'
+
+    # grab copy of ts (for preservation purposes)
+    ts_copy = ts
+
+    # create list holding all values (last col)
+    # for use in finding length of ts
     ts = ts.iloc[:, -1].tolist()
     times = []
     total = 0
@@ -374,10 +381,8 @@ def assign_time(ts, start, increment):
         times.append(start + total)
         total += increment
 
-    ret = pd.DataFrame()
-    ret["Times"] = times
-    ret["Values"] = ts
-    return ret
+    ts_copy.insert(loc=0, column="Times", value=times)
+    return ts_copy
 
 def scaling(ts):
     """
