@@ -1,10 +1,17 @@
 """
 Tests for preprocessing.py methods.
 
-To run nosetests (from 'time-series/' directory):
+To run all nosetests (from 'time-series/' directory):
 
     nosetests -v testing/preprocessing_testing.py
 
+To run single test class:
+
+    nosetests -v testing/preprocessing_testing.py:<class name>
+
+To run single test module (single test from within a class):
+
+    nosetests -v testing/preprocessing_testing.py:<class name>.<module name>
 
 Author(s): Nick Titzler, River Veek
 """
@@ -39,53 +46,52 @@ def test_denoise_general():
 						})
 
 
+class Test_impute_missing_data:
+    """Test class for impute_missing_data()."""
 
+    #############################
+    # IMPUTE_MISSING_DATA() TESTS
+    #############################
+    def test_NaN_last_impute_missing_data(self):
+        """
+        Testing impute_missing_data() with NaN as last value and as first value.
+        """
+        df1 = pd.DataFrame({'Time': [0, 1, 2], 'Daily Top': ["GME", "AMC", "BB"], 'Vals': [14.6, 17.8, "NaN"]})
+        df2 = pd.DataFrame({'Time': [0, 1, 2], 'Daily Top': ["GME", "AMC", "BB"], 'Vals': [14.6, 17.8, 16.2]})
 
+        df3 = pd.DataFrame({'Time': [0, 1, 2], 'Daily Top': ["GME", "AMC", "BB"], 'Vals': ["NaN", 10, 11]})
+        df4 = pd.DataFrame({'Time': [0, 1, 2], 'Daily Top': ["GME", "AMC", "BB"], 'Vals': [10.5, 10, 11]})
 
+        assert impute_missing_data(df1).equals(df2)
+        assert impute_missing_data(df3).equals(df4)
 
-test_denoise_general()
-#############################
-# IMPUTE_MISSING_DATA() TESTS
-#############################
-def test_NaN_last_impute_missing_data():
-    """
-    Testing impute_missing_data() with NaN as last value and as first value.
-    """
-    df1 = pd.DataFrame({'Time': [0, 1, 2], 'Daily Top': ["GME", "AMC", "BB"], 'Vals': [14.6, 17.8, "NaN"]})
-    df2 = pd.DataFrame({'Time': [0, 1, 2], 'Daily Top': ["GME", "AMC", "BB"], 'Vals': [14.6, 17.8, 16.2]})
+    def test_NaN_middle_impute_missing_data(self):
+        """
+        Testing impute_missing_data() with NaN as a middle value (not the first or last value).
+        """
+        df1 = pd.DataFrame({'Time': [0, 1, 2], 'Vals': [10, "NaN", 20]})
+        df2 = pd.DataFrame({'Time': [0, 1, 2], 'Vals': [10.0, 15.0, 20.0]})
 
-    df3 = pd.DataFrame({'Time': [0, 1, 2], 'Daily Top': ["GME", "AMC", "BB"], 'Vals': ["NaN", 10, 11]})
-    df4 = pd.DataFrame({'Time': [0, 1, 2], 'Daily Top': ["GME", "AMC", "BB"], 'Vals': [10.5, 10, 11]})
+        assert impute_missing_data(df1).equals(df2)
 
-    assert impute_missing_data(df1).equals(df2)
-    assert impute_missing_data(df3).equals(df4)
+    def test_NaN_only_impute_missing_data(self):
+        """
+        Testing impute_missing_data() with NaN as only value.
+        """
+        df1 = pd.DataFrame({'Time': [0], 'Vals': ["NaN"]})
+        df2 = pd.DataFrame({'Time': [0], 'Vals': [0]})
 
-def test_NaN_middle_impute_missing_data():
-    """
-    Testing impute_missing_data() with NaN as a middle value (not the first or last value).
-    """
-    df1 = pd.DataFrame({'Time': [0, 1, 2], 'Vals': [10, "NaN", 20]})
-    df2 = pd.DataFrame({'Time': [0, 1, 2], 'Vals': [10.0, 15.0, 20.0]})
+        assert impute_missing_data(df1).equals(df2)
 
-    assert impute_missing_data(df1).equals(df2)
+    def test_no_NaN_impute_missing_data(self):
+        """
+        Testing impute_missing_data() with no NaN.
+        """
+        df1 = pd.DataFrame({'Time': [0], 'Vals': [22]})
+        df2 = pd.DataFrame({'Time': [0], 'Vals': [22]})
 
-def test_NaN_only_impute_missing_data():
-    """
-    Testing impute_missing_data() with NaN as only value.
-    """
-    df1 = pd.DataFrame({'Time': [0], 'Vals': ["NaN"]})
-    df2 = pd.DataFrame({'Time': [0], 'Vals': [0]})
+        assert impute_missing_data(df1).equals(df2)
 
-    assert impute_missing_data(df1).equals(df2)
-
-def test_no_NaN_impute_missing_data():
-    """
-    Testing impute_missing_data() with no NaN.
-    """
-    df1 = pd.DataFrame({'Time': [0], 'Vals': [22]})
-    df2 = pd.DataFrame({'Time': [0], 'Vals': [22]})
-
-    assert impute_missing_data(df1).equals(df2)
 
 #########################
 # IMPUTE_OUTLIERS() TESTS
@@ -153,6 +159,7 @@ def test_multiple_outlier_impute_outliers():
 
     assert impute_outliers(df1).equals(df2)
 
+
 ##############################
 # LONGEST_CONTINUOUS_RUN TESTS
 ##############################
@@ -202,6 +209,7 @@ def test_all_NaN_longest_continuous_run():
                         'Vals': []})
 
     assert longest_continuous_run(df1).equals(df2)
+
 
 ###############
 # CLIP() TESTS
@@ -257,9 +265,8 @@ def test_invalid_times_clip():
     df4 = pd.DataFrame({'Time': [3, 4],
                         'Daily Top': ["DOGE", "NOK"],
                         'Vals': [88, 90]})
-    # print(clip(df1, 5, 8))
-    print(clip(df1, 3, 6))
-    # assert clip(df1, 5, 8).equals(df2)
+
+    assert clip(df1, 5, 8).equals(df2)
     assert clip(df3, 3, 6).equals(df4)
 
 def test_equal_times_clip():
@@ -273,13 +280,49 @@ def test_equal_times_clip():
                         'Daily Top': ["AMC"],
                         'Vals': [12]})
 
-    print(clip(df1, 1, 1))
     assert clip(df1, 1, 1).equals(df2)
 
 
 #####################
 # ASSIGN_TIME() TESTS
 #####################
+def test_assign_time():
+    """
+    Testing assign_time().
+    """
+    df1 = pd.DataFrame({'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+    df2 = pd.DataFrame({'Times': [1, 2, 3, 4, 5],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+
+    df3 = pd.DataFrame({'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+    df4 = pd.DataFrame({'Times': [0, 5, 10, 15, 20],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+
+    assert assign_time(df1, 1, 1).equals(df2)
+    assert assign_time(df3, 0, 5).equals(df4)
+
+def test_decreasing_assign_time():
+    """
+    Testing assign_time() with a negative start and increment arguments.
+    """
+    df1 = pd.DataFrame({'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+    df2 = pd.DataFrame({'Times': [0, -1, -2, -3, -4],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+
+    df3 = pd.DataFrame({'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+    df4 = pd.DataFrame({'Times': [-5, -10, -15, -20, -25],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
+                        'Vals': [10, 12, 45, 88, 90]})
+
+    assert assign_time(df1, 0, -1).equals(df2)
+    assert assign_time(df3, -5, -5).equals(df4)
 
 
 ###################
@@ -405,6 +448,7 @@ def test_multicolumn_difference():
 	df_test_output = pd.DataFrame(test_output)
 	df_actual_output = difference(df_test_input)
 	assert list(df_actual_output.iloc[:, -1]) == list(df_test_output.iloc[:, -1])
+
 
 ##################
 # SCALING() TESTS
@@ -698,8 +742,9 @@ def test_cubic_root():
 
 	df = cubic_root(ts)
 
+
 ##########################
-# SPLIT DATA TESTS
+# SPLIT_DATA() TESTS
 ##########################
 def test_split_data():
 	ts = pd.DataFrame({
@@ -722,10 +767,49 @@ def test_split_data():
 	split_data(ts, val1, val2, val3)
 
 
+#######################
+# DESIGN_MATRIX() TESTS
+#######################
+def test_design_matrix():
+    """
+    Testing design_matrix().
+    """
+    df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4, 5, 6],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK", "BTC", "ETH"],
+                        'Vals': [10, 12, 45, 88, 90, 77, 81]})
+    ret1 = (df1, (np.array([[10, 12], [12, 45], [45, 88], [88, 90]]),
+                  np.array([[45, 88], [88, 90], [90, 77], [77, 81]])))
+
+    op1 = design_matrix(df1, 2.0, 2.0)
+    ts1_correct = op1[0].equals(df1)
+    in1_vs_op1 = op1[1][0] == ret1[1][0]
+    in1 = in1_vs_op1.all()
+    out1_vs_op1 = op1[1][1] == ret1[1][1]
+    out1 = in1_vs_op1.all()
+    assert ts1_correct and in1 and out1
+
+def test_again_design_matrix():
+    """
+    Testing design_matrix() again.
+    """
+    df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4, 5, 6],
+                        'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK", "BTC", "ETH"],
+                        'Vals': [10, 12, 45, 88, 90, 77, 81]})
+    ret1 = (df1, (np.array([[10, 12, 45], [12, 45, 88], [45, 88, 90]]),
+                  np.array([[88, 90], [90, 77], [90, 77], [77, 81]])))
+
+    ts1_correct = ret1[0].equals(df1)
+    op1 = design_matrix(df1, 3.0, 2.0)
+    in1_vs_op1 = op1[1][0] == ret1[1][0]
+    in1 = in1_vs_op1.all()
+    out1_vs_op1 = op1[1][1] == ret1[1][1]
+    out1 = in1_vs_op1.all()
+    assert ts1_correct and in1 and out1
+
+
 #############
 # DB2TS()
 #############
-
 def test_general_db2ts():
 	"""
 	Tests general use case of db2ts()

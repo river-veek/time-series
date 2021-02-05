@@ -354,18 +354,25 @@ def assign_time(ts, start, increment):
     """
     Assign time stamps to data points in a given time series.
 
-    Takes a time series with no time stamps, the starting time (t_0), and
-    the amount to be incremented by (delta). Assumed that start and
-    increment are both integers. Returns a time series with column names
-    defaulting to 'Times' and 'Values.'
+    Takes a time series without time stamps, the starting time (start),
+    and the amount to be incremented by (increment). Assumed that start and
+    increment are both integers. It is also assumed that no column holding
+    times exists.
+
+    Returns a time series with where the name of the first column is 'Times.'
 
     start and increment can be negative or positive values.
 
     Author: River Veek
     """
     # START AND INCREMENT ARE INTS
-    # DEFAULT COL NAMES TO 'TIMES' AND 'VALUES'
-    new_ts = []
+    # DEFAULT FIRST COL NAME TO 'Times'
+
+    # grab copy of ts (for preservation purposes)
+    ts_copy = ts
+
+    # create list holding all values (last col)
+    # for use in finding length of ts
     ts = ts.iloc[:, -1].tolist()
     times = []
     total = 0
@@ -374,10 +381,8 @@ def assign_time(ts, start, increment):
         times.append(start + total)
         total += increment
 
-    ret = pd.DataFrame()
-    ret["Times"] = times
-    ret["Values"] = ts
-    return ret
+    ts_copy.insert(loc=0, column="Times", value=times)
+    return ts_copy
 
 def scaling(ts):
     """
@@ -423,8 +428,8 @@ def design_matrix(ts, data_start, data_end):
     Takes a time series, float representing the size of input array,
     float representing the size of the output array, and returns a
     tuple consisting of the original time series as well as
-    another tuple that holds the two matrices (input matrix and output matrix)
-    in that particular order.
+    another tuple that holds the two matrices (input matrix and output matrix,
+    both as numpy arrays) in that particular order.
 
     Example of return:
     (ts, (input array, output array))
@@ -437,7 +442,7 @@ def design_matrix(ts, data_start, data_end):
     # ouput index == where to start second tuple, float -> int
     # return tuple of numpy arrays containing numpy arrays ANDDDDD the original ts
     # EXAMPLE
-    # (    [ [1,2,3], [2,3,4], [3,4,5], … [] ],    [ [4,5], [5,6], [6,7], … [] ]    )
+    # (ts, ([[1,2,3], [2,3,4], [3,4,5], ..., []], [[4,5], [5,6], [6,7], ..., []]))
 
     # convert value col of ts to list
     ts_copy = ts.iloc[:, -1].tolist()
@@ -453,7 +458,7 @@ def design_matrix(ts, data_start, data_end):
     output = []
 
     for i in range(len(ts_copy)):
-
+        # print(i)
         # tmp to be added to input matrix
         tmp = []
 
@@ -478,12 +483,13 @@ def design_matrix(ts, data_start, data_end):
         for j in range(data_end):
 
             # don't access out of range elements
-            if i + j  + data_end  + 1 >= len(ts_copy):
+            if i + j  + data_end >= len(ts_copy):
                 break
 
-            tmp.append(ts_copy[i + j + data_end + 1])
+            tmp.append(ts_copy[i + j + data_end])
 
         if len(tmp) == data_end:
+            # print(tmp)
             output.append(tmp)
 
     # convert input and output matrices
