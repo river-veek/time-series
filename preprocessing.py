@@ -491,7 +491,7 @@ def design_matrix(ts, data_start, data_end):
     output = np.array(output)
 
     # return tuple of original ts, tuple of matrices
-    return ts, (input, output)
+    return input, output
 
 def design_matrix_2(ts, mi, ti, mo, to):
     pass
@@ -621,7 +621,7 @@ def ts2db(input_file, perc_train, perc_val, perc_test,
     ts_splits = split_data(ts, perc_train, perc_val, perc_test)
     # convert datasets into databases that can be processed by
     # a machine learning model
-    train_db = design_matrix(ts_splits[0], input_index, output_index)
+    train_db = design_matrix(ts_splits[0], input_index, output_index)       # CHANGE OUTPUT HANDLING
     val_db = design_matrix(ts_splits[1], input_index, output_index)
     test_db = design_matrix(ts_splits[2], input_index, output_index)
     # return set of databases
@@ -646,3 +646,12 @@ def db2ts(db):
     # convert to real time series data to return
     ts = pd.DataFrame(ts_list)
     return ts
+
+
+def main():
+    ts = fio.read_from_file("timeSeriesData/TimeSeriesData1/1_temperature_test.csv")
+    db = design_matrix(ts, 20, 10)
+    np.savetxt("timeSeriesData/TimeSeriesData1/1_temperature_test.csv", db[0])
+
+
+main()
