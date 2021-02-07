@@ -497,6 +497,7 @@ def design_matrix(ts, data_start, data_end):
     output = np.array(output)
 
     # return tuple of original ts, tuple of matrices
+    # FIXME: NEW RETURNS??? BOTH TESTS FAILING NOW
     return input, output
 
 def design_matrix_2(ts, mi, ti, mo, to):
@@ -653,7 +654,7 @@ def db2ts(db):
     ts = pd.DataFrame(ts_list)
     return ts
 
-
+"""
 def main():
     ts = fio.read_from_file("timeSeriesData/TimeSeriesData1/1_temperature_test.csv")
     db = design_matrix(ts, 20, 10)
@@ -661,3 +662,4 @@ def main():
 
 
 main()
+"""
