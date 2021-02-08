@@ -805,14 +805,14 @@ class Test_design_matrix:
         df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4, 5, 6],
                             'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK", "BTC", "ETH"],
                             'Vals': [10, 12, 45, 88, 90, 77, 81]})
-        ret1 = ((np.array([[10, 12, 45], [12, 45, 88], [45, 88, 90]]),
-                      np.array([[88, 90], [90, 77], [90, 77], [77, 81]])))
+        ret1 = (np.array([[10, 12, 45], [12, 45, 88], [45, 88, 90]]),
+                      np.array([[88, 90], [90, 77], [77, 81]]))
 
         op1 = design_matrix(df1, 3.0, 2.0)
         in1_vs_op1 = op1[0] == ret1[0]
         in1 = in1_vs_op1.all()
         out1_vs_op1 = op1[1] == ret1[1]
-        out1 = in1_vs_op1.all()
+        out1 = out1_vs_op1.all()
         assert in1 and out1
 
 

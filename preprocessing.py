@@ -442,7 +442,7 @@ def design_matrix(ts, data_start, data_end):
     # ouput index == where to start second tuple, float -> int
     # return tuple of numpy arrays containing numpy arrays ANDDDDD the original ts
     # EXAMPLE
-    # (ts, ([[1,2,3], [2,3,4], [3,4,5], ..., []], [[4,5], [5,6], [6,7], ..., []]))
+    # (([[1,2,3], [2,3,4], [3,4,5], ..., [2, 2, 1]], [[4,5], [5,6], [6,7], ..., [7, 9]]))
 
     # convert value col of ts to list
     ts_copy = ts.iloc[:, -1].tolist()
@@ -483,10 +483,10 @@ def design_matrix(ts, data_start, data_end):
         for j in range(data_end):
 
             # don't access out of range elements
-            if i + j  + data_end >= len(ts_copy):
+            if i + j  + data_start >= len(ts_copy):  # data_end ==> data_start
                 break
 
-            tmp.append(ts_copy[i + j + data_end])
+            tmp.append(ts_copy[i + j + data_start])  # data_end ==> data_start
 
         if len(tmp) == data_end:
             # print(tmp)
@@ -496,12 +496,7 @@ def design_matrix(ts, data_start, data_end):
     input = np.array(input)
     output = np.array(output)
 
-    # return tuple of original ts, tuple of matrices
-    # FIXME: NEW RETURNS??? BOTH TESTS FAILING NOW
     return input, output
-
-def design_matrix_2(ts, mi, ti, mo, to):
-    pass
 
 def logarithm(ts):
     """
