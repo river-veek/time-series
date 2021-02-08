@@ -1,21 +1,21 @@
 --------------------------------------------------------------------------------
+CIS 422 - Project 1
+
 Authors -
 
-  Cameron Jordal
+\tCameron Jordal
 
-  JT Kashuba
+\tJT Kashuba
 
-  Noah Kruss
+\tNoah Kruss
 
-  Nick Titzler
+\tNick Titzler
 
-  River Veek
+\tRiver Veek
 
 Group - Keyboard Warriors
 
 Last Modified - 2/8/2021
-
-CIS 422 - Project 1
 --------------------------------------------------------------------------------
 
 # System Description:
