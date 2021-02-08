@@ -27,6 +27,8 @@ def denoise(ts, increment=10):
     Thought this was my responsibility, call this a draft -Nick Titzler
     """
 
+    increment = int(increment)
+
     if increment >= (len(ts.iloc[:,-1])):
         print("ERROR: by using increment size ",increment," your data will be converted to NaN")
         print("Now exiting")
