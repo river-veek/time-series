@@ -1,16 +1,25 @@
-1) Open a command line terminal and run the following commanded
+----------------------------------------------------------------------------------------
+Installation Instructions for data scientist wishing to use our Time-Series Tree library
+Author - Noah Kruss
+Group - Keyboard Warriors
+Last Modified - 2/7/2021
+----------------------------------------------------------------------------------------
 
-      $pip install numpy pandas scikit-learn anytree matplotlib
+Installation Instructions:
 
-2) Download this code repository though clicking the download button in the
-upper right corner.
+  1) Open a command line terminal and run the following commanded
 
-3) Go to the downloaded folder and rename it "Time_Series_Transformation_Tree"
+        $ pip install numpy pandas scikit-learn anytree matplotlib
 
-4) Move the "Time_Series_Transformation_Tree" folder into the directory that
-your project code is going to be created in.
+  2) Download this code repository though clicking the download button in the
+     upper right corner.
 
-4) At the top of the python file that you want to use a Time-Series Tree in
-type the following install command
+  3) Go to the downloaded folder and rename it "Time_Series_Transformation_Tree"
 
-      from Time_Series_Transformation_Tree/tree import *
+  4) Move the "Time_Series_Transformation_Tree" folder into the directory that
+     your project code is going to be created in.
+
+  5) At the top of the python file that you want to use a Time-Series Tree in
+     type the following install command
+
+        from Time_Series_Transformation_Tree/tree import *
