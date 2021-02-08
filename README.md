@@ -1,24 +1,19 @@
 --------------------------------------------------------------------------------
-CIS 422 - Project 1
-
 Authors -
-
-\tCameron Jordal
-
-\tJT Kashuba
-
-\tNoah Kruss
-
-\tNick Titzler
-
-\tRiver Veek
+* Cameron Jordal
+* JT Kashuba
+* Noah Kruss
+* Nick Titzler
+* River Veek
 
 Group - Keyboard Warriors
 
 Last Modified - 2/8/2021
 --------------------------------------------------------------------------------
 
-# System Description:
+# CIS 422 - Project 1
+
+## System Description:
 
 This system is a code library that provides functionality for processing time
 series data - specifically cleaning it up, displaying different forms of output,
@@ -27,17 +22,17 @@ The Time Series Tree stores references of the operations that the data will be p
 through upon a tree or path execution command. Each path through the tree is
 called a “pipeline”.  
 
-# How To Install and Run
+## How To Install and Run
 
 See Installation_Instructions.txt
 
-# Software Dependencies
+## Software Dependencies
 
 See Requirements.txt
 
 Python 3.0 or later
 
-# REPO Organization
+## REPO Organization
 
 * tree.py - Time-Series Tree class and functions
 * file_io.py - Functions for opening and saving Time Series data
