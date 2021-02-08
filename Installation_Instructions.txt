@@ -1,0 +1,16 @@
+1) Open a command line terminal and run the following commanded
+
+      $pip install numpy pandas scikit-learn anytree matplotlib
+
+2) Download this code repository though clicking the download button in the
+upper right corner.
+
+3) Go to the downloaded folder and rename it "Time_Series_Transformation_Tree"
+
+4) Move the "Time_Series_Transformation_Tree" folder into the directory that
+your project code is going to be created in.
+
+4) At the top of the python file that you want to use a Time-Series Tree in
+type the following install command
+
+      from Time_Series_Transformation_Tree/tree import *
