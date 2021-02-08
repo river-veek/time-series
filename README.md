@@ -1,15 +1,14 @@
---------------------------------------------------------------------------------
 Authors -
-* Cameron Jordal
-* JT Kashuba
-* Noah Kruss
-* Nick Titzler
-* River Veek
+  * Cameron Jordal
+  * JT Kashuba
+  * Noah Kruss
+  * Nick Titzler
+  * River Veek
 
 Group - Keyboard Warriors
 
 Last Modified - 2/8/2021
---------------------------------------------------------------------------------
+
 
 # CIS 422 - Project 1
 
