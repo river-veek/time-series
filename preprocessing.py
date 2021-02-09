@@ -313,7 +313,7 @@ def clip(ts, starting_date, final_date):
     # grab copy of ts (for preservation purposes)
     ts_copy = ts
 
-    # make blank dictionary to add future col vals to
+    # make blank dictionary to add future column vals to
     d = {}
     for col in ts_copy:
         d[col] = []
@@ -326,7 +326,7 @@ def clip(ts, starting_date, final_date):
     time_col_name = ts.columns[0]  # name of first col
     val_col_name = ts.columns[-1]  # name of last col
 
-    # input will be Pandas DataFrame
+    # input will be DataFrame
     # immediately convert to list (for easier mutability)
     ts = ts.iloc[:, -1].tolist()
 
