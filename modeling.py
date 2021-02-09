@@ -26,7 +26,7 @@ def mlp_window_selector(data, num_divs=5):
     # return window of num_divs standard deviations from mean
     min_val = mean_val - std_val * num_divs
     max_val = mean_val + std_val * num_divs
-    return min_val, max_val
+    return (float(min_val), float(max_val))
 
 def mlp_input_mapper(data, window):
     """
@@ -62,13 +62,14 @@ def mlp_model(train, layers=(100,), window_size=5):
     """
     # generate a window
     window = mlp_window_selector(train, window_size)
+
     # interpolate new data
-    train[0] = mlp_input_mapper(train[0], window)
-    train[1] = mlp_input_mapper(train[1], window)
+    train_x = mlp_input_mapper(train[0], window)
+    train_y = mlp_input_mapper(train[1], window)
     # generate model
     model = MLPClassifier(hidden_layer_sizes=tuple(layers))
     # fit model with new data
-    model.fit(train[0], train[1])
+    model.fit(train_x, train_y)
     # return model and window
     return (model, window)
 
