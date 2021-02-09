@@ -330,12 +330,12 @@ def clip(ts, starting_date, final_date):
     # immediately convert to list (for easier mutability)
     ts = ts.iloc[:, -1].tolist()
 
-    if (not starting_date in first_col) or (not final_date in first_col):
-        flag = 2  # lets loop know invalid arguments were entered
-
+    # find section in ts to clip
     for key in first_col:
 
         if key == starting_date:
+
+            # if starting and ending dates are the same, add only that information to d and break
             if starting_date == final_date:
                 for col in d:
 
@@ -343,6 +343,7 @@ def clip(ts, starting_date, final_date):
 
                 break
 
+            # else, begin to add information to d in sequence
             for col in d:
 
                 d[col].append(ts_copy[col][idx])
@@ -351,7 +352,10 @@ def clip(ts, starting_date, final_date):
             idx += 1
             continue
 
+        # if starting date has been found, begin adding information to d
         if flag == 1:
+
+            # if final date is found, add remaining information and break
             if key == final_date:
                 for col in d:
 
@@ -359,6 +363,7 @@ def clip(ts, starting_date, final_date):
 
                 break
 
+            # else, add current information
             for col in d:
 
                 d[col].append(ts_copy[col][idx])
@@ -388,16 +393,17 @@ def assign_time(ts, start, increment):
     # grab copy of ts (for preservation purposes)
     ts_copy = ts
 
-    # create list holding all values (last col)
     # for use in finding length of ts
-    ts = ts.iloc[:, -1].tolist()
-    times = []
-    total = 0
+    ts = ts.iloc[:, -1].tolist()  # create list holding all values (last col)
+    times = []  # list to append times to
+    total = 0  # total time units to add to
 
+    # loop through ts and create times list
     for i in range(len(ts)):
         times.append(start + total)
         total += increment
 
+    # reassign times column to ts and return
     ts_copy.insert(loc=0, column="Times", value=times)
     return ts_copy
 
@@ -455,11 +461,13 @@ def design_matrix(ts, data_start, data_end):
     the size of the output matrix. Both parameters are expected to be floats
     but will immediately be converted into ints.
     """
-    # input index == where to start first tuple, float -> int
-    # ouput index == where to start second tuple, float -> int
-    # return tuple of numpy arrays containing numpy arrays ANDDDDD the original ts
-    # EXAMPLE
-    # (([[1,2,3], [2,3,4], [3,4,5], ..., [2, 2, 1]], [[4,5], [5,6], [6,7], ..., [7, 9]]))
+    # input index == where to start input array, convert float -> int
+    # ouput index == where to start output array, convert float -> int
+    # return tuple of two numpy arrays containing
+
+    # EXAMPLE RETURN VALUE
+    # >>> design_matrix()
+    # (([[1,2,3], [2,3,4], [3,4,5], ..., [9, 10, 11]], [[4,5], [5,6], [6,7], ..., [10, 11]]))
 
     # convert value col of ts to list
     ts_copy = ts.iloc[:, -1].tolist()
@@ -474,11 +482,13 @@ def design_matrix(ts, data_start, data_end):
     # create output matrix
     output = []
 
+    # loop through values in ts
     for i in range(len(ts_copy)):
-        # print(i)
+
         # tmp to be added to input matrix
         tmp = []
 
+        # calculate input array
         for j in range(data_start):
 
             # don't access out of range elements
@@ -497,19 +507,21 @@ def design_matrix(ts, data_start, data_end):
         # tmp to be added to output matrix
         tmp = []
 
+        # calculate output array
         for j in range(data_end):
 
             # don't access out of range elements
-            if i + j  + data_start >= len(ts_copy):  # data_end ==> data_start
+            if i + j  + data_start >= len(ts_copy):
                 break
 
-            tmp.append(ts_copy[i + j + data_start])  # data_end ==> data_start
+            tmp.append(ts_copy[i + j + data_start])
 
+        # only add tmp if it is full (same size as data_end)
         if len(tmp) == data_end:
-            # print(tmp)
+
             output.append(tmp)
 
-    # convert input and output matrices
+    # convert input and output to numpy arrays, return
     input = np.array(input)
     output = np.array(output)
 
@@ -665,13 +677,3 @@ def db2ts(db):
     # convert to real time series data to return
     ts = pd.DataFrame(ts_list)
     return ts
-
-"""
-def main():
-    ts = fio.read_from_file("timeSeriesData/TimeSeriesData1/1_temperature_test.csv")
-    db = design_matrix(ts, 20, 10)
-    np.savetxt("timeSeriesData/TimeSeriesData1/1_temperature_test.csv", db[0])
-
-
-main()
-"""
