@@ -49,12 +49,11 @@ class test_split_data:
 
 def mse_test():
     ts2 = pd.DataFrame({ "Values": [1.0, 0.0, 9.0, 10.0, 8.0, 4.0, 5.0, 5.5, 6.0, 5.5, 6.0] })
-    x = ts2.iloc[:,-1].to_numpy()
+    x = ts2
 
     for item in x:
         print(item)
 
-mse_test()
 
 
 #############################

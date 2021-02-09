@@ -82,22 +82,22 @@ def normality_test(ts):
 	return stats.normaltest(ts)
 
 def mse(y_forecast, y_test: str):
-	yf = db2ts(y_forecast)
-	yt = read_from_file(y_test)
+    yf = db2ts(y_forecast)
+    yt = read_from_file(y_test)
 
     return mean_squared_error(yf.iloc[:,-1].to_numpy(), yt.iloc[:,-1].to_numpy())
 
 def mape(y_forecast, y_test: str):
-	yf = db2ts(y_forecast)
-	yt = read_from_file(y_test)
+    yf = db2ts(y_forecast)
+    yt = read_from_file(y_test)
 
     return np.mean((np.abs(yf.iloc[:,-1].to_numpy()-yt.iloc[:,-1].to_numpy()) / yf.iloc[:,-1].to_numpy())) * 100
 
 def smape(y_forecast, y_test: str):
 
-	yf = db2ts(y_forecast)
-	yt = read_from_file(y_test)
-	
+    yf = db2ts(y_forecast)
+    yt = read_from_file(y_test)
+
     return 100/len(yf.iloc[:,-1].to_numpy()) * np.sum(2 * np.abs(yt.iloc[:,-1].to_numpy() - yf.iloc[:,-1].to_numpy()) / (np.abs(yf.iloc[:,-1].to_numpy()) + np.abs(yt.iloc[:,-1].to_numpy())))
 
 
