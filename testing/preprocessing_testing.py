@@ -40,11 +40,21 @@ class test_split_data:
     	#ts1.iloc[:,-1] = ts1.iloc[:,-1].rolling(5).mean()
     	#print(ts1)
 
-    	ts2 = pd.DataFrame({"greetings": ["hello2", "hello3", "hello4", "hello5", "hello", "hello1", "hello2", "hello3", "hello4", "hello5"],
+    	ts3 = pd.DataFrame({"greetings": ["hello2", "hello3", "hello4", "hello5", "hello", "hello1", "hello2", "hello3", "hello4", "hello5"],
     							"date": ["wed", "thu", "friday", "saturday", "monday", "tue", "wed", "thu", "friday", "saturday"],
     							"Values": [3.333333, 6.333333, 9.000000, 7.333333, 4.333333, 1.666667, 3.333333, 6.333333, 9.000000, 7.333333]
 
-    						})
+    	})
+
+
+def mse_test():
+    ts2 = pd.DataFrame({ "Values": [1.0, 0.0, 9.0, 10.0, 8.0, 4.0, 5.0, 5.5, 6.0, 5.5, 6.0] })
+    x = ts2.iloc[:,-1].to_numpy()
+
+    for item in x:
+        print(item)
+
+mse_test()
 
 
 #############################
