@@ -1,5 +1,7 @@
 """
-Preprocessing Functions
+Preprocessing functions.
+
+Author(s): Nick Titzler, River Veek, Cameron
 """
 
 ########################
@@ -62,7 +64,7 @@ def impute_missing_data(ts):
     # ASSUMED THAT ONLY ONE POINT IS MISSING AT THE MOST
     # ASSUMED THAT VALUE COLUMN IS ALWAYS LAST
 
-    # isolate last col name
+    # isolate last column of time series
     col_name = ts.columns[-1]
 
     # grab copy of ts (for preservation of original time series)
@@ -72,31 +74,40 @@ def impute_missing_data(ts):
     # immediately convert to list (for easier mutability)
     ts = ts.iloc[:, -1].tolist()
 
+    # loop through each value in ts and check if 'NaN'
     for i in range(len(ts)):
 
         if ts[i] == "NaN":
 
+            # if first value is 'NaN'
             if i == 0:
 
+                # if 'NaN' is only value, convert to 0
                 if len(ts) == 1:
-                    ts[i] = 0  # IF ONLY VALUE == NaN, CONVERT TO 0
+                    ts[i] = 0
 
+                # if only two values exist, convert to second value
                 elif len(ts) == 2:
                     ts[i] = ts[1]
 
+                # else, convert to mean of following two values
                 else:
                     mean = (ts[i + 1] + ts[i + 2]) / 2
                     ts[i] = mean
 
+            # if last value is 'NaN'
             elif i == len(ts) - 1:
 
+                # if only two values exist, convert to first value
                 if len(ts) == 2:
                     ts[i] = ts[i - 1]
 
+                # else, convert to mean of previous two values
                 else:
                     mean = (ts[i - 1] + ts[i - 2]) / 2
                     ts[i] = mean
 
+            # else, convert to mean of previous and following value
             else:
                 mean = (ts[i - 1] + ts[i + 1]) / 2
                 ts[i] = mean
@@ -123,7 +134,7 @@ def impute_outliers(ts):
 
     Author: River Veek
     """
-    # isolate last col name
+    # isolate last column of time series
     col_name = ts.columns[-1]
 
     # make copy of ts for sorting purposes
@@ -134,7 +145,7 @@ def impute_outliers(ts):
     # grab second copy of ts (for preservation of original time series)
     ts_original = ts
 
-    # convert ts into list of values from last col (data)
+    # convert ts into list of values from last (data) column
     ts = ts.iloc[:, -1].tolist()
 
     # isolate Q1, Q2, IQR
@@ -151,29 +162,35 @@ def impute_outliers(ts):
     # run as long as outliers exist (flag == 0)
     while flag == 0:
 
-        flag = 1
+        flag = 1  # temporarily flip flag
 
+        # examine each value in ts
         for item in ts:
 
             if item > upper or item < lower:
-                flag = 0  # flip flag if any outliers found (alert loop to continue)
+                flag = 0  # flip flag back if any outliers found (alert loop to continue)
 
+        # examine each value in ts AND convert it to non-outlier
         for i in range(len(ts)):
 
             if (ts[i] > upper) or (ts[i] < lower):
 
+                # if first value is outlier, convert to mean of following two values
                 if i == 0:
                     mean = (ts[i + 1] + ts[i + 2]) / 2
                     ts[i] = mean
 
+                # if last value is outlier, convert to mean of previous two values
                 elif i == len(ts) - 1:
                     mean = (ts[i - 1] + ts[i - 2]) / 2
                     ts[i] = mean
 
+                # else, convert to mean of previous and following value
                 else:
                     mean = (ts[i - 1] + ts[i + 1]) / 2
                     ts[i] = mean
 
+    # reassign original values column
     ts_original[col_name] = ts
     return ts_original
 
@@ -195,16 +212,16 @@ def longest_continuous_run(ts):
     # WORKS WITH MULTIPLE MISSING POINTS
 
     # create dictionary of all columns with empty value lists
+    # will return d as DataFrame
     d = {}
     for col in ts:
         d[col] = []
 
     # grab copy of d (for preserverion purposes)
-    # will create a DataFrame of this if start_idx and end_idx are equal
+    # will create and return a DataFrame of this if start_idx and end_idx are equal
     d_copy = {}
     for col in ts:
         d_copy[col] = []
-    print(d_copy)
 
     # grab copy of original ts (for preservation purposes)
     ts_copy = ts
@@ -212,13 +229,12 @@ def longest_continuous_run(ts):
     # input will be Pandas DataFrame
     # immediately convert to list (for easier mutability)
     ts = ts.iloc[:, -1].tolist()
-    # new_ts = []
 
-    longest_run = 0
-    cur_run = 0
-    cur_idx = 0
-    start_idx = 0
-    end_idx = 0
+    longest_run = 0  # will hold length of longest run
+    cur_run = 0  # will hold length of current longest run
+    cur_idx = 0  # current index in ts
+    start_idx = 0  # starting index of ts
+    end_idx = 0  # ending index of ts
 
     # calculate, isolate longest run
     for i in range(len(ts)):
@@ -229,6 +245,7 @@ def longest_continuous_run(ts):
         else:
             cur_run = 0
 
+        # if new longest run is found, reinitialize longest run
         if cur_run > longest_run:
             longest_run = cur_run
             end_idx = cur_idx
@@ -236,7 +253,7 @@ def longest_continuous_run(ts):
 
         cur_idx += 1
 
-    # add all data from longest run to dictionary (d)
+    # add all data from longest run to main dictionary (d)
     for i in range(start_idx, end_idx + 1):
         for col in d:
             d[col].append(ts_copy[col][i])
@@ -298,7 +315,7 @@ def clip(ts, starting_date, final_date):
     # grab copy of ts (for preservation purposes)
     ts_copy = ts
 
-    # make blank dictionary to add future col vals to
+    # make blank dictionary to add future column vals to
     d = {}
     for col in ts_copy:
         d[col] = []
@@ -311,16 +328,16 @@ def clip(ts, starting_date, final_date):
     time_col_name = ts.columns[0]  # name of first col
     val_col_name = ts.columns[-1]  # name of last col
 
-    # input will be Pandas DataFrame
+    # input will be DataFrame
     # immediately convert to list (for easier mutability)
     ts = ts.iloc[:, -1].tolist()
 
-    if (not starting_date in first_col) or (not final_date in first_col):
-        flag = 2  # lets loop know invalid arguments were entered
-
+    # find section in ts to clip
     for key in first_col:
 
         if key == starting_date:
+
+            # if starting and ending dates are the same, add only that information to d and break
             if starting_date == final_date:
                 for col in d:
 
@@ -328,6 +345,7 @@ def clip(ts, starting_date, final_date):
 
                 break
 
+            # else, begin to add information to d in sequence
             for col in d:
 
                 d[col].append(ts_copy[col][idx])
@@ -336,7 +354,10 @@ def clip(ts, starting_date, final_date):
             idx += 1
             continue
 
+        # if starting date has been found, begin adding information to d
         if flag == 1:
+
+            # if final date is found, add remaining information and break
             if key == final_date:
                 for col in d:
 
@@ -344,6 +365,7 @@ def clip(ts, starting_date, final_date):
 
                 break
 
+            # else, add current information
             for col in d:
 
                 d[col].append(ts_copy[col][idx])
@@ -373,16 +395,17 @@ def assign_time(ts, start, increment):
     # grab copy of ts (for preservation purposes)
     ts_copy = ts
 
-    # create list holding all values (last col)
     # for use in finding length of ts
-    ts = ts.iloc[:, -1].tolist()
-    times = []
-    total = 0
+    ts = ts.iloc[:, -1].tolist()  # create list holding all values (last col)
+    times = []  # list to append times to
+    total = 0  # total time units to add to
 
+    # loop through ts and create times list
     for i in range(len(ts)):
         times.append(start + total)
         total += increment
 
+    # reassign times column to ts and return
     ts_copy.insert(loc=0, column="Times", value=times)
     return ts_copy
 
@@ -440,11 +463,13 @@ def design_matrix(ts, data_start, data_end):
     the size of the output matrix. Both parameters are expected to be floats
     but will immediately be converted into ints.
     """
-    # input index == where to start first tuple, float -> int
-    # ouput index == where to start second tuple, float -> int
-    # return tuple of numpy arrays containing numpy arrays ANDDDDD the original ts
-    # EXAMPLE
-    # (([[1,2,3], [2,3,4], [3,4,5], ..., [2, 2, 1]], [[4,5], [5,6], [6,7], ..., [7, 9]]))
+    # input index == where to start input array, convert float -> int
+    # ouput index == where to start output array, convert float -> int
+    # return tuple of two numpy arrays containing
+
+    # EXAMPLE RETURN VALUE
+    # >>> design_matrix()
+    # (([[1,2,3], [2,3,4], [3,4,5], ..., [9, 10, 11]], [[4,5], [5,6], [6,7], ..., [10, 11]]))
 
     # convert value col of ts to list
     ts_copy = ts.iloc[:, -1].tolist()
@@ -459,11 +484,13 @@ def design_matrix(ts, data_start, data_end):
     # create output matrix
     output = []
 
+    # loop through values in ts
     for i in range(len(ts_copy)):
-        # print(i)
+
         # tmp to be added to input matrix
         tmp = []
 
+        # calculate input array
         for j in range(data_start):
 
             # don't access out of range elements
@@ -482,19 +509,21 @@ def design_matrix(ts, data_start, data_end):
         # tmp to be added to output matrix
         tmp = []
 
+        # calculate output array
         for j in range(data_end):
 
             # don't access out of range elements
-            if i + j  + data_start >= len(ts_copy):  # data_end ==> data_start
+            if i + j  + data_start >= len(ts_copy):
                 break
 
-            tmp.append(ts_copy[i + j + data_start])  # data_end ==> data_start
+            tmp.append(ts_copy[i + j + data_start])
 
+        # only add tmp if it is full (same size as data_end)
         if len(tmp) == data_end:
-            # print(tmp)
+
             output.append(tmp)
 
-    # convert input and output matrices
+    # convert input and output to numpy arrays, return
     input = np.array(input)
     output = np.array(output)
 
@@ -650,13 +679,3 @@ def db2ts(db):
     # convert to real time series data to return
     ts = pd.DataFrame(ts_list)
     return ts
-
-"""
-def main():
-    ts = fio.read_from_file("timeSeriesData/TimeSeriesData1/1_temperature_test.csv")
-    db = design_matrix(ts, 20, 10)
-    np.savetxt("timeSeriesData/TimeSeriesData1/1_temperature_test.csv", db[0])
-
-
-main()
-"""
