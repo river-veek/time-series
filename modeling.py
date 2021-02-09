@@ -59,7 +59,8 @@ def round_data(data):
             d_row.append(round(val))
         d_list.append(d_row)
     nd_list = np.array(d_list)
-    print(nd_list)
+
+    return nd_list
 
 
 ###################
@@ -79,7 +80,7 @@ def mlp_model(train, layers=(100,), window_size=5):
     # generate model
     model = MLPClassifier(hidden_layer_sizes=tuple(layers))
     # fit model with new rounded data
-    model.fit(round(train_x), round(train_y))
+    model.fit(round_data(train_x), round_data(train_y))
     # return model and window
     return (model, window)
 
