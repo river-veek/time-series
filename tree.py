@@ -300,7 +300,7 @@ class Operation_node(NodeMixin):
                  t_0 = None,
                  layers = None):
         """
-        Initilize node properties:
+        Initialize node properties:
             name - str in the form 'operation_call-node_index'
 
             function - str representation of function call
@@ -451,7 +451,7 @@ class TS_Tree:
 
     def __init__(self):
         """
-        Initilize a Tree with a read_from_file root node
+        Initialize a Tree with a read_from_file root node
         """
         #make denoise root node and place it in the Tree
         root_node = Operation_node("read_from_file-0", "read_from_file", None)
