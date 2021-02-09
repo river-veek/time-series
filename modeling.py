@@ -4,23 +4,87 @@ Modeling and Forecasting Functions
 
 from sklearn.neural_network import MLPClassifier
 import file_io as fio
+import preprocessing as pp
 
 
-def mlp_model(train, layers=(100,)):
+#######################
+# HELPER FUNCTIONS
+#######################
+
+def mlp_window_selector(data, num_divs=5):
+    """
+    Function that a set of data and automatically
+    selects an appropriate range to view the values.
+    """
+    # convert the first aspect of data back into time series
+    # to be analyzed
+    ts_data = pp.db2ts(data[0])
+    # get mean of data
+    mean_val = ts_data.mean()
+    # get standard deviation of data
+    std_val = ts_data.std()
+    # return window of num_divs standard deviations from mean
+    min_val = mean_val - std_val * num_divs
+    max_val = mean_val + std_val * num_divs
+    return min_val, max_val
+
+def mlp_input_mapper(data, window):
+    """
+    Function that takes a range of input data
+    defined from in a tuple window and squashes
+    it into a range of 0 to 1.
+    """
+    # get factor to scale data by
+    mult = 1 / (window[1] - window[0])
+    # return scaled data with minimum value offset
+    return mult * (data - window[0])
+
+def mlp_output_mapper(data, window):
+    """
+    Function that takes a range of input data
+    in a range of 0 to 1 and expands it into a
+    range defined in the tuple window.
+    """
+    # get factor to scale data by
+    mult = window[1] - window[0]
+    # return scaled data offset by minimum value
+    return mult * data + window[0]
+
+
+###################
+# FUNCTIONS
+###################
+
+def mlp_model(train, layers=(100,), window_size=5):
     """
     Creates a multi-layer perceptron model with a provided number
     of hidden layers. Trains the model with provided data.
     """
+    # generate a window
+    window = mlp_window_selector(train, window_size)
+    # interpolate new data
+    train[0] = mlp_input_mapper(train[0], window)
+    train[1] = mlp_input_mapper(train[1], window)
+    # generate model
     model = MLPClassifier(hidden_layer_sizes=tuple(layers))
+    # fit model with new data
     model.fit(train[0], train[1])
-    return model
+    # return model and window
+    return (model, window)
 
-def mlp_forecast(model, x_filename):
+def mlp_forecast(model_data, x_filename):
     """
     Predicts a future set of values from a given set of values
     and a trained model.
     """
+    # extract model and tree from model data
+    model = model_data[0]
+    window = model_data[1]
+    # grab test data from file
     x = fio.read_from_file(x_filename)
     x = x.to_numpy()
+    # predict values
     y_hat = model.predict(x)
+    # interpolate predicted values to real size
+    y_hat = mlp_output_mapper(y_hat, window)
     return y_hat
