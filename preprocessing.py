@@ -73,11 +73,12 @@ def impute_missing_data(ts):
     # input will be Pandas DataFrame
     # immediately convert to list (for easier mutability)
     ts = ts.iloc[:, -1].tolist()
-
+    
     # loop through each value in ts and check if 'NaN'
     for i in range(len(ts)):
 
-        if ts[i] == "NaN":
+        # look for 'NaN' values
+        if np.isnan(ts[i]):
 
             # if first value is 'NaN'
             if i == 0:
