@@ -1,5 +1,7 @@
 """
-Preprocessing Functions
+Preprocessing functions.
+
+Author(s): Nick Titzler, River Veek, Cameron
 """
 
 ########################
