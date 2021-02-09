@@ -5,6 +5,7 @@ Modeling and Forecasting Functions
 from sklearn.neural_network import MLPClassifier
 import file_io as fio
 import preprocessing as pp
+import numpy as np
 
 
 #######################
@@ -49,6 +50,16 @@ def mlp_output_mapper(data, window):
     mult = window[1] - window[0]
     # return scaled data offset by minimum value
     return mult * data + window[0]
+
+def round_data(data):
+    d_list = []
+    for row in data:
+        d_row = []
+        for val in row:
+            d_row.append(round(val))
+        d_list.append(d_row)
+    nd_list = np.array(d_list)
+    print(nd_list)
 
 
 ###################
