@@ -25,8 +25,14 @@ pd.options.mode.chained_assignment = None
 
 def denoise(ts, increment=10):
     """
-    Takes time series and returns a new time series
-    Thought this was my responsibility, call this a draft -Nick Titzler
+    Takes time series and a increment value and returns a new time series
+    
+    Denoises data by applying a rolling mean whose size is determinded by the increment
+
+    Calls: NA
+    CALLED BY: TS_Tree.execute_tree()
+
+    Author: Nick Titzler
     """
 
     increment = int(increment)
@@ -532,9 +538,12 @@ def design_matrix(ts, data_start, data_end):
 
 def logarithm(ts):
     """
-    Converts ts values to their log10 value
+    Converts ts values to their log10 value, returns a timeseries
 
-    possible bug: if input values from df coloumn are of type int, this may not work
+    Calls: NA
+    Called By:  TS_Tree.execute_tree()
+
+    Author: Nick Titzler
     """
 
     nums = ts.iloc[:,-1,].to_list()
@@ -560,7 +569,14 @@ def logarithm(ts):
 
 
 def cubic_root(ts):
-    """prints warning but works"""
+    """
+    Converts ts values to their cubric root value, returns a timeseries
+
+    Calls: NA
+    Called By:  TS_Tree.execute_tree()
+
+    Author: Nick Titzler
+    """
     nums = ts.iloc[:,-1,].to_list()
 
     for i in range(len(nums)):
@@ -578,7 +594,10 @@ def cubic_root(ts):
 
 def split_data(ts, perc_training, perc_valid, perc_test):
     """
-   splits ts dataframe in the following format:
+   splits ts dataframe into percentage sized arrays based on input percentages: perc_traning, perc_valid, and perc_test
+
+   Calls: None
+   Called By: ts2db()
 
     -[ts, ts, ts]
     -[perc_training, perc_valid, perc_test]
