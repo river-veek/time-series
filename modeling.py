@@ -73,14 +73,13 @@ def mlp_model(train, layers=(100,), window_size=5):
     """
     # generate a window
     window = mlp_window_selector(train, window_size)
-
     # interpolate new data
     train_x = mlp_input_mapper(train[0], window)
     train_y = mlp_input_mapper(train[1], window)
     # generate model
     model = MLPClassifier(hidden_layer_sizes=tuple(layers))
-    # fit model with new data
-    model.fit(train_x, train_y)
+    # fit model with new rounded data
+    model.fit(round(train_x), round(train_y))
     # return model and window
     return (model, window)
 
