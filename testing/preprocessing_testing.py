@@ -40,11 +40,21 @@ class test_split_data:
     	#ts1.iloc[:,-1] = ts1.iloc[:,-1].rolling(5).mean()
     	#print(ts1)
 
-    	ts2 = pd.DataFrame({"greetings": ["hello2", "hello3", "hello4", "hello5", "hello", "hello1", "hello2", "hello3", "hello4", "hello5"],
+    	ts3 = pd.DataFrame({"greetings": ["hello2", "hello3", "hello4", "hello5", "hello", "hello1", "hello2", "hello3", "hello4", "hello5"],
     							"date": ["wed", "thu", "friday", "saturday", "monday", "tue", "wed", "thu", "friday", "saturday"],
     							"Values": [3.333333, 6.333333, 9.000000, 7.333333, 4.333333, 1.666667, 3.333333, 6.333333, 9.000000, 7.333333]
 
-    						})
+    	})
+
+
+def mse_test():
+    ts2 = pd.DataFrame({ "Values": [1.0, 0.0, 9.0, 10.0, 8.0, 4.0, 5.0, 5.5, 6.0, 5.5, 6.0] })
+    x = ts2.iloc[:,-1].to_numpy()
+
+    for item in x:
+        print(item)
+
+mse_test()
 
 
 #############################
@@ -56,10 +66,10 @@ class Test_impute_missing_data:
         """
         Testing impute_missing_data() with NaN as last value and as first value.
         """
-        df1 = pd.DataFrame({'Time': [0, 1, 2], 'Daily Top': ["GME", "AMC", "BB"], 'Vals': [14.6, 17.8, "NaN"]})
+        df1 = pd.DataFrame({'Time': [0, 1, 2], 'Daily Top': ["GME", "AMC", "BB"], 'Vals': [14.6, 17.8, np.nan]})
         df2 = pd.DataFrame({'Time': [0, 1, 2], 'Daily Top': ["GME", "AMC", "BB"], 'Vals': [14.6, 17.8, 16.2]})
 
-        df3 = pd.DataFrame({'Time': [0, 1, 2], 'Daily Top': ["GME", "AMC", "BB"], 'Vals': ["NaN", 10, 11]})
+        df3 = pd.DataFrame({'Time': [0, 1, 2], 'Daily Top': ["GME", "AMC", "BB"], 'Vals': [np.nan, 10, 11]})
         df4 = pd.DataFrame({'Time': [0, 1, 2], 'Daily Top': ["GME", "AMC", "BB"], 'Vals': [10.5, 10, 11]})
 
         assert impute_missing_data(df1).equals(df2)
@@ -69,7 +79,7 @@ class Test_impute_missing_data:
         """
         Testing impute_missing_data() with NaN as a middle value (not the first or last value).
         """
-        df1 = pd.DataFrame({'Time': [0, 1, 2], 'Vals': [10, "NaN", 20]})
+        df1 = pd.DataFrame({'Time': [0, 1, 2], 'Vals': [10, np.nan, 20]})
         df2 = pd.DataFrame({'Time': [0, 1, 2], 'Vals': [10.0, 15.0, 20.0]})
 
         assert impute_missing_data(df1).equals(df2)
@@ -78,7 +88,7 @@ class Test_impute_missing_data:
         """
         Testing impute_missing_data() with NaN as only value.
         """
-        df1 = pd.DataFrame({'Time': [0], 'Vals': ["NaN"]})
+        df1 = pd.DataFrame({'Time': [0], 'Vals': [np.nan]})
         df2 = pd.DataFrame({'Time': [0], 'Vals': [0]})
 
         assert impute_missing_data(df1).equals(df2)

@@ -13,12 +13,11 @@ import numpy as np
 def read_from_file(input_file_name):
 
 	# use csv file
-	data = pd.read_csv(input_file_name, na_values=['NONE'])
+	data = pd.read_csv(input_file_name, na_values=['NaN'])
 
 	df = pd.DataFrame(data)
-	
-	return df
 
+	return df
 
 
 def write_to_file(ts, output_file_name):
@@ -38,20 +37,12 @@ def write_to_file(ts, output_file_name):
 	df.to_csv(path, index=1)
 
 
-
-
-	pass
-
-
-
-
 def db_read_to_file(input_filename):
 	"""
 	Reads in a time series database.
 	"""
 	data = pd.read_csv(input_filename)
 	return data
-
 
 
 def test():

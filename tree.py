@@ -6,11 +6,9 @@ to be applied to time series data. A pipeline within the tree (a path from the
 root node to the target node) can then be executed to apply the chain of
 functions onto the time series data.
 
-Author: Noah Kruss
-"""
-
-"""
-!!!!! Need to still check if new node conflicts with previous
+Author - Noah Kruss
+Group - Keyboard Warriors
+Last Modified - 2/6/21
 """
 
 
@@ -453,10 +451,10 @@ class TS_Tree:
 
     def __init__(self):
         """
-        Initilize a Tree with a denoise root node
+        Initilize a Tree with a read_from_file root node
         """
         #make denoise root node and place it in the Tree
-        root_node = Operation_node("denoise-0", "denoise", None, increment=10.0)
+        root_node = Operation_node("read_from_file-0", "read_from_file", None)
         self.nodes = [root_node]
 
     def print_tree(self):
@@ -697,6 +695,8 @@ class TS_Tree:
         pipeline = self.get_path(node_index)
 
         for node in pipeline:
+
+            print(f"\n ###executing - {node.name}###")
 
             #get fucntion reference
             func = node.function[0]
