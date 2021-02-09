@@ -696,8 +696,7 @@ class TS_Tree:
 
         for node in pipeline:
 
-            print(f"\n executing - {node.name}")
-            print(data_input)
+            print(f"\n ###executing - {node.name}###")
 
             #get fucntion reference
             func = node.function[0]
