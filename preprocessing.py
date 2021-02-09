@@ -62,7 +62,7 @@ def impute_missing_data(ts):
     # ASSUMED THAT ONLY ONE POINT IS MISSING AT THE MOST
     # ASSUMED THAT VALUE COLUMN IS ALWAYS LAST
 
-    # isolate last col name
+    # isolate last column of time series
     col_name = ts.columns[-1]
 
     # grab copy of ts (for preservation of original time series)
@@ -72,31 +72,40 @@ def impute_missing_data(ts):
     # immediately convert to list (for easier mutability)
     ts = ts.iloc[:, -1].tolist()
 
+    # loop through each value in ts and check if 'NaN'
     for i in range(len(ts)):
 
         if ts[i] == "NaN":
 
+            # if first value is 'NaN'
             if i == 0:
 
+                # if 'NaN' is only value, convert to 0
                 if len(ts) == 1:
-                    ts[i] = 0  # IF ONLY VALUE == NaN, CONVERT TO 0
+                    ts[i] = 0
 
+                # if only two values exist, convert to second value
                 elif len(ts) == 2:
                     ts[i] = ts[1]
 
+                # else, convert to mean of following two values
                 else:
                     mean = (ts[i + 1] + ts[i + 2]) / 2
                     ts[i] = mean
 
+            # if last value is 'NaN'
             elif i == len(ts) - 1:
 
+                # if only two values exist, convert to first value
                 if len(ts) == 2:
                     ts[i] = ts[i - 1]
 
+                # else, convert to mean of previous two values
                 else:
                     mean = (ts[i - 1] + ts[i - 2]) / 2
                     ts[i] = mean
 
+            # else, convert to mean of previous and following value
             else:
                 mean = (ts[i - 1] + ts[i + 1]) / 2
                 ts[i] = mean
@@ -123,7 +132,7 @@ def impute_outliers(ts):
 
     Author: River Veek
     """
-    # isolate last col name
+    # isolate last column of time series
     col_name = ts.columns[-1]
 
     # make copy of ts for sorting purposes
@@ -134,7 +143,7 @@ def impute_outliers(ts):
     # grab second copy of ts (for preservation of original time series)
     ts_original = ts
 
-    # convert ts into list of values from last col (data)
+    # convert ts into list of values from last (data) column
     ts = ts.iloc[:, -1].tolist()
 
     # isolate Q1, Q2, IQR
@@ -151,29 +160,35 @@ def impute_outliers(ts):
     # run as long as outliers exist (flag == 0)
     while flag == 0:
 
-        flag = 1
+        flag = 1  # temporarily flip flag
 
+        # examine each value in ts
         for item in ts:
 
             if item > upper or item < lower:
-                flag = 0  # flip flag if any outliers found (alert loop to continue)
+                flag = 0  # flip flag back if any outliers found (alert loop to continue)
 
+        # examine each value in ts AND convert it to non-outlier
         for i in range(len(ts)):
 
             if (ts[i] > upper) or (ts[i] < lower):
 
+                # if first value is outlier, convert to mean of following two values
                 if i == 0:
                     mean = (ts[i + 1] + ts[i + 2]) / 2
                     ts[i] = mean
 
+                # if last value is outlier, convert to mean of previous two values
                 elif i == len(ts) - 1:
                     mean = (ts[i - 1] + ts[i - 2]) / 2
                     ts[i] = mean
 
+                # else, convert to mean of previous and following value
                 else:
                     mean = (ts[i - 1] + ts[i + 1]) / 2
                     ts[i] = mean
 
+    # reassign original values column
     ts_original[col_name] = ts
     return ts_original
 
@@ -195,16 +210,16 @@ def longest_continuous_run(ts):
     # WORKS WITH MULTIPLE MISSING POINTS
 
     # create dictionary of all columns with empty value lists
+    # will return d as DataFrame
     d = {}
     for col in ts:
         d[col] = []
 
     # grab copy of d (for preserverion purposes)
-    # will create a DataFrame of this if start_idx and end_idx are equal
+    # will create and return a DataFrame of this if start_idx and end_idx are equal
     d_copy = {}
     for col in ts:
         d_copy[col] = []
-    print(d_copy)
 
     # grab copy of original ts (for preservation purposes)
     ts_copy = ts
@@ -212,13 +227,12 @@ def longest_continuous_run(ts):
     # input will be Pandas DataFrame
     # immediately convert to list (for easier mutability)
     ts = ts.iloc[:, -1].tolist()
-    # new_ts = []
 
-    longest_run = 0
-    cur_run = 0
-    cur_idx = 0
-    start_idx = 0
-    end_idx = 0
+    longest_run = 0  # will hold length of longest run
+    cur_run = 0  # will hold length of current longest run
+    cur_idx = 0  # current index in ts
+    start_idx = 0  # starting index of ts
+    end_idx = 0  # ending index of ts
 
     # calculate, isolate longest run
     for i in range(len(ts)):
@@ -229,6 +243,7 @@ def longest_continuous_run(ts):
         else:
             cur_run = 0
 
+        # if new longest run is found, reinitialize longest run
         if cur_run > longest_run:
             longest_run = cur_run
             end_idx = cur_idx
@@ -236,7 +251,7 @@ def longest_continuous_run(ts):
 
         cur_idx += 1
 
-    # add all data from longest run to dictionary (d)
+    # add all data from longest run to main dictionary (d)
     for i in range(start_idx, end_idx + 1):
         for col in d:
             d[col].append(ts_copy[col][i])
