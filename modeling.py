@@ -2,7 +2,7 @@
 Modeling and Forecasting Functions
 """
 
-from sklearn.neural_network import MLPClassifier
+from sklearn.neural_network import MLPRegressor
 import file_io as fio
 import preprocessing as pp
 import numpy as np
@@ -78,9 +78,9 @@ def mlp_model(train, layers=(100,), window_size=5):
     train_x = mlp_input_mapper(train[0], window)
     train_y = mlp_input_mapper(train[1], window)
     # generate model
-    model = MLPClassifier(hidden_layer_sizes=tuple(layers))
+    model = MLPRegressor(hidden_layer_sizes=tuple(layers))
     # fit model with new rounded data
-    model.fit(round_data(train_x), round_data(train_y))
+    model.fit(train_x, train_y)
     # return model and window
     return (model, window)
 
