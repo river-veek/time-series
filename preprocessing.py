@@ -32,9 +32,12 @@ pd.options.mode.chained_assignment = None
 
 def denoise(ts, increment=10):
     """
-    Takes time series and a increment value and returns a new time series
+    Takes time series dataframe and a increment value and returns a new time series
 
-    Denoises data by applying a rolling mean whose size is determinded by the increment
+    Denoises data by applying a rolling mean whose size is determinded by the
+    increment parameter. The function will not allow an increment that is too small,
+    as denoising the data would result in the data being reduced to greatly. The function will 
+    exit if this possibility occurs.
 
     Calls: NA
     CALLED BY: TS_Tree.execute_tree()
@@ -541,7 +544,8 @@ def design_matrix(ts, data_start, data_end):
 
 def logarithm(ts):
     """
-    Converts ts values to their log10 value, returns a timeseries
+    Converts values inside a dataframe (ts) to their
+    log10 value, returns a timeseries with the new values.
 
     Calls: NA
     Called By:  TS_Tree.execute_tree()
@@ -552,19 +556,20 @@ def logarithm(ts):
     nums = ts.iloc[:,-1,].to_list()
 
 
+    # loop through value column, replace number with log10
     for i in range(len(nums)):
         item = nums[i]
 
 
         if item != 0:
-            item = np.log10(nums[i])
+            item = np.log10(nums[i]) # take log10
             print(item)
             ts.iloc[:,-1,][i] = item
         elif (item == 0):
             print(item)
-            ts.iloc[:,-1,][i] = 0
+            ts.iloc[:,-1,][i] = 0.0 # ignore if 0
         else:
-            ts.iloc[:,-1,][i] = np.nan
+            ts.iloc[:,-1,][i] = np.nan # keep nan as nan
 
 
     return ts
@@ -573,7 +578,8 @@ def logarithm(ts):
 
 def cubic_root(ts):
     """
-    Converts ts values to their cubric root value, returns a timeseries
+    Converts values inside a dataframe (ts) to the values
+    cube root, returns a timeseries with the new values.
 
     Calls: NA
     Called By:  TS_Tree.execute_tree()
@@ -582,16 +588,17 @@ def cubic_root(ts):
     """
     nums = ts.iloc[:,-1,].to_list()
 
+    # loop through value column, replace val with cube root of val
     for i in range(len(nums)):
         item = nums[i]
 
         if item != 0:
-            item = item**(1/3)
+            item = item**(1/3) # replace with cube root
             ts.iloc[:,-1,][i] = item
         elif (item == 0):
-            ts.iloc[:,-1,][i] = 0.0
+            ts.iloc[:,-1,][i] = 0.0  # ignore 0
         else:
-            ts.iloc[:,-1,][i] = np.nan
+            ts.iloc[:,-1,][i] = np.nan # ignore nan
 
     return ts
 
@@ -615,35 +622,35 @@ def split_data(ts, perc_training, perc_valid, perc_test):
     # check how many columns are in the dataset
 
 
-    # for one column in original ts
+    # first if branch for 1 column dataframes
     if len(ts.columns) == 1:
 
         length = len(a)
-        #print((len(a)*p[:-1].cumsum()).astype(int))
         values = np.split(a, (len(a)*p[:-1].cumsum()).astype(int)     )
-        #print(values)
         perc_training = pd.DataFrame(values[0])
         perc_valid = pd.DataFrame(values[1])
         perc_test = pd.DataFrame(values[2])
         return [perc_training, perc_valid, perc_test]
 
-    else:
+    else: # for two column dataframes
 
         res = []
 
-        # iterate through columns
+        # iterate through columns, splitting data based on percentages
         for i in range(len(ts.columns)):
 
            col = np.array(ts.iloc[:,i].to_list())
-           values = np.split(col, (len(col)*p[:-1].cumsum()).astype(int)     )
+           values = np.split(col, (len(col)*p[:-1].cumsum()).astype(int)) # split data into slices
            res.append(values)
 
 
+        # create a dictionary that holds each percentage slice
         dictList = []
         for i in range(len(ts.columns)):
             dictList.append({})
 
         ctr = 0
+        # combine relevant slices
         for i in range(len(ts.columns)):
             for j in range(len(ts.columns)):
                 dictList[i][ts.columns[j]] = res[j][i]
@@ -651,10 +658,9 @@ def split_data(ts, perc_training, perc_valid, perc_test):
 
         result = []
 
-
+        # make each slice a dataframe, and return it
         for i in range(len(dictList)):
             x = pd.DataFrame.from_dict(dictList[i])
-            #print(x)
             result.append(x)
 
 
