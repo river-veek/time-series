@@ -73,7 +73,7 @@ def impute_missing_data(ts):
     # input will be Pandas DataFrame
     # immediately convert to list (for easier mutability)
     ts = ts.iloc[:, -1].tolist()
-    
+
     # loop through each value in ts and check if 'NaN'
     for i in range(len(ts)):
 
@@ -240,7 +240,7 @@ def longest_continuous_run(ts):
     # calculate, isolate longest run
     for i in range(len(ts)):
 
-        if not ts[i] == "NaN":
+        if not np.isnan(ts[i]):
             cur_run += 1
 
         else:
@@ -261,7 +261,6 @@ def longest_continuous_run(ts):
 
     # if time series has no valid points, return empty time series (d_copy)
     if start_idx == end_idx:
-        print(d_copy)
         return pd.DataFrame(d_copy)
 
     return pd.DataFrame(d)
