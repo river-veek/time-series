@@ -49,9 +49,9 @@ def plot(ts, fname=None):
 	"""
 
 	if type(ts) == list:
-	 	for item in ts:
-	 		item.plot()
-	 	plt.show()
+		for item in ts:
+			item.plot()
+		plt.show()
 	else:
 		ts.plot()
 		plt.show()
