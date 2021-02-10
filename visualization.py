@@ -106,41 +106,32 @@ def normality_test(ts):
 	return stats.normaltest(ts)
 
 def mse(y_forecast, y_test: str):
-<<<<<<< HEAD
 	"""
 	takes in a database (y_forcast) and a file name (y_test: str)
 	and returns the mean squared error between the datasets
 
 	Author: Nick Titzler
 	"""
-    yf = db2ts(y_forecast)
-    yt = read_from_file(y_test)
-=======
+    
     yf = pre.db2ts(y_forecast)
     yt = fio.read_from_file(y_test)
->>>>>>> 13b14078a8936635114fce22f4c11597df95957e
 
     return mean_squared_error(yf.iloc[:,-1].to_numpy(), yt.iloc[:,-1].to_numpy())
 
 def mape(y_forecast, y_test: str):
-<<<<<<< HEAD
 	"""
 	takes in a database (y_forcast) and a file name (y_test)
 	and returns the mean absoulute percentage error
 
 	Author: Nick Titzler
 	"""
-    yf = db2ts(y_forecast)
-    yt = read_from_file(y_test)
-=======
+    
     yf = pre.db2ts(y_forecast)
     yt = fio.read_from_file(y_test)
->>>>>>> 13b14078a8936635114fce22f4c11597df95957e
 
     return np.mean((np.abs(yf.iloc[:,-1].to_numpy()-yt.iloc[:,-1].to_numpy()) / yf.iloc[:,-1].to_numpy())) * 100
 
 def smape(y_forecast, y_test: str):
-<<<<<<< HEAD
 	"""
 	takes in a database (y_forcast) and a file name (y_test)
 	and returns the symmetric mean absolute percentage error
@@ -148,11 +139,7 @@ def smape(y_forecast, y_test: str):
 	Author: Nick Titzler
 	"""
 
-    yf = db2ts(y_forecast)
-    yt = read_from_file(y_test)
-=======
     yf = pre.db2ts(y_forecast)
     yt = fio.read_from_file(y_test)
->>>>>>> 13b14078a8936635114fce22f4c11597df95957e
 
     return 100/len(yf.iloc[:,-1].to_numpy()) * np.sum(2 * np.abs(yt.iloc[:,-1].to_numpy() - yf.iloc[:,-1].to_numpy()) / (np.abs(yf.iloc[:,-1].to_numpy()) + np.abs(yt.iloc[:,-1].to_numpy())))
