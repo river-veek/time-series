@@ -760,6 +760,7 @@ class TS_Tree:
             #if node is a leaf execute the pipeline from it to the root
             if node.is_a_leaf:
                 index = node.name.split("-")[1]
+                index = int(index)
                 result = self.execute_path(data_input, index)
                 Outputs[node.name] = result
 
