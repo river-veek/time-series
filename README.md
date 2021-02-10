@@ -55,7 +55,7 @@ documentation specifications, and system requirements.
 
 # Some helpful examples at a glance:
 
-## Tree node operations
+## Tree node operations:
 
 * `add_node(operation: str, node_index, input_parameters)`
 
@@ -77,9 +77,10 @@ documentation specifications, and system requirements.
 
 ## input_parameters for specific functions:
 
-*Note: A `time series` gets called in each of these functions, but only by `execute_path` or `execute_tree`. The Users will never actually pass a `time series` to these functions themselves as an argument. It will happen implicitly when they call `execute_path` or `execute_tree`.*
+*Note: A `time series` gets called in each of these functions, but only by `execute_path` or `execute_tree`. The user will never actually pass a `time series` to these functions themselves as an argument. It will happen implicitly in all function calls when the user calls `execute_path` or `execute_tree`. To reiterate, `execute_path` and `execute_tree` are the only
+two functions that require the user to use a `time series` as an argument.*
 
-**These MUST be declared, otherwise Users will get error messages**
+**These input_parameters MUST be declared, otherwise the user will get errors**
 
 * `design_matrix(data_start = <float>, data_end = <float>)`
 
