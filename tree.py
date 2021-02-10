@@ -97,8 +97,6 @@ def validate_operation_order(operation: str, parent_operation: str):
     """
     valid = True
 
-    print(parent_operation, operation)
-
     if parent_operation in leaf_functions:
         print(f"Error - parent function '{parent_operation}' can't have children")
         valid = False
