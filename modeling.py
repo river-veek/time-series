@@ -2,9 +2,10 @@
 Modeling and Forecasting Functions
 """
 
-from sklearn.neural_network import MLPClassifier
+from sklearn.neural_network import MLPRegressor
 import file_io as fio
 import preprocessing as pp
+import numpy as np
 
 
 #######################
@@ -50,6 +51,17 @@ def mlp_output_mapper(data, window):
     # return scaled data offset by minimum value
     return mult * data + window[0]
 
+def round_data(data):
+    d_list = []
+    for row in data:
+        d_row = []
+        for val in row:
+            d_row.append(round(val))
+        d_list.append(d_row)
+    nd_list = np.array(d_list)
+
+    return nd_list
+
 
 ###################
 # FUNCTIONS
@@ -62,13 +74,12 @@ def mlp_model(train, layers=(100,), window_size=5):
     """
     # generate a window
     window = mlp_window_selector(train, window_size)
-
     # interpolate new data
     train_x = mlp_input_mapper(train[0], window)
     train_y = mlp_input_mapper(train[1], window)
     # generate model
-    model = MLPClassifier(hidden_layer_sizes=tuple(layers))
-    # fit model with new data
+    model = MLPRegressor(hidden_layer_sizes=tuple(layers))
+    # fit model with new rounded data
     model.fit(train_x, train_y)
     # return model and window
     return (model, window)
