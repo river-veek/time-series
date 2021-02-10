@@ -1,8 +1,11 @@
 """
+----------------------------------------------------------------------------------------
 Tests for time_series.py containing the time series class
 
-Author: Nick Titzler
-
+Author - Nick Titzler
+Group - Keyboard Warriors
+Last Modified - 2/9/21
+----------------------------------------------------------------------------------------
 """
 import numpy as np
 import sys
@@ -27,9 +30,6 @@ def test2_stdiv():
 def main():
 	test1_mean()
 	test2_stdiv()
-
-
-
 
 
 main()

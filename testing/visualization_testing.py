@@ -1,9 +1,13 @@
 """
+----------------------------------------------------------------------------------------
 Tests for time_series.py containing the time series class
 
-Author: Nick Titzler
-
+Author - Nick Titzler
+Group - Keyboard Warriors
+Last Modified - 2/9/21
+----------------------------------------------------------------------------------------
 """
+
 import numpy as np
 import sys
 sys.path.append("../")
@@ -23,15 +27,15 @@ import preprocessing as pre
 def test1_timeSeriesData1():
 	"""
 	test time series creation from timeSeriesData1 files
-	
+
 	"""
 	fileNames = ["1_temperature_test.csv","1_temperature_train.csv","2_temperature_subsampled_test.csv",
-	"2_temperature_subsampled_train.csv", "3_passengers_test.csv","3_passengers_train.csv","4_irradiance_test.csv", 
+	"2_temperature_subsampled_train.csv", "3_passengers_test.csv","3_passengers_train.csv","4_irradiance_test.csv",
 	"4_irradiance_train.csv", "5_irradiance_subsampled_test.csv", "5_irradiance_subsampled_train.csv", "6_sunspots_test.csv", "6_sunspots_train.csv",
 	"7_distribution_subsampled_norm_test.csv", "7_distribution_subsampled_norm_train.csv", "8_distribution_subsampled_test.csv", "8_distribution_subsampled_train.csv"]
 
 	fname = "../timeSeriesData/TimeSeriesData1/1_temperature_test.csv"
-	
+
 	try:
 		for item in fileNames:
 			fname = "../timeSeriesData/TimeSeriesData1/"+item
@@ -39,9 +43,9 @@ def test1_timeSeriesData1():
 			ts = fio.read_from_file(fname)
 	except:
 		print("error in test 1")
-	
 
-	
+
+
 def test2_timeSeriesData2():
 
 	fname1 = "../timeSeriesData/TimeSeriesData1/1_temperature_test.csv"
@@ -51,11 +55,11 @@ def test2_timeSeriesData2():
 	ts = fio.read_from_file(fname1)
 	ts2 = fio.read_from_file(fname2)
 	#plot.plot([ts, ts2])
-	
-	
-	
+
+
+
 	#plot.histogram([ts, ts2])
-	
+
 
 	#plot.box_plot(ts)
 	#plot.box_plot([ts, ts2])
@@ -73,7 +77,7 @@ def test_plot():
 	ts3 = fio.read_from_file(fname3)
 
 	print(ts)
-	
+
 	#plot.plot(ts3)
 	plot.plot(ts)
 
@@ -88,7 +92,7 @@ def test_histogram():
 	#plot.histogram([ts, ts2])
 	#plot.histogram(ts2)
 	plot.histogram(ts2)
-	
+
 def test_normality():
 
 	fname1 = "../timeSeriesData/TimeSeriesData1/1_temperature_test.csv"
@@ -105,8 +109,8 @@ def test_box():
 	ts2 = fio.read_from_file(fname2)
 	ts3 = fio.read_from_file(fname3)
 
-	
-	
+
+
 	plot.box_plot(ts3)
 
 
