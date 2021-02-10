@@ -21,21 +21,21 @@ def read_from_file(input_file_name):
 
 		Author: Nick Titzler
 	"""
-	print(input_file_name)
-	print(input_file_name.split(".")[1])
-	# check if csv or pickle file
-	#if (input_file_name.split(".")[1] == "csv"):
+	
+	# try to read in csv file
 	try:
 		data = pd.read_csv(input_file_name, na_values=['NaN'])
 		df = pd.DataFrame(data)
 		return df
+	# if not a csv open it as a pickle
 	except: 
 		try:
 			data = pickle.load( open(input_file_name, "rb" ) )
 			df = pd.DataFrame.from_dict(data)
 			return df
 	
-		except:
+		except: # if its neither, exit the program
+
 			print("File type not accepted. Use .csv, .p, or .pkl")
 			exit()
 
