@@ -32,34 +32,7 @@ import nose
 import numpy as np
 
 
-##########################
-# SPLIT DATA TESTS
-##########################
-class test_split_data:
-    def test_denoise_general(self):
-    	ts1 = pd.DataFrame({
-    		"greetings": ["hello", "hello1", "hello2", "hello3", "hello4", "hello5", "hello", "hello1", "hello2", "hello3", "hello4", "hello5"],
-    		"date": ["monday", "tue", "wed", "thu", "friday", "saturday", "monday", "tue", "wed", "thu", "friday", "saturday"],
-    		"Values": [1.0, 0.0, 9.0, 10.0, 8.0, 4.0, 1.0, 0.0, 9.0, 10.0, 8.0, 4.0]
-    	})
-    	ts2 = pd.DataFrame({ "Values": [1.0, 0.0, 9.0, 10.0, 8.0, 4.0, 5.0, 5.5, 6.0, 5.5, 6.0] })
-    	#print(ts1)
-    	#ts1.iloc[:,-1] = ts1.iloc[:,-1].rolling(5).mean()
-    	#print(ts1)
 
-    	ts3 = pd.DataFrame({"greetings": ["hello2", "hello3", "hello4", "hello5", "hello", "hello1", "hello2", "hello3", "hello4", "hello5"],
-    							"date": ["wed", "thu", "friday", "saturday", "monday", "tue", "wed", "thu", "friday", "saturday"],
-    							"Values": [3.333333, 6.333333, 9.000000, 7.333333, 4.333333, 1.666667, 3.333333, 6.333333, 9.000000, 7.333333]
-
-    	})
-
-
-def mse_test():
-    ts2 = pd.DataFrame({ "Values": [1.0, 0.0, 9.0, 10.0, 8.0, 4.0, 5.0, 5.5, 6.0, 5.5, 6.0] })
-    x = ts2
-
-    for item in x:
-        print(item)
 
 
 
@@ -753,6 +726,27 @@ class Test_logarithm:
 
     	logarithm(ts)
 
+    def test_logarithm(self):
+        """
+        Tests 1 column dataframe
+        """
+        ts = pd.DataFrame({
+            "Times": [0, 1, 2, 3, 4, 5],
+            "Values": [1.0, 0.0, 9.0, 10.0, 8.0, 4.0]
+        })
+
+        logarithm(ts)
+
+    def test_log10_2(self):
+
+        ts2 = pd.DataFrame({
+
+            'Time': [0, 1, 2, 3, 4, 5, 6],
+            'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK", "BTC", "ETH"],
+            'Vals': [10, 12, 45, 88, 90, 77, 81]
+        })
+        df = logarithm(ts2)
+
 
 ##########################
 # CUBIC ROOT TESTS
@@ -767,6 +761,16 @@ class Test_cubic_root:
 
     	df = cubic_root(ts)
 
+    def test_cubic_root2(self):
+
+        ts2 = pd.DataFrame({
+
+            'Time': [0, 1, 2, 3, 4, 5, 6],
+            'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK", "BTC", "ETH"],
+            'Vals': [10, 12, 45, 88, 90, 77, 81]
+        })
+        df = cubic_root(ts2)
+
 
 ##########################
 # SPLIT_DATA() TESTS
@@ -778,9 +782,7 @@ class Test_split_data:
     		"date": ["monday", "tue", "wed", "thu", "friday", "saturday"],
     		"Values": [1.0, 0.0, 9.0, 10.0, 8.0, 4.0]
     	})
-    	ts2 = pd.DataFrame({
-    		"Values": [1.0, 0.0, 9.0, 10.0, 8.0, 4.0]
-    	})
+    	
 
     	val1 = .25
     	val2 = .50
@@ -790,7 +792,22 @@ class Test_split_data:
     	res = split_data(ts, val1, val2, val3)
 
 
-    	split_data(ts, val1, val2, val3)
+
+    def test_split_data2(self):
+        
+        ts2 = pd.DataFrame({
+            "Values": [1.0, 0.0, 9.0, 10.0, 8.0, 4.0]
+        })
+
+        val1 = .25
+        val2 = .50
+        val3 = .25
+        #ts = logarithm(ts)
+        ts2 = cubic_root(ts2)
+        res = split_data(ts2, val1, val2, val3)
+        print(res)
+
+
 
 
 #######################
@@ -831,6 +848,37 @@ class Test_design_matrix:
         out1 = out1_vs_op1.all()
         assert in1 and out1
 
+##########################
+# DENOISE TESTS
+##########################
+class test_denoise:
+    def test_split_general(self):
+        ts1 = pd.DataFrame({
+            "greetings": ["hello", "hello1", "hello2", "hello3", "hello4", "hello5", "hello", "hello1", "hello2", "hello3", "hello4", "hello5"],
+            "date": ["monday", "tue", "wed", "thu", "friday", "saturday", "monday", "tue", "wed", "thu", "friday", "saturday"],
+            "Values": [1.0, 0.0, 9.0, 10.0, 8.0, 4.0, 1.0, 0.0, 9.0, 10.0, 8.0, 4.0]
+        })
+        
+
+    def test_denoise_general2(self):
+        
+        ts2 = pd.DataFrame({ "Values": [1.0, 0.0, 9.0, 10.0, 8.0, 4.0, 5.0, 5.5, 6.0, 5.5, 6.0] })
+
+
+    def test_denoise_general2(self):
+       
+        ts3 = pd.DataFrame({"greetings": ["hello2", "hello3", "hello4", "hello5", "hello", "hello1", "hello2", "hello3", "hello4", "hello5"],
+                                "date": ["wed", "thu", "friday", "saturday", "monday", "tue", "wed", "thu", "friday", "saturday"],
+                                "Values": [3.333333, 6.333333, 9.000000, 7.333333, 4.333333, 1.666667, 3.333333, 6.333333, 9.000000, 7.333333]
+        })
+
+
+def mse_test():
+    ts2 = pd.DataFrame({ "Values": [1.0, 0.0, 9.0, 10.0, 8.0, 4.0, 5.0, 5.5, 6.0, 5.5, 6.0] })
+    x = ts2
+
+    for item in x:
+        print(item)
 
 #############
 # DB2TS()
