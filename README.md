@@ -129,7 +129,6 @@ documentation specifications, and system requirements.
 * `smape(input_filename = <str>)`
 
 * `mlp_model(layers = <list>)`
-**Layers in the form [100,] or [100, 20,]**
 
 * `mlp_forecast(input_filename = <str>)`
 
