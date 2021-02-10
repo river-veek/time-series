@@ -57,7 +57,7 @@ visualization = {"plot": (vis.plot, [7]),
                  "smape": (vis.smape, [6])
                  }
 
-leaf_functions = ["split_data", "mse", "mape", "smape", "write_to_file"]
+leaf_functions = ["split_data", "ts2db", "mse", "mape", "smape", "write_to_file"]
 
 path_dependent = ["design_matrix","ts2db", "mlp_model"]
 
@@ -105,10 +105,6 @@ def validate_operation_order(operation: str, parent_operation: str):
 
     elif (parent_operation == "design_matrix" and operation != "mlp_model"):
         print(f"Error - design_matrix needs to be followed by mlp_model")
-        valid = False
-
-    elif (parent_operation == "ts2db" and operation != "mlp_model"):
-        print(f"Error - ts2db needs to be followed by mlp_model")
         valid = False
 
     elif (parent_operation == "mlp_model" and operation != "mlp_forecast"):
