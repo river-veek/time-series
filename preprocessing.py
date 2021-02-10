@@ -29,7 +29,7 @@ pd.options.mode.chained_assignment = None
 def denoise(ts, increment=10):
     """
     Takes time series and a increment value and returns a new time series
-    
+
     Denoises data by applying a rolling mean whose size is determinded by the increment
 
     Calls: NA
@@ -305,9 +305,9 @@ def difference(ts):
 def clip(ts, starting_date, final_date):
     """
     Takes a time series, the starting date to clip the time series
-    by, and the ending date to clip the time series by. No assumption
-    is made about the types of starting_date and final_date; these two
-    parameters will only be assumed to be valid items of the time series ts.
+    by, and the ending date to clip the time series by. starting_date and
+    final_date must be of type float; these two parameters will be
+    assumed to be valid items of the time series ts.
 
     If starting_date greater than (>) final_date, then time series ts is
     clipped from starting_date to the end of ts.
