@@ -309,9 +309,10 @@ def difference(ts):
 def clip(ts, starting_date, final_date):
     """
     Takes a time series, the starting date to clip the time series
-    by, and the ending date to clip the time series by. starting_date and
-    final_date must be of type float; these two parameters will be
-    assumed to be valid items of the time series ts.
+    by, and the ending date to clip the time series by and returns
+    a modified time series. starting_date and final_date must be of
+    type float; these two parameters will be assumed to be valid items
+    of the time series ts.
 
     If starting_date greater than (>) final_date, then time series ts is
     clipped from starting_date to the end of ts.
@@ -389,16 +390,13 @@ def clip(ts, starting_date, final_date):
 
 def assign_time(ts, start, increment):
     """
-    Assign time stamps to data points in a given time series.
-
     Takes a time series without time stamps, the starting time (start),
-    and the amount to be incremented by (increment). Assumed that start and
-    increment are both integers. It is also assumed that no column holding
-    times exists.
+    and the amount to be incremented by (increment) and returns an
+    updated time series with the first column being named 'Times.'
 
-    Returns a time series with where the name of the first column is 'Times.'
-
-    start and increment can be negative or positive values.
+    Assign time stamps to data points in a given time series. Assumed that start
+    and increment are both integers. It is also assumed that no column holding
+    times exists. start and increment can be negative or positive values.
 
     Author: River Veek
     """
@@ -465,12 +463,11 @@ def design_matrix(ts, data_start, data_end):
     """
     Takes a time series, float representing the size of input array,
     float representing the size of the output array, and returns a
-    tuple consisting of the original time series as well as
-    another tuple that holds the two matrices (input matrix and output matrix,
+    tuple that holds the two matrices (input matrix and output matrix,
     both as numpy arrays) in that particular order.
 
     Example of return:
-    (ts, (input array, output array))
+    (input array, output array)
 
     data_start represents the size of the input matrix. data_end represents
     the size of the output matrix. Both parameters are expected to be floats
