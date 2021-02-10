@@ -12,7 +12,7 @@ Last Modified - 2/9/2021
 
 
 # CIS 422 - Project 1
-## Time Series Manipulations, Modeling, and Forecasting
+# Time Series Manipulations, Modeling, and Forecasting
 
 ## System Description:
 
