@@ -563,10 +563,10 @@ def logarithm(ts):
 
         if item != 0:
             item = np.log10(nums[i]) # take log10
-            print(item)
+            #print(item)
             ts.iloc[:,-1,][i] = item
         elif (item == 0):
-            print(item)
+            #print(item)
             ts.iloc[:,-1,][i] = 0.0 # ignore if 0
         else:
             ts.iloc[:,-1,][i] = np.nan # keep nan as nan

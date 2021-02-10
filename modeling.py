@@ -64,6 +64,10 @@ def mlp_output_mapper(data, window):
 
 def mlp_model(train, layers=(100,), window_size=5):
     """
+    Takes in a tuple of 2 numpy matrices, a tuple of layers,
+    and an integer. Returns tuple with a MLPRegressor model and
+    a tuple.
+
     Creates a multi-layer perceptron model with a provided number
     of hidden layers. Trains the model with provided data.
     """
@@ -81,6 +85,9 @@ def mlp_model(train, layers=(100,), window_size=5):
 
 def mlp_forecast(model_data, x_filename):
     """
+    Takes in a tuple containing a MLPRegressor object and a tuple as
+    well a string. Returns a numpy matrix.
+
     Predicts a future set of values from a given set of values
     and a trained model.
     """
