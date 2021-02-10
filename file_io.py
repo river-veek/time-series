@@ -15,6 +15,11 @@ import numpy as np
 
 
 def read_from_file(input_file_name):
+	"""
+		Takes a string input as the name of a file, returns a dataframe containing the file
+
+		Author: Nick Titzler
+	"""
 
 	# use csv file
 	data = pd.read_csv(input_file_name, na_values=['NaN'])
@@ -26,9 +31,10 @@ def read_from_file(input_file_name):
 
 def write_to_file(ts, output_file_name):
 	"""
-		writes a time series to a file
+		Takes a time series, and a string with the name of the output file. Returns None, and
+		writes a csv file to output_file_name
 
-		BUG: currently program writes a 0 to the start of the file, unsure as to why
+		Author: Nick Titzler
 	"""
 	path = "output/" + output_file_name
 
@@ -37,9 +43,4 @@ def write_to_file(ts, output_file_name):
 
 
 
-def test():
-	fname1 = "1_temperature_test.csv"
-	fname2 = "wind_cointzio_10m_complete.csv"
-	#read_from_file(fname1)
 
-#test()
