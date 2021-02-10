@@ -53,10 +53,10 @@ documentation from group meetings, agendas for team meetings, benchmarks / goals
 documentation specifications, and system requirements.
 * Programmer_Documentation.pdf -
 
-# Some Helpful Examples
-## at a glance
+# Some helpful examples at a glance:
 
-Tree node operations
+##Tree node operations
+
 * `Add_node(operation: str, node_index, input_parameters)`
 
 * `Replace_node(operation: str, node_index, input_parameters)`
@@ -74,35 +74,63 @@ Tree node operations
 * `execute_tree(“fileName.txt”)`
 
 
-input_parameters for specific functions:
-A time_series gets called in each of these functions, but only by execute_path or execute_tree. The Users will never actually pass a time_series to these functions themselves as an argument. It will happen implicitly when they call execute_path or execute_tree.
+##input_parameters for specific functions:
+*Note: A `time series` gets called in each of these functions, but only by `execute_path` or `execute_tree`. The Users will never actually pass a `time series` to these functions themselves as an argument. It will happen implicitly when they call `execute_path` or `execute_tree`.*
 
 These MUST be declared, otherwise Users will get error messages
 
-design_matrix(data_start = <float>, data_end = <float>)
-denoise(increment = <float>)
-impute_missing_data()
-impute_outliers()
-longest_continuous_run()
-clip(data_start = <float>, data_end = <float>)
-assign_time(data_start = <float>, increment = <float>)
-difference()
-scaling()
-standardize()
-logarithm()
-cubic_root()
-split_data(perc_training = <float>, perc_valid = <float>, perc_test = <float>)
-ts2db(input_filename = <str>, perc_training = <float>, perc_val = <float>, perc_test = <float>, data_start = <float>, data_end = <float>, output_filename = <str>)
-db2ts()
-plot()
-histogram()
-box_plot()
-normality_test()
-mse(input_filename = <str>)
-maps(input_filename = <str>)
-smape(input_filename = <str>)
-mlp_model(layers = <list>)
-Layers in the form [100,] or [100, 20,]
-mlp_forecast(input_filename = <str>)
-read_from_file()
-write_to_file(output_filename = <str>)
+* `design_matrix(data_start = <float>, data_end = <float>)`
+
+* `denoise(increment = <float>)`
+
+* `impute_missing_data()`
+
+* `impute_outliers()`
+
+* `longest_continuous_run()`
+
+* `clip(data_start = <float>, data_end = <float>)`
+
+* `assign_time(data_start = <float>, increment = <float>)`
+
+* `difference()`
+
+* `scaling()`
+
+* `standardize()`
+
+* `logarithm()`
+
+* `cubic_root()`
+
+* `split_data(perc_training = <float>, perc_valid = <float>, perc_test = <float>)`
+
+* `ts2db(input_filename = <str>, perc_training = <float>, perc_val = <float>, perc_test =
+<float>)`
+
+* `data_start = <float>, data_end = <float>, output_filename = <str>)`
+
+* `db2ts()`
+
+* `plot()`
+
+* `histogram()`
+
+* `box_plot()`
+
+* `normality_test()`
+
+* `mse(input_filename = <str>)`
+
+* `mape(input_filename = <str>)`
+
+* `smape(input_filename = <str>)`
+
+* `mlp_model(layers = <list>)`
+**Layers in the form [100,] or [100, 20,]**
+
+* `mlp_forecast(input_filename = <str>)`
+
+* `read_from_file()`
+
+* `write_to_file(output_filename = <str>)`
