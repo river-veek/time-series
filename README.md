@@ -29,9 +29,10 @@ See Installation_Instructions.txt
 
 ## Software Dependencies
 
-See Requirements.txt
-
 Python 3.0 or later
+
+See requirements.txt for a full list of dependencies
+
 
 ## REPO Organization
 
