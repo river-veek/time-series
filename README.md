@@ -44,32 +44,32 @@ errors in forecasted models.
 * testing - A suite of test case files for each of the python files listed above.
 * timeSeriesData - A directory of different Time Series data files which were
 used as examples in the creation of this project.
-
-* SRS.pdf - Software Requirements Specification
-* SDS.pdf - Software Design Specification
-* Project_Plan - A directory of PDF files containing the roles / responsibilities
+* documentation - A directory containing the following pieces of documentation
+  * SRS.pdf - Software Requirements Specification
+  * SDS.pdf - Software Design Specification
+  * Project_Plan - A directory of PDF files containing the roles / responsibilities
 of each team member, the individual progress made by each team member,
 documentation from group meetings, agendas for team meetings, benchmarks / goals,
 documentation specifications, and system requirements.
-* Programmer_Documentation.pdf -
+  * Programmer_Documentation.pdf -
 
 # Some helpful examples at a glance:
 
 ## Tree node operations
 
-* `Add_node(operation: str, node_index, input_parameters)`
+* `add_node(operation: str, node_index, input_parameters)`
 
-* `Replace_node(operation: str, node_index, input_parameters)`
+* `replace_node(operation: str, node_index, input_parameters)`
 
-* `Add_subtree(TREE_1, node_index, subtree)`
+* `add_subtree(TREE_1, node_index, subtree)`
 
-* `Copy_subtree(TREE_2, subtree_root_index)`
+* `copy_subtree(TREE_2, subtree_root_index)`
 
-* `Save_tree(“output_file.txt”)`
+* `save_tree(“output_file.txt”)`
 
 * `load_tree(“input_file.txt”)`
 
-* `Execute_path(“fileName.txt”, node_index)`
+* `execute_path(“fileName.txt”, node_index)`
 
 * `execute_tree(“fileName.txt”)`
 
