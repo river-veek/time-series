@@ -1,4 +1,5 @@
 """
+----------------------------------------------------------------------------------------
 Tree class for product library
 
 The TS_Tree object will store and organize nodes which contain function call
@@ -8,7 +9,8 @@ functions onto the time series data.
 
 Author - Noah Kruss
 Group - Keyboard Warriors
-Last Modified - 2/6/21
+Last Modified - 2/9/21
+----------------------------------------------------------------------------------------
 """
 
 
