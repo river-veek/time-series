@@ -75,6 +75,7 @@ documentation specifications, and system requirements.
 
 
 ##input_parameters for specific functions:
+
 *Note: A `time series` gets called in each of these functions, but only by `execute_path` or `execute_tree`. The Users will never actually pass a `time series` to these functions themselves as an argument. It will happen implicitly when they call `execute_path` or `execute_tree`.*
 
 These MUST be declared, otherwise Users will get error messages
