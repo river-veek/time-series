@@ -1,11 +1,12 @@
 """
-
-File that contains the the plotting functions, and MSE, MAPE, SMAPE, 
-and normalization tests. 
+----------------------------------------------------------------------------------------
+Contains the plotting functions, and MSE, MAPE, SMAPE,
+and normalization tests.
 
 Author: Nick Titzler
 Group - Keyboard Warriors
 Last Modified - 2/9/21
+----------------------------------------------------------------------------------------
 """
 
 import preprocessing as pre
@@ -86,13 +87,13 @@ def box_plot(ts, fname=None):
 	fiveNumberSummary(ts)
 	x = ts.iloc[:,-1]
 
-	
+
 	plt.boxplot(x)
 	plt.show()
 
 	if type(fname) == str:
 		plt.savefig(fname)
-	
+
 	return ts
 
 
@@ -117,7 +118,3 @@ def smape(y_forecast, y_test: str):
     yt = read_from_file(y_test)
 
     return 100/len(yf.iloc[:,-1].to_numpy()) * np.sum(2 * np.abs(yt.iloc[:,-1].to_numpy() - yf.iloc[:,-1].to_numpy()) / (np.abs(yf.iloc[:,-1].to_numpy()) + np.abs(yt.iloc[:,-1].to_numpy())))
-
-
-
-

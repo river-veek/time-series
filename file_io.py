@@ -1,7 +1,11 @@
 """
-File IO functions
+----------------------------------------------------------------------------------------
+Contains File I/O functions.
 
 Author: Nick Titzler
+Group - Keyboard Warriors
+Last Modified - 2/9/21
+----------------------------------------------------------------------------------------
 """
 import csv
 import pickle
