@@ -61,6 +61,7 @@ used as examples in the creation of this project.
         * documentation specifications
         * system requirements
     * Programmer_Documentation.pdf -
+    * presentation.pdf - A pdf of the slides used in the presentation to the customer
 * output - directory to store csv files created from a write_to_file command
 
 # Some helpful examples at a glance:
