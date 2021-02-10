@@ -43,6 +43,10 @@ See requirements.txt for a full list of dependencies
 * visualization.py - Functions for plotting Time Series data and computing
 errors in forecasted models.
 * testing - A suite of test case files for each of the python files listed above.
+* Installation_Instructions.txt - Document that provides the User instructions on
+how to install this repository
+* requirements.txt - Document that denotes what libraries need to be imported by
+the user for the project to work.
 * timeSeriesData - A directory of different Time Series data files which were
 used as examples in the creation of this project.
 * documentation - A directory containing the following pieces of documentation
