@@ -28,11 +28,6 @@ def write_to_file(ts, output_file_name):
 	"""
 	path = "write_to_file_outputTesting/" + output_file_name
 
-	# convert series to dataframe
-	df = pd.DataFrame.from_dict(ts.series , orient='index')
-
-
-
 	# write dataframe to file.
 	df.to_csv(path, index=1)
 
