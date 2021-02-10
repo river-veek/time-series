@@ -30,7 +30,7 @@ def write_to_file(ts, output_file_name):
 
 		BUG: currently program writes a 0 to the start of the file, unsure as to why
 	"""
-	path = "write_to_file_outputTesting/" + output_file_name
+	path = "output/" + output_file_name
 
 	# write dataframe to file.
 	df.to_csv(path, index=1)
