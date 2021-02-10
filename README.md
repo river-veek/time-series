@@ -57,14 +57,21 @@ documentation specifications, and system requirements.
 ## at a glance
 
 Tree node operations
-`Add_node(operation: str, node_index, input_parameters)`
-`Replace_node(operation: str, node_index, input_parameters)`
-`Add_subtree(TREE_1, node_index, subtree)`
-`Copy_subtree(TREE_2, subtree_root_index)`
-`Save_tree(“output_file.txt”)`
-`load_tree(“input_file.txt”)`
-`Execute_path(“fileName.txt”, node_index)`
-`execute_tree(“fileName.txt”)`
+* `Add_node(operation: str, node_index, input_parameters)`
+
+* `Replace_node(operation: str, node_index, input_parameters)`
+
+* `Add_subtree(TREE_1, node_index, subtree)`
+
+* `Copy_subtree(TREE_2, subtree_root_index)`
+
+* `Save_tree(“output_file.txt”)`
+
+* `load_tree(“input_file.txt”)`
+
+* `Execute_path(“fileName.txt”, node_index)`
+
+* `execute_tree(“fileName.txt”)`
 
 
 input_parameters for specific functions:
