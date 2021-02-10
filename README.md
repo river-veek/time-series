@@ -45,13 +45,13 @@ errors in forecasted models.
 * timeSeriesData - A directory of different Time Series data files which were
 used as examples in the creation of this project.
 * documentation - A directory containing the following pieces of documentation
-  * SRS.pdf - Software Requirements Specification
-  * SDS.pdf - Software Design Specification
-  * Project_Plan - A directory of PDF files containing the roles / responsibilities
+    * SRS.pdf - Software Requirements Specification
+    * SDS.pdf - Software Design Specification
+    * Project_Plan - A directory of PDF files containing the roles / responsibilities
 of each team member, the individual progress made by each team member,
 documentation from group meetings, agendas for team meetings, benchmarks / goals,
 documentation specifications, and system requirements.
-  * Programmer_Documentation.pdf -
+    * Programmer_Documentation.pdf -
 
 # Some helpful examples at a glance:
 
