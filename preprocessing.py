@@ -1,7 +1,11 @@
 """
-Preprocessing functions.
+----------------------------------------------------------------------------------------
+Preprocessing Functions
 
-Author(s): Nick Titzler, River Veek, Cameron
+Authors - River Veek, Nick Titzler, Cameron Jordal
+Group - Keyboard Warriors
+Last Modified - 2/9/2021
+----------------------------------------------------------------------------------------
 """
 
 ########################
@@ -29,7 +33,7 @@ pd.options.mode.chained_assignment = None
 def denoise(ts, increment=10):
     """
     Takes time series and a increment value and returns a new time series
-    
+
     Denoises data by applying a rolling mean whose size is determinded by the increment
 
     Calls: NA
@@ -82,7 +86,7 @@ def impute_missing_data(ts):
     # input will be Pandas DataFrame
     # immediately convert to list (for easier mutability)
     ts = ts.iloc[:, -1].tolist()
-    
+
     # loop through each value in ts and check if 'NaN'
     for i in range(len(ts)):
 
@@ -249,7 +253,7 @@ def longest_continuous_run(ts):
     # calculate, isolate longest run
     for i in range(len(ts)):
 
-        if not ts[i] == "NaN":
+        if not np.isnan(ts[i]):
             cur_run += 1
 
         else:
@@ -270,7 +274,6 @@ def longest_continuous_run(ts):
 
     # if time series has no valid points, return empty time series (d_copy)
     if start_idx == end_idx:
-        print(d_copy)
         return pd.DataFrame(d_copy)
 
     return pd.DataFrame(d)
@@ -306,9 +309,9 @@ def difference(ts):
 def clip(ts, starting_date, final_date):
     """
     Takes a time series, the starting date to clip the time series
-    by, and the ending date to clip the time series by. No assumption
-    is made about the types of starting_date and final_date; these two
-    parameters will only be assumed to be valid items of the time series ts.
+    by, and the ending date to clip the time series by. starting_date and
+    final_date must be of type float; these two parameters will be
+    assumed to be valid items of the time series ts.
 
     If starting_date greater than (>) final_date, then time series ts is
     clipped from starting_date to the end of ts.

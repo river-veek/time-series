@@ -1,5 +1,6 @@
 ----------------------------------------------------------------------------------------
 Installation Instructions for data scientists wishing to use our Time-Series Tree library
+
 Authors - JT Kashuba & Noah Kruss
 Group - Keyboard Warriors
 Last Modified - 2/9/2021

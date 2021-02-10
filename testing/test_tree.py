@@ -1,8 +1,11 @@
 """
+----------------------------------------------------------------------------------------
 Tests for tree.py containing the the TS_Tree class
 
-Author: Noah Kruss
-
+Author - Noah Kruss
+Group - Keyboard Warriors
+Last Modified - 2/9/2021
+----------------------------------------------------------------------------------------
 """
 
 """

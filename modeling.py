@@ -1,5 +1,11 @@
 """
-Modeling and Forecasting Functions
+----------------------------------------------------------------------------------------
+Contains Modeling and Forecasting Functions
+
+Author - Cameron Jordal
+Group - Keyboard Warriors
+Last Modified - 2/9/21
+----------------------------------------------------------------------------------------
 """
 
 from sklearn.neural_network import MLPRegressor

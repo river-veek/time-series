@@ -1,7 +1,11 @@
 """
-File IO functions
+----------------------------------------------------------------------------------------
+Contains File I/O functions.
 
-Author: Nick Titzler
+Author - Nick Titzler
+Group - Keyboard Warriors
+Last Modified - 2/9/21
+----------------------------------------------------------------------------------------
 """
 import csv
 import pickle
@@ -31,13 +35,6 @@ def write_to_file(ts, output_file_name):
 	# write dataframe to file.
 	df.to_csv(path, index=1)
 
-
-def db_read_to_file(input_filename):
-	"""
-	Reads in a time series database.
-	"""
-	data = pd.read_csv(input_filename)
-	return data
 
 
 def test():

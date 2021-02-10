@@ -1,4 +1,5 @@
 """
+----------------------------------------------------------------------------------------
 Tree class for product library
 
 The TS_Tree object will store and organize nodes which contain function call
@@ -8,7 +9,8 @@ functions onto the time series data.
 
 Author - Noah Kruss
 Group - Keyboard Warriors
-Last Modified - 2/6/21
+Last Modified - 2/9/21
+----------------------------------------------------------------------------------------
 """
 
 
@@ -113,13 +115,13 @@ def validate_operation_order(operation: str, parent_operation: str):
         print(f"Error - mlp_model needs to be followed by mlp_forecast")
         valid = False
 
-    elif (parent_operation == "mlp_forecast" and operation != "mape") or \
-         (parent_operation == "mlp_forecast" and operation != "smape") or \
+    elif (parent_operation == "mlp_forecast" and operation != "mape") and \
+         (parent_operation == "mlp_forecast" and operation != "smape") and \
          (parent_operation == "mlp_forecast" and operation != "db2ts"):
         print(f"Error - mlp_forecast needs to be followed by mape, smape, or db2ts")
         valid = False
 
-    elif (parent_operation == "db2ts" and operation != "write_to_file") or \
+    elif (parent_operation == "db2ts" and operation != "write_to_file") and \
          (parent_operation == "mlp_forecast" and (operation not in visualization.keys())):
         print(f"Error - db2ts needs to be followed by write_to_file or visualiztion/error function")
         valid = False
