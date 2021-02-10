@@ -34,9 +34,9 @@ def read_from_file(input_file_name):
 			df = pd.DataFrame.from_dict(data)
 			return df
 	
-		except: # if its neither, exit the program
+		except: # if its neither, exit the program, or if the file is empty
 
-			print("File type not accepted. Use .csv, .p, or .pkl")
+			print("File type not accepted It is empty or it is not using .csv, .p, or .pkl\n\n")
 			exit()
 
 	

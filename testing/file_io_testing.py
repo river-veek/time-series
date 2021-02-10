@@ -68,20 +68,22 @@ def test3_read_from_file_pandas():
 	#df = pd.read_csv(r'../timeSeriesData/TimeSeriesData1/1_temperature_test.csv')
 	#df = pd.read_csv('../timeSeriesData/TimeSeriesData2/AtmPres2005NovMin.csv')
 
-	df = fio.read_from_file_pandas('../timeSeriesData/TimeSeriesData2/AtmPres2005NovMin.csv')
+	df = fio.read_from_file('../timeSeriesData/TimeSeriesData2/AtmPres2005NovMin.csv')
 
 
 	print(df)
 	#print(df)
 	#print(d2)
-	d3 = fio.read_from_file_pandas('../timeSeriesData/TimeSeriesData2/AtmPres2005NovMin.csv')
+	d3 = fio.read_from_file('../timeSeriesData/TimeSeriesData2/AtmPres2005NovMin.csv')
 
 	print(df.iloc[:,-1:])
 	#print(d3.iloc[:,-3])
 	return 0
 
+def test4_empty_file():
 
-
+	df = fio.read_from_file('../timeSeriesData/TimeSeriesData1/oneItem.csv')
+	print(df)
 """
 ###############################
 	WRITE_TO_FILE TESTS
@@ -99,11 +101,11 @@ def test1_write_to_file():
 
 def main():
 	#test1_timeSeriesData1()
-	test2_timeSeriesData2()
+	#test2_timeSeriesData2()
 
 	#test1_write_to_file()
 	#test3_read_from_file_pandas()
-
+	#test4_empty_file()
 
 	return 1
 
