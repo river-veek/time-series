@@ -198,42 +198,51 @@ def validate_inputs(operation,
     #check inputs match with the function
     if operation == "clip":
         if (data_start == None) or (data_end == None):
+            print(f"Error - clip needs data_start and data_end")
             valid = False
     elif operation == "denoise":
         if (increment == None):
+            print(f"Error - denoise needs data_start and data_end")
             valid = False
     elif operation == "assign_time":
         if (data_start == None) or (increment == None):
+            print(f"Error - assign_time needs data_start and increment")
             valid = False
     elif operation == "split_data":
         if (perc_test == None) or (perc_valid == None) or (perc_training == None):
+            print(f"Error - split_data needs perc_test, perc_valid, and perc_training")
             valid = False
     elif operation == "design_matrix":
         if (data_start == None) or (data_end == None):
-            valid = False
-    elif operation == "design_matrix_2":
-        if (m_i == None) or (t_i == None) or (m_0 == None) or (t_0 == None):
+            print(f"Error - design_matrix needs data_start and data_end")
             valid = False
     elif operation == "ts2db":
         if (input_filename == None) or (perc_test == None) or (perc_valid == None) or (perc_training == None) or (data_start == None) or (data_end == None) or (output_filename == None):
+            print(f"Error - ts_2db needs input_filename, perc_test, perc_valid, perc_training, data_start, data_end, and output_filename")
             valid = False
     elif operation == "mlp_model":
         if (layers == None):
+            print(f"Error - mlp_model needs layers")
             valid = False
     elif operation == "mlp_forecast":
         if (input_filename == None):
+            print(f"Error - mlp_forecast needs input_filename")
             valid = False
     elif operation == "write_to_file":
         if (output_filename == None):
+            print(f"Error - write_to_file needs output_filename")
             valid = False
     elif operation == "mse":
         if (input_filename == None):
+            print(f"Error - mse needs input_filename")
             valid = False
     elif operation == "mape":
         if (input_filename == None):
+            print(f"Error - mape needs input_filename")
             valid = False
     elif operation == "smape":
         if (input_filename == None):
+            print(f"Error - smape needs input_filename")
             valid = False
 
     return valid
@@ -300,7 +309,7 @@ class Operation_node(NodeMixin):
                  t_0 = None,
                  layers = None):
         """
-        Initilize node properties:
+        Initialize node properties:
             name - str in the form 'operation_call-node_index'
 
             function - str representation of function call
@@ -451,7 +460,7 @@ class TS_Tree:
 
     def __init__(self):
         """
-        Initilize a Tree with a read_from_file root node
+        Initialize a Tree with a read_from_file root node
         """
         #make denoise root node and place it in the Tree
         root_node = Operation_node("read_from_file-0", "read_from_file", None)
@@ -688,7 +697,7 @@ class TS_Tree:
         Returns - Time Series
         """
         #check to make sure node_index is valid
-        if node_index > len(self.nodes) or node_index < 0:
+        if node_index >= len(self.nodes) or node_index < 0:
             print("Invalid node_index")
             return None
 
