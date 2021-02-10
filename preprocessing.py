@@ -1,7 +1,10 @@
 """
-Preprocessing functions.
-
-Author(s): Nick Titzler, River Veek, Cameron
+----------------------------------------------------------------------------------------
+Preprocessing Functions
+Authors - River Veek, Nick Titzler, Cameron Jordal
+Group - Keyboard Warriors
+Last Modified - 2/9/2021
+----------------------------------------------------------------------------------------
 """
 
 ########################

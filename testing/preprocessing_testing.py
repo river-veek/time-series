@@ -1,6 +1,13 @@
 """
-Tests for preprocessing.py methods.
+----------------------------------------------------------------------------------------
+Tests and Testing Instructions for preprocessing.py
+Authors - River Veek, Nick Titzler, Cameron Jordal
+Group - Keyboard Warriors
+Last Modified - 2/9/2021
+----------------------------------------------------------------------------------------
 
+
+----------------------------------------------------------------------------------------
 To run all nosetests (from 'time-series/' directory):
 
     nosetests -v testing/preprocessing_testing.py
@@ -12,8 +19,7 @@ To run single test class:
 To run single test module (single test from within a class):
 
     nosetests -v testing/preprocessing_testing.py:<class name>.<module name>
-
-Author(s): Nick Titzler, River Veek
+----------------------------------------------------------------------------------------
 """
 
 import numpy as np
