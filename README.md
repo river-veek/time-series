@@ -25,7 +25,7 @@ command. Paths in the tree can also be referred to as “pipelines”.
 
 ## How To Install and Run
 
-See Installation_Instructions.txt
+See Installation_Instructions.txt for a step-by-step install guide
 
 ## Software Dependencies
 
