@@ -56,6 +56,11 @@ def test2_timeSeriesData2():
 
 	fname4 = "../timeSeriesData/TimeSeriesData1/AtmPres2005NovMinEmpty.csv"
 
+	fname5 = "../timeSeriesData/TimeSeriesData1/save1.p"
+
+	ts1 = fio.read_from_file(fname5)
+
+	print(ts1)
 	ts = fio.read_from_file(fname4)
 	print(ts)
 
