@@ -180,18 +180,18 @@ class Test_longest_continuous_run:
         """
         df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
                             'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK", "BTC", "NIO", "DIS", "ETH", "JD"],
-                            'Vals': [10, 17.8, 15, "NaN", 25, 17, 18, 19, 500, 700]})
+                            'Vals': [10, 17.8, 15, np.nan, 25, 17, 18, 19, 500, 700]})
         df2 = pd.DataFrame({'Time': [4, 5, 6, 7, 8, 9],
                             'Daily Top': ["NOK", "BTC", "NIO", "DIS", "ETH", "JD"],
-                            'Vals': [25, 17, 18, 19, 500, 700]})
+                            'Vals': [25.0, 17.0, 18.0, 19.0, 500.0, 700.0]})
 
         df3 = pd.DataFrame({'Time': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
                             'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK", "BTC", "NIO", "DIS", "ETH", "JD"],
-                            'Vals': ["NaN", 17.8, 15, 16, 25, 17, 18, 19, 500, 700]})
+                            'Vals': [np.nan, 17.8, 15, 16, 25, 17, 18, 19, 500, 700]})
         df4 = pd.DataFrame({'Time': [1, 2, 3, 4, 5, 6, 7, 8, 9],
                             'Daily Top': ["AMC", "BB", "DOGE", "NOK", "BTC", "NIO", "DIS", "ETH", "JD"],
-                            'Vals': [17.8, 15, 16, 25, 17, 18, 19, 500, 700]})
-
+                            'Vals': [17.8, 15.0, 16.0, 25.0, 17.0, 18.0, 19.0, 500.0, 700.0]})
+        # print(longest_continuous_run(df1))
         assert longest_continuous_run(df1).equals(df2)
         assert longest_continuous_run(df3).equals(df4)
 
@@ -214,7 +214,7 @@ class Test_longest_continuous_run:
         """
         df1 = pd.DataFrame({'Time': [0, 1, 2, 3, 4],
                             'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
-                            'Vals': ["NaN", "NaN", "NaN", "NaN", "NaN"]})
+                            'Vals': [np.nan, np.nan, np.nan, np.nan, np.nan]})
         df2 = pd.DataFrame({'Time': [],
                             'Daily Top': [],
                             'Vals': []})
