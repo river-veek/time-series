@@ -305,18 +305,18 @@ class Test_assign_time:
         """
         df1 = pd.DataFrame({'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
                             'Vals': [10, 12, 45, 88, 90]})
-        df2 = pd.DataFrame({'Times': [1, 2, 3, 4, 5],
+        df2 = pd.DataFrame({'Times': [1.0, 2.0, 3.0, 4.0, 5.0],
                             'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
                             'Vals': [10, 12, 45, 88, 90]})
 
         df3 = pd.DataFrame({'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
                             'Vals': [10, 12, 45, 88, 90]})
-        df4 = pd.DataFrame({'Times': [0, 5, 10, 15, 20],
+        df4 = pd.DataFrame({'Times': [0.0, 5.0, 10.0, 15.0, 20.0],
                             'Daily Top': ["GME", "AMC", "BB", "DOGE", "NOK"],
                             'Vals': [10, 12, 45, 88, 90]})
 
-        assert assign_time(df1, 1, 1).equals(df2)
-        assert assign_time(df3, 0, 5).equals(df4)
+        assert assign_time(df1, 1.0, 1.0).equals(df2)
+        assert assign_time(df3, 0.0, 5.0).equals(df4)
 
     def test_decreasing_assign_time(self):
         """
