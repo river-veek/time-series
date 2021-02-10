@@ -60,7 +60,12 @@ used as examples in the creation of this project.
         * benchmarks / goals
         * documentation specifications
         * system requirements
-    * Programmer_Documentation.pdf -
+    * Programmer_Documentation.pdf - Document that provides a programmer with
+    documentation for every function in the preprocessing, tree, modeling,
+    visualization, and file I/O module. The parameters, returns and doc-strings
+    for each function will be included as well.
+    * User_Documentation.pdf - Document that goes over how a typical user can
+    use the system and walk through a typical use case.
     * presentation.pdf - A pdf of the slides used in the presentation to the customer
 * output - directory to store csv files created from a write_to_file command
 
