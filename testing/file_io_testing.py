@@ -1,8 +1,11 @@
 """
-Tests for time_series.py containing the time series class
+----------------------------------------------------------------------------------------
+Tests for Tree File I/O
 
-Author: Nick Titzler
-
+Author - Nick Titzler
+Group - Keyboard Warriors
+Last Modified - 1/29/21
+----------------------------------------------------------------------------------------
 """
 import numpy as np
 import sys
@@ -21,15 +24,15 @@ import pandas as pd
 def test1_timeSeriesData1():
 	"""
 	test time series creation from timeSeriesData1 files
-	
+
 	"""
 	fileNames = ["1_temperature_test.csv","1_temperature_train.csv","2_temperature_subsampled_test.csv",
-	"2_temperature_subsampled_train.csv", "3_passengers_test.csv","3_passengers_train.csv","4_irradiance_test.csv", 
+	"2_temperature_subsampled_train.csv", "3_passengers_test.csv","3_passengers_train.csv","4_irradiance_test.csv",
 	"4_irradiance_train.csv", "5_irradiance_subsampled_test.csv", "5_irradiance_subsampled_train.csv", "6_sunspots_test.csv", "6_sunspots_train.csv",
 	"7_distribution_subsampled_norm_test.csv", "7_distribution_subsampled_norm_train.csv", "8_distribution_subsampled_test.csv", "8_distribution_subsampled_train.csv"]
 
 	fname = "../timeSeriesData/TimeSeriesData1/1_temperature_test.csv"
-	
+
 
 	try:
 		for item in fileNames:
@@ -38,9 +41,9 @@ def test1_timeSeriesData1():
 			ts = fio.read_from_file(fname)
 	except:
 		print("error in test 1")
-	
 
-	
+
+
 def test2_timeSeriesData2():
 
 	fname1 = "../timeSeriesData/TimeSeriesData2/AtmPres2005NovMin.csv"
@@ -58,7 +61,7 @@ def test2_timeSeriesData2():
 
 def test3_read_from_file_pandas():
 	#df = pd.read_csv(r'../timeSeriesData/TimeSeriesData1/1_temperature_test.csv')
-	#df = pd.read_csv('../timeSeriesData/TimeSeriesData2/AtmPres2005NovMin.csv')	
+	#df = pd.read_csv('../timeSeriesData/TimeSeriesData2/AtmPres2005NovMin.csv')
 
 	df = fio.read_from_file_pandas('../timeSeriesData/TimeSeriesData2/AtmPres2005NovMin.csv')
 
@@ -67,7 +70,7 @@ def test3_read_from_file_pandas():
 	#print(df)
 	#print(d2)
 	d3 = fio.read_from_file_pandas('../timeSeriesData/TimeSeriesData2/AtmPres2005NovMin.csv')
-	
+
 	print(df.iloc[:,-1:])
 	#print(d3.iloc[:,-3])
 	return 0
@@ -84,9 +87,9 @@ def test3_read_from_file_pandas():
 def test1_write_to_file():
 	ts = TS.TimeSeries()
 	ts = fio.read_from_file("../timeSeriesData/TimeSeriesData1/1_temperature_test.csv")
-	
+
 	fio.write_to_file(ts, "1_temperature_test_output.csv")
-	
+
 
 
 def main():

@@ -2,7 +2,7 @@
 ----------------------------------------------------------------------------------------
 Contains Modeling and Forecasting Functions
 
-Author: Cameron Jordal
+Author - Cameron Jordal
 Group - Keyboard Warriors
 Last Modified - 2/9/21
 ----------------------------------------------------------------------------------------

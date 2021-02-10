@@ -16,7 +16,7 @@ def test1_mean():
 	ts.series = {"0":0,"1":1,"2":2,"3":3,"4":4,"5":5}
 	print(ts.mean())
 	assert(ts.mean() == np.mean([0,1,2,3,4,5]))
-	
+
 
 def test2_stdiv():
 	ts = TS.TimeSeries()

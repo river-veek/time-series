@@ -2,7 +2,7 @@
 ----------------------------------------------------------------------------------------
 Contains File I/O functions.
 
-Author: Nick Titzler
+Author - Nick Titzler
 Group - Keyboard Warriors
 Last Modified - 2/9/21
 ----------------------------------------------------------------------------------------

@@ -3,7 +3,7 @@
 Contains the plotting functions, and MSE, MAPE, SMAPE,
 and normalization tests.
 
-Author: Nick Titzler
+Author - Nick Titzler
 Group - Keyboard Warriors
 Last Modified - 2/9/21
 ----------------------------------------------------------------------------------------
