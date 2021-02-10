@@ -57,17 +57,6 @@ def mlp_output_mapper(data, window):
     # return scaled data offset by minimum value
     return mult * data + window[0]
 
-def round_data(data):
-    d_list = []
-    for row in data:
-        d_row = []
-        for val in row:
-            d_row.append(round(val))
-        d_list.append(d_row)
-    nd_list = np.array(d_list)
-
-    return nd_list
-
 
 ###################
 # FUNCTIONS

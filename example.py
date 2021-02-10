@@ -12,11 +12,11 @@ tree.add_node("mlp_model", 4, layers=[100,])
 tree.add_node("mlp_forecast", 5, input_filename="timeSeriesData/TimeSeriesData1/1_temperature_db_test.csv")
 
 tree.add_node("db2ts", 6)
-tree.add_node("write_to_file", 7, output_filename="timeSeriesData/TimeSeriesData1/1_temperature_test_futures.csv")
+tree.add_node("write_to_file", 7, output_filename="1_temperature_test_futures.csv")
 
-#tree.add_node("mse", 6, input_filename="timeSeriesData/TimeSeriesData1/1_temperature_test.csv")
+tree.add_node("mape", 6, input_filename="timeSeriesData/TimeSeriesData1/1_temperature_test.csv")
 
 tree.print_tree()
 
 #processed = tree.execute_path("timeSeriesData/TimeSeriesData1/1_temperature_test.csv", 3)
-forecast = tree.execute_path("timeSeriesData/TimeSeriesData1/1_temperature_train.csv", 8)
+forecast = tree.execute_path("timeSeriesData/TimeSeriesData1/1_temperature_train.csv", 9)
