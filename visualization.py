@@ -1,9 +1,11 @@
 """
 
+File that contains the the plotting functions, and MSE, MAPE, SMAPE, 
+and normalization tests. 
+
 Author: Nick Titzler
-
-
-
+Group - Keyboard Warriors
+Last Modified - 2/9/21
 """
 
 import preprocessing as pre
@@ -20,6 +22,9 @@ from sklearn.metrics import mean_squared_error
 #########################
 
 def fiveNumberSummary(ts):
+	"""
+	Creates a five number summary of the data
+	"""
 	quartiles = np.percentile(ts.iloc[:,-1,], [25, 50, 75])
 	print("~~~~FIVE NUMBER SUMMARY~~~~~")
 	print("		Min:	",ts.iloc[:,-1,].min())
@@ -35,6 +40,13 @@ def fiveNumberSummary(ts):
 
 
 def plot(ts, fname=None):
+	"""
+	Creates a plot of the data and displays it.
+
+
+	Author: Nick Titzler
+	"""
+
 	if type(ts) == list:
 	 	for item in ts:
 	 		item.plot()
@@ -50,6 +62,12 @@ def plot(ts, fname=None):
 	return ts
 
 def histogram(ts, fname=None):
+	"""
+	Creates a histogram of the data and displays it.
+
+
+	Author: Nick Titzler
+	"""
 	ax = ts.plot()
 	ts.plot.hist(ax=ax, orientation="horizontal")
 	plt.show()
@@ -60,17 +78,17 @@ def histogram(ts, fname=None):
 	return ts
 
 def box_plot(ts, fname=None):
-	if type(ts) == list:
-		for item in ts:
-			item.boxplot()
-			fiveNumberSummary(item)
-		plt.show()
+	"""
+	Creates a boxplot of the data and displays it. Prints a five number summary of the data
 
-	else:
-		ts.boxplot()
-		
-		fiveNumberSummary(ts)
-		plt.show()
+	Author: Nick Titzler
+	"""
+	fiveNumberSummary(ts)
+	x = ts.iloc[:,-1]
+
+	
+	plt.boxplot(x)
+	plt.show()
 
 	if type(fname) == str:
 		plt.savefig(fname)

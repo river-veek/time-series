@@ -105,17 +105,14 @@ def test_box():
 	ts2 = fio.read_from_file(fname2)
 	ts3 = fio.read_from_file(fname3)
 
-	#plot.histogram([ts, ts2])
-	#plot.histogram(ts2)
-	#plot.box_plot(ts)
 	
-	plt.boxplot(ts)
-	plt.show()
+	
+	plot.box_plot(ts3)
 
 
 
 def main():
-	test_plot()
+	#test_plot()
 	#test_box()
 	#test_histogram()
 	#test_plot()
