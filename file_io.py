@@ -39,7 +39,7 @@ def write_to_file(ts, output_file_name):
 	path = "output/" + output_file_name
 
 	# write dataframe to file.
-	df.to_csv(path, index=1)
+	ts.to_csv(path, index=1)
 
 
 

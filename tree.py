@@ -115,10 +115,11 @@ def validate_operation_order(operation: str, parent_operation: str):
         print(f"Error - mlp_model needs to be followed by mlp_forecast")
         valid = False
 
-    elif (parent_operation == "mlp_forecast" and operation != "mape") and \
+    elif (parent_operation == "mlp_forecast" and operation != "mse") and \
+         (parent_operation == "mlp_forecast" and operation != "mape") and \
          (parent_operation == "mlp_forecast" and operation != "smape") and \
          (parent_operation == "mlp_forecast" and operation != "db2ts"):
-        print(f"Error - mlp_forecast needs to be followed by mape, smape, or db2ts")
+        print(f"Error - mlp_forecast needs to be followed by mse, mape, smape, or db2ts")
         valid = False
 
     elif (parent_operation == "db2ts" and operation != "write_to_file") and \
@@ -759,6 +760,7 @@ class TS_Tree:
             #if node is a leaf execute the pipeline from it to the root
             if node.is_a_leaf:
                 index = node.name.split("-")[1]
+                index = int(index)
                 result = self.execute_path(data_input, index)
                 Outputs[node.name] = result
 
