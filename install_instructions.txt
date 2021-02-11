@@ -1,0 +1,36 @@
+----------------------------------------------------------------------------------------
+Installation Instructions for data scientists wishing to use our Time-Series Tree library
+
+Authors - JT Kashuba & Noah Kruss
+Group - Keyboard Warriors
+Last Modified - 2/10/2021
+----------------------------------------------------------------------------------------
+
+Installation Instructions:
+
+  1) Open a command line terminal and run the following command
+
+        $ pip install numpy pandas scikit-learn anytree matplotlib
+
+  2) Download this code repository though clicking the download button in the
+     upper right corner.
+
+  3) Move the "time-series" folder into the directory that your project code is
+     going to be created in.
+
+  4) At the top of the python file that you want to use a TS_Tree in,
+     import everything from tree.py with the relative path to wherever
+     you moved the "Time_Series_Transformation_Tree" folder.
+
+        Some possible examples:
+
+            from tree import *
+
+            from time-series/tree import *
+
+  5) Check out the SRS.pdf for extensive documentation on specific Use Case
+     functionality.
+
+  6) Check out the README.md for some helpful info on the organization of the
+     time-series repo as well as useful info for a first time user regarding
+     Tree Operations and input_parameters for specific functions
