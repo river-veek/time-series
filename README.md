@@ -63,8 +63,7 @@ used as examples in the creation of this project.
         * agendas for team meetings
         * benchmarks / goals
         * documentation specifications
-        * function checks
-        * questions for client
+        * questions asked
     * Programmer_Documentation.pdf - Document that provides a programmer with
     documentation for every function in the preprocessing, tree, modeling,
     visualization, and file I/O module. The parameters, returns and doc-strings
