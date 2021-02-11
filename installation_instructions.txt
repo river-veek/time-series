@@ -3,7 +3,7 @@ Installation Instructions for data scientists wishing to use our Time-Series Tre
 
 Authors - JT Kashuba & Noah Kruss
 Group - Keyboard Warriors
-Last Modified - 2/9/2021
+Last Modified - 2/10/2021
 ----------------------------------------------------------------------------------------
 
 Installation Instructions:
@@ -15,12 +15,10 @@ Installation Instructions:
   2) Download this code repository though clicking the download button in the
      upper right corner.
 
-  3) Go to the downloaded folder and rename it "Time_Series_Transformation_Tree"
+  3) Move the "time-series" folder into the directory that your project code is
+     going to be created in.
 
-  4) Move the "Time_Series_Transformation_Tree" folder into the directory that
-     your project code is going to be created in.
-
-  5) At the top of the python file that you want to use a TS_Tree in,
+  4) At the top of the python file that you want to use a TS_Tree in,
      import everything from tree.py with the relative path to wherever
      you moved the "Time_Series_Transformation_Tree" folder.
 
@@ -28,7 +26,11 @@ Installation Instructions:
 
             from tree import *
 
-            from Time_Series_Transformation_Tree/tree import *
+            from time-series/tree import *
 
-  6) Check out the SRS.pdf for extensive documentation on specific Use Case
+  5) Check out the SRS.pdf for extensive documentation on specific Use Case
      functionality.
+
+  6) Check out the README.md for some helpful info on the organization of the
+     time-series repo as well as useful info for a first time user regarding
+     Tree Operations and input_parameters for specific functions
