@@ -20,7 +20,7 @@ Installation Instructions:
 
   4) At the top of the python file that you want to use a TS_Tree in,
      import everything from tree.py with the relative path to wherever
-     you moved the "Time_Series_Transformation_Tree" folder.
+     you moved the "time-series" folder.
 
         Some possible examples:
 
