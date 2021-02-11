@@ -14,7 +14,7 @@ Last Modified - 2/9/2021
 # CIS 422 - Project 1
 # Time Series Manipulations, Modeling, and Forecasting
 
-## System Description:
+## System Description
 
 This system is a code library that provides functionality for processing time
 series data - specifically cleaning it up, displaying different forms of output,
@@ -25,7 +25,11 @@ command. Paths in the tree can also be referred to as “pipelines”.
 
 ## How To Install and Run
 
-See Installation_Instructions.txt for a step-by-step install guide
+See installation_instructions.txt for a step-by-step install guide
+
+*Note: csv files used in this system MUST start with 1 header line which
+      describes what each column in the file represents*
+
 
 ## Software Dependencies
 
@@ -34,7 +38,7 @@ Python 3.0 or later
 See requirements.txt for a full list of dependencies
 
 
-## REPO Organization
+## Repo Organization
 
 * tree.py - Time-Series Tree class and functions
 * file_io.py - Functions for opening and saving Time Series data files
@@ -59,13 +63,15 @@ used as examples in the creation of this project.
         * agendas for team meetings
         * benchmarks / goals
         * documentation specifications
+        * function checks
+        * questions for client
     * Programmer_Documentation.pdf - Document that provides a programmer with
     documentation for every function in the preprocessing, tree, modeling,
     visualization, and file I/O module. The parameters, returns and doc-strings
     for each function will be included as well.
     * User_Documentation.pdf - Document that goes over how a typical user can
     use the system and walk through a typical use case.
-    * presentation.pdf - A pdf of the slides used in the presentation to the customer
+    * presentation.pdf - A PDF of the slides used in the presentation to the client
 * output - directory to store csv files created from a write_to_file command
 
 # Some helpful examples at a glance:
